@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mshz.cloud.tms.business.mapper.ResCommonMapper">
+
+
+    <select id="selectOneLineByFiberId" parameterType="com.mshz.cloud.tms.business.vo.ResParaVo" resultType="java.util.Map">
+        SELECT
+            t1.ID segId,
+            t1.NAME segName,
+            t2.ID lineId,
+            t2.NAME lineName,
+            ( SELECT `NAME` FROM SG_TCCON_FBRCONNECT_B WHERE ID = t1.A_RESOBJID ) aResobjid,
+            ( SELECT `NAME` FROM SG_TCCON_FBRCONNECT_B WHERE ID = t1.Z_RESOBJID ) zResobjid,
+            t1.LINE_NUMBER lineNumber,
+            ( SELECT `NAME` FROM SG_DIC_TCOPTICALTYPE WHERE CODE = t1.FIBER_TYPE ) fiberType,
+            ( SELECT `NAME` FROM SG_DIC_SERVICESTATE WHERE CODE = t1.SERVICE_STATE ) serviceState
+        FROM
+            SG_TCDEV_FIBERSEG_B t1
+            LEFT JOIN dw_tcdev_oneline t2 ON t1.PAR_LINE = t2.id
+        WHERE
+            t1.id IN (SELECT FIBERSEG_ID FROM SG_TCDEV_FIBERSEG_R_FIBER  WHERE FIBER_ID = #{fiberId})
+    </select>
+
+    <select id="selectOneLineNotReFiberId" parameterType="com.mshz.cloud.tms.business.vo.ResParaVo" resultType="java.util.Map">
+        select * from dw_tcdev_oneline o
+        <if test="name != null  and name != ''">where o.NAME like concat('%', #{name}, '%')</if>
+    </select>
+
+    <select id="selectCarryingOpticalPathById" parameterType="com.mshz.cloud.tms.business.vo.ResParaVo" resultType="java.lang.String">
+        SELECT t1.ROUTER_ID  FROM sg_tccon_tcrouter_r_fiber t1
+        WHERE t1.FIBER_ID = #{resId}
+        UNION
+        select t1.OPTICAL_ID from `tms`.sg_tccon_tcrouter_r_tcopticalroad t1
+        join (SELECT IS_HGS from `tms`.sg_tcdev_fiber_b where id = #{resId} ) t2 on  t2.IS_HGS = '0'
+        where t1.RES_ID in (
+            select ID from `tms`.SG_TCDEV_FIBERLINE_B where PAR_FIBER_SEG in (select FIBERSEG_ID from `tms`.SG_TCDEV_FIBERSEG_R_FIBER where FIBER_ID = #{resId})
+        ) OR Z_RES_ID in (
+            select ID from `tms`.SG_TCDEV_FIBERLINE_B where PAR_FIBER_SEG in (select FIBERSEG_ID from `tms`.SG_TCDEV_FIBERSEG_R_FIBER where FIBER_ID = #{resId})
+        )
+        UNION
+        select t1.OPTICAL_ID from `tms`.sg_tccon_tcrouter_r_tcopticalroad t1
+        join (SELECT IS_HGS from `tms`.sg_tcdev_fiber_b where id = #{resId} ) t2 on  t2.IS_HGS = '1'
+        where t1.RES_ID in (
+            select FIBERSEGLINE_ID from sg_tccon_fiberline_r_fibersegline where PAR_FIBER = #{resId}
+        ) OR Z_RES_ID in (
+            select FIBERSEGLINE_ID from sg_tccon_fiberline_r_fibersegline where PAR_FIBER = #{resId}
+        )
+        UNION
+        select t1.ID FROM SG_TCCON_TCOPTICALROAD_B t1 where  t1.LOAD_BEARING_OTN_CHANNEL_ID in (
+            SELECT t2.CHANNEL_ID FROM sg_tccon_tcrouter_r_fiber t1
+            join `tms`.nr_res_channelroutenode_m t2 on t2.RES_ID = t1.ROUTER_ID
+            WHERE t1.FIBER_ID = #{resId}
+            UNION
+            select t2.CHANNEL_ID from `tms`.sg_tccon_tcrouter_r_tcopticalroad t1
+            join (SELECT IS_HGS from `tms`.sg_tcdev_fiber_b where id = #{resId} ) t3 on  t3.IS_HGS = '0'
+            join `tms`.nr_res_channelroutenode_m t2 on t2.RES_ID = t1.OPTICAL_ID
+            where t1.RES_ID in (
+                select ID from `tms`.SG_TCDEV_FIBERLINE_B where PAR_FIBER_SEG in (select FIBERSEG_ID from `tms`.SG_TCDEV_FIBERSEG_R_FIBER where FIBER_ID = #{resId})
+            ) OR Z_RES_ID in (
+                select ID from `tms`.SG_TCDEV_FIBERLINE_B where PAR_FIBER_SEG in (select FIBERSEG_ID from `tms`.SG_TCDEV_FIBERSEG_R_FIBER where FIBER_ID = #{resId})
+            )
+            UNION
+            select t2.CHANNEL_ID from `tms`.sg_tccon_tcrouter_r_tcopticalroad t1
+            join (SELECT IS_HGS from `tms`.sg_tcdev_fiber_b where id = #{resId} ) t3 on  t3.IS_HGS = '1'
+            join `tms`.nr_res_channelroutenode_m t2 on t2.RES_ID = t1.OPTICAL_ID
+            where t1.RES_ID in (
+                select FIBERSEGLINE_ID from sg_tccon_fiberline_r_fibersegline where PAR_FIBER = #{resId}
+            ) OR Z_RES_ID in (
+                select FIBERSEGLINE_ID from sg_tccon_fiberline_r_fibersegline where PAR_FIBER = #{resId}
+            )
+        )
+    </select>
+    <select id="selectCarryingBusinessById" parameterType="com.mshz.cloud.tms.business.vo.ResParaVo" resultType="java.lang.String">
+        SELECT t3.BUZ_ID FROM sg_tccon_tcrouter_r_fiber t1
+        join `tms`.nr_res_channelroutenode_m t2 on t2.RES_ID = t1.ROUTER_ID
+        JOIN `tms`.sg_tccon_tcbuz_r_tcchannel t3 ON t3.CHANNEL_ID = t2.CHANNEL_ID
+        WHERE t1.FIBER_ID = #{resId}
+        UNION
+        select t3.BUZ_ID from `tms`.sg_tccon_tcrouter_r_tcopticalroad t1
+        join `tms`.nr_res_channelroutenode_m t2 on t2.RES_ID = t1.OPTICAL_ID
+        JOIN `tms`.sg_tccon_tcbuz_r_tcchannel t3 ON t3.CHANNEL_ID = t2.CHANNEL_ID
+        where t1.RES_ID in (
+            select ID from `tms`.SG_TCDEV_FIBERLINE_B where PAR_FIBER_SEG in (select FIBERSEG_ID from `tms`.SG_TCDEV_FIBERSEG_R_FIBER where FIBER_ID = #{resId})
+        ) OR Z_RES_ID in (
+            select ID from `tms`.SG_TCDEV_FIBERLINE_B where PAR_FIBER_SEG in (select FIBERSEG_ID from `tms`.SG_TCDEV_FIBERSEG_R_FIBER where FIBER_ID = #{resId})
+        )
+        UNION
+        select BUZ_ID from `tms`.sg_tccon_tcbuz_r_tcchannel
+        where CHANNEL_ID in (
+            select PAR_CHANNEL from `tms`.sg_tccon_tcchannelfiber_b
+            where A_RES_ID in (
+                select ID from `tms`.SG_TCDEV_FIBERLINE_B where PAR_FIBER_SEG in (select FIBERSEG_ID from `tms`.SG_TCDEV_FIBERSEG_R_FIBER where FIBER_ID = #{resId})
+            ) or Z_RES_ID in (
+                select ID from `tms`.SG_TCDEV_FIBERLINE_B where PAR_FIBER_SEG in (select FIBERSEG_ID from `tms`.SG_TCDEV_FIBERSEG_R_FIBER where FIBER_ID = #{resId})
+            )
+        )
+    </select>
+    <select id="selectCarryingChannelLinkById" parameterType="com.mshz.cloud.tms.business.vo.ResParaVo" resultType="java.lang.String">
+        SELECT t2.CHANNEL_ID FROM sg_tccon_tcrouter_r_fiber t1
+        join `tms`.nr_res_channelroutenode_m t2 on t2.RES_ID = t1.ROUTER_ID
+        WHERE t1.FIBER_ID = #{resId}
+        UNION
+        select t2.CHANNEL_ID from `tms`.sg_tccon_tcrouter_r_tcopticalroad t1
+        join `tms`.nr_res_channelroutenode_m t2 on t2.RES_ID = t1.OPTICAL_ID
+        where t1.RES_ID in (
+            select ID from `tms`.SG_TCDEV_FIBERLINE_B where PAR_FIBER_SEG in (select FIBERSEG_ID from `tms`.SG_TCDEV_FIBERSEG_R_FIBER where FIBER_ID = #{resId})
+        ) OR Z_RES_ID in (
+            select ID from `tms`.SG_TCDEV_FIBERLINE_B where PAR_FIBER_SEG in (select FIBERSEG_ID from `tms`.SG_TCDEV_FIBERSEG_R_FIBER where FIBER_ID = #{resId})
+        )
+    </select>
+    <select id="selectCarryingChannelLinkByGlId" parameterType="com.mshz.cloud.tms.business.vo.ResParaVo" resultType="java.lang.String">
+        SELECT DISTINCT t2.CHANNEL_ID FROM `tms`.nr_res_channelroutenode_m t2
+        WHERE t2.RES_ID = #{resId}
+    </select>
+    <select id="selectCarryingChannelLinkBySDHId" parameterType="com.mshz.cloud.tms.business.vo.ResParaVo" resultType="java.lang.String">
+        SELECT id FROM `tms`.sg_tccon_tcchannel_b WHERE A_RES_ID = #{resId} or Z_RES_ID = #{resId}
+    </select>
+    <select id="selectCarryingChannelLinkByBuzId" parameterType="com.mshz.cloud.tms.business.vo.ResParaVo" resultType="java.lang.String">
+        SELECT CHANNEL_ID FROM `tms`.sg_tccon_tcbuz_r_tcchannel WHERE BUZ_ID = #{resId}
+    </select>
+
+    <select id="selectSDHCarryingOpticalPathById" parameterType="com.mshz.cloud.tms.business.vo.ResParaVo" resultType="string">
+        SELECT DISTINCT t1.ID FROM `tms`.SG_TCCON_TCOPTICALROAD_B t1
+        where t1.A_RES_ID = #{resId} OR t1.Z_RES_ID = #{resId}
+    </select>
+    <select id="selectBuzCarryingOpticalPathById" parameterType="com.mshz.cloud.tms.business.vo.ResParaVo" resultType="string">
+        SELECT t2.RES_ID FROM `tms`.sg_tccon_tcbuz_r_tcchannel t1
+        join `tms`.nr_res_channelroutenode_m t2 on t2.CHANNEL_ID = t1.CHANNEL_ID
+        WHERE t1.BUZ_ID = #{resId}
+    </select>
+
+    <select id="selectSDHCarryingBusinessById" parameterType="com.mshz.cloud.tms.business.vo.ResParaVo" resultType="string">
+        SELECT DISTINCT t3.BUZ_ID FROM `tms`.SG_TCCON_TCOPTICALROAD_B t1
+        join `tms`.nr_res_channelroutenode_m t2 on t2.RES_ID = t1.ID
+        JOIN `tms`.sg_tccon_tcbuz_r_tcchannel t3 ON t3.CHANNEL_ID = t2.CHANNEL_ID
+        where t1.A_RES_ID = #{resId} OR t1.Z_RES_ID = #{resId}
+    </select>
+
+    <select id="selectGLCarryingBusinessById" parameterType="com.mshz.cloud.tms.business.vo.ResParaVo" resultType="string">
+        SELECT DISTINCT t2.BUZ_ID FROM `tms`.nr_res_channelroutenode_m t1
+        JOIN `tms`.sg_tccon_tcbuz_r_tcchannel t2 ON t2.CHANNEL_ID = t1.CHANNEL_ID
+        WHERE t1.RES_ID = #{resId}
+    </select>
+
+    <select id="selectBKCarryingBusinessById" parameterType="com.mshz.cloud.tms.business.vo.ResParaVo" resultType="string">
+        SELECT DISTINCT t2.BUZ_ID FROM `tms`.SG_TCDEV_TCPORT_B t
+        JOIN `tms`.SG_TCCON_TCOPTICALROAD_B tt ON ( tt.A_PORT = t.ID OR tt.Z_PORT = t.ID )
+        JOIN `tms`.nr_res_channelroutenode_m t1 ON t1.RES_ID = tt.ID
+        JOIN `tms`.sg_tccon_tcbuz_r_tcchannel t2 ON t2.CHANNEL_ID = t1.CHANNEL_ID
+        WHERE t.PAR_CARD = #{resId}
+    </select>
+
+    <select id="selectBKCarryingOpticalPathById" parameterType="com.mshz.cloud.tms.business.vo.ResParaVo" resultType="string">
+        SELECT DISTINCT tt.ID FROM `tms`.SG_TCDEV_TCPORT_B t
+        JOIN `tms`.SG_TCCON_TCOPTICALROAD_B tt ON ( tt.A_PORT = t.ID OR tt.Z_PORT = t.ID )
+        WHERE t.PAR_CARD = #{resId}
+    </select>
+    <select id="cabinetAssociatedSites" parameterType="com.mshz.cloud.tms.business.vo.ResParaVo" resultType="string">
+        SELECT DISTINCT tt.PAR_STATION from `tms`.SG_TCCON_TCRACK_B t
+        JOIN `tms`.SG_TCCON_TCROOM_B tt on tt.ID = t.PAR_ROOM
+        where t.ID = #{resId}
+    </select>
+
+
+    <select id="selectCarryingOpticalPathByIds" resultType="java.util.Map">
+        SELECT
+            t1.ID id,
+            t1.NAME fiberName,
+            t1.FIBER_LENGTH fiberLength,
+            t6.REMARK des,
+            t3.NAME lineVoltageClass,
+            t2.totalCore,
+            t2.remainingCore,
+            t4.lineName,
+            t5.state_grid stateGrid,
+            t5.east_china eastChina,
+            t5.provincial_network provincialNetwork,
+            t5.land_city landCity
+        FROM
+            SG_TCDEV_FIBER_B t1
+                LEFT JOIN (select PAR_FIBER as parFiber, COUNT(1) totalCore ,COUNT(IF(SERVICE_STATE = '1300',1, NULL)) remainingCore from sg_tcdev_fiberline GROUP BY PAR_FIBER) t2 on t2.parFiber = t1.ID
+                LEFT JOIN `tms`.SG_DIC_VOLTAGETYPE t3 on t1.LINE_VOLTAGE_CLASS = t3.`CODE`
+                LEFT JOIN (SELECT FIBER_ID as parFiber, GROUP_CONCAT( tt.NAME SEPARATOR '、' ) lineName FROM sg_tcdev_fiber_r_line t LEFT JOIN dw_tcdev_oneline tt ON tt.ID = t.LINE_ID GROUP BY FIBER_ID) t4 on t4.parFiber = t1.ID
+                LEFT JOIN fiber_correlation_opticalroad t5 on t5.id = t1.ID
+                LEFT JOIN `tms`.nr_res_resource_b t6 on t6.ID = t1.ID
+        WHERE
+            t1.ID IN (${ids})
+    </select>
+
+    <select id="selectOpticalPathByIds" resultType="java.util.Map">
+        SELECT
+            t1.ID ID,
+            IFNULL( t1.SNNAME, t1.NAME ) name,
+            t2.NAME rate,
+            t3.NAME tcplane,
+            t5.NAME aResobj,
+            t4.NAME aNe,
+            t7.NAME zResobj,
+            t6.NAME zNe,
+            t1.OPTICAL_ROUTING opticalRouting
+        FROM
+            sg_tccon_tcopticalroad_b t1
+                LEFT JOIN SG_DIC_TCRATE t2 ON t2.CODE = t1.RATE
+                LEFT JOIN SG_TCCON_TCPLANE_B t3 ON t3.id = t1.TCPLANE
+                LEFT JOIN ( SELECT id AS CODE, NAME AS NAME FROM SG_TCDEV_TCNESDH_B UNION SELECT id AS CODE, NAME AS NAME FROM SG_TCDEV_TCNEOTN_B ) t4 ON t4.`code` = t1.A_RES_ID
+                LEFT JOIN SG_TCCON_TCSITE_B t5 ON t5.ID = t1.A_RESOBJID
+                LEFT JOIN ( SELECT id AS CODE, NAME AS NAME FROM SG_TCDEV_TCNESDH_B UNION SELECT id AS CODE, NAME AS NAME FROM SG_TCDEV_TCNEOTN_B ) t6 ON t6.`code` = t1.Z_RES_ID
+                LEFT JOIN SG_TCCON_TCSITE_B t7 ON t7.ID = t1.Z_RESOBJID
+        WHERE
+            t1.ID IN ( ${ids} )
+    </select>
+    <select id="selectAPortList" resultType="java.util.Map">
+        SELECT
+            t2.id ID,
+            t1.NAME aPort
+        FROM
+            SG_TCDEV_TCPORT_B t1
+                RIGHT JOIN sg_tccon_tcopticalroad_b t2 ON t2.A_PORT = t1.ID
+        WHERE
+            t2.id IN (${ids})
+    </select>
+    <select id="selectZPortList" resultType="java.util.Map">
+        SELECT
+            t2.id ID,
+            t1.NAME zPort
+        FROM
+            SG_TCDEV_TCPORT_B t1
+                RIGHT JOIN sg_tccon_tcopticalroad_b t2 ON t2.Z_PORT = t1.ID
+        WHERE
+            t2.id IN (${ids})
+    </select>
+    <select id="selectMergeList" resultType="java.util.Map">
+        SELECT
+            GROUP_CONCAT( ID ) merge
+        FROM
+            sg_tccon_tcopticalroad_b
+        WHERE
+            IFNULL( A_RES_ID, '' ) != ''
+	        AND IFNULL( Z_RES_ID, '' ) != ''
+            AND ID IN (${ids})
+        GROUP BY
+            A_RES_ID,
+            Z_RES_ID
+        HAVING
+            COUNT( 1 ) = 2
+    </select>
+    <select id="carryingOpticalPathExport" resultType="java.util.Map">
+        SELECT
+            IFNULL( t1.SNNAME, t1.`NAME` ) name,
+            t2.NAME aResId,
+            t3.NAME zResId,
+            t4.NAME aPort,
+            t5.NAME zPort,
+            t6.NAME dspLevel
+        FROM
+            SG_TCCON_TCOPTICALROAD_B t1
+                LEFT JOIN ( SELECT ID AS CODE, NAME AS NAME FROM SG_TCDEV_TCNESDH_B UNION SELECT ID AS CODE, NAME AS NAME FROM SG_TCDEV_TCNEOTN_B ) t2 ON t2.`code` = t1.A_RES_ID
+                LEFT JOIN ( SELECT ID AS CODE, NAME AS NAME FROM SG_TCDEV_TCNESDH_B UNION SELECT ID AS CODE, NAME AS NAME FROM SG_TCDEV_TCNEOTN_B ) t3 ON t3.`code` = t1.Z_RES_ID
+                LEFT JOIN SG_TCDEV_TCPORT_B t4 ON t4.ID = t1.A_PORT
+                LEFT JOIN SG_TCDEV_TCPORT_B t5 ON t5.ID = t1.Z_PORT
+                LEFT JOIN SG_DIC_TCDISPATCHLEVEL t6 ON t6.`CODE` = t1.DSP_LEVEL
+        WHERE
+            t1.ID in
+        <foreach item="id" collection="list" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <select id="carryingBusinessExport" resultType="java.util.Map">
+        SELECT
+            IFNULL( t1.SNNAME, t1.`NAME` ) name,
+            channel_route channelRoute,
+            t2.NAME dspLevel,
+            t3.NAME buzType
+        FROM
+            sg_tccon_tcbuz_b t1
+                LEFT JOIN SG_DIC_TCDISPATCHLEVEL t2 ON t2.`CODE` = t1.DSP_LEVEL
+                LEFT JOIN SG_DIC_TCBUZTYPE t3 ON t3.`CODE` = t1.BUZ_TYPE
+        WHERE
+            t1.ID in
+        <foreach item="id" collection="list" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+    <select id="selectFiberNameById" resultType="java.lang.String">
+        select NAME from SG_TCDEV_FIBER_B where id = #{id}
+    </select>
+    <select id="selectSDHNameById" resultType="java.lang.String">
+        select NAME from SG_TCDEV_TCNESDH_B where id = #{id}
+    </select>
+    <select id="selectOTNNameById" resultType="java.lang.String">
+        select NAME from SG_TCDEV_TCNEOTN_B where id = #{id}
+    </select>
+    <select id="selectBuzNameById" resultType="java.lang.String">
+        select NAME from SG_TCCON_TCBUZ_B where id = #{id}
+    </select>
+    <select id="selectCardNameById" resultType="java.lang.String">
+        select NAME from SG_TCDEV_TCCARD_B where id = #{id}
+    </select>
+    <select id="selectGLNameById" resultType="java.lang.String">
+        select IFNULL(SNNAME,`NAME` ) from SG_TCCON_TCOPTICALROAD_B where id = #{id}
+    </select>
+    <select id="selectLineSn" resultType="java.util.Map">
+        SELECT
+            t2.ID ID,GROUP_CONCAT(t1.sn) LINE_SN
+        FROM
+            SG_TCDEV_FIBERLINE t1
+                JOIN SG_TCCON_TCOPTICALROAD_B t2 ON t2.id = t1.OPTICALROAD_ID
+        WHERE
+            t1.PAR_FIBER = #{resId} GROUP BY t2.ID
+    </select>
+    <select id="getSdhBySiteId" resultType="java.lang.String">
+        select b.id from `tms`.SG_TCCON_TCROOM_B a
+        join `tms`.sg_tcdev_tcnesdh_b b on b.PAR_ROOM = a.id
+        where a.PAR_STATION = #{resId}
+    </select>
+    <select id="getOtnBySiteId" resultType="java.lang.String">
+        select b.id from `tms`.SG_TCCON_TCROOM_B a
+        join `tms`.sg_tcdev_tcneotn_b b on b.PAR_ROOM = a.id
+        where a.PAR_STATION = #{resId}
+    </select>
+    <select id="getFiberBySiteId" resultType="java.lang.String">
+        select id from `tms`.sg_tcdev_fiber_b where A_RESOBJID = #{resId} or Z_RESOBJID = #{resId}
+    </select>
+    <select id="getFiberByGlId" resultType="java.lang.String">
+        SELECT t1.FIBER_ID  FROM sg_tccon_tcrouter_r_fiber t1
+        WHERE t1.ROUTER_ID = #{resId}
+        UNION
+        select t3.FIBER_ID from `tms`.sg_tccon_tcrouter_r_tcopticalroad t1
+        join `tms`.SG_TCDEV_FIBERLINE_B t2 on t2.ID = t1.RES_ID
+        join `tms`.SG_TCDEV_FIBERSEG_R_FIBER t3 on t3.FIBERSEG_ID = t2.PAR_FIBER_SEG
+        where t1.OPTICAL_ID = #{resId}
+    </select>
+    <select id="getFiberByBuzId" resultType="java.lang.String">
+        SELECT t3.FIBER_ID FROM `tms`.sg_tccon_tcbuz_r_tcchannel t1
+        join `tms`.nr_res_channelroutenode_m t2 on t2.CHANNEL_ID = t1.CHANNEL_ID
+        JOIN sg_tccon_tcrouter_r_fiber t3 ON t3.ROUTER_ID = t2.RES_ID
+        WHERE t1.BUZ_ID = #{resId}
+        UNION
+        SELECT t5.FIBER_ID FROM `tms`.sg_tccon_tcbuz_r_tcchannel t1
+        join `tms`.nr_res_channelroutenode_m t2 on t2.CHANNEL_ID = t1.CHANNEL_ID
+        join `tms`.sg_tccon_tcrouter_r_tcopticalroad t3 on t3.OPTICAL_ID = t2.RES_ID
+        join `tms`.SG_TCDEV_FIBERLINE_B t4 on t4.ID = t3.RES_ID
+        join `tms`.SG_TCDEV_FIBERSEG_R_FIBER t5 on t5.FIBERSEG_ID = t4.PAR_FIBER_SEG
+        WHERE t1.BUZ_ID = #{resId}
+        UNION
+        select t5.FIBER_ID from `tms`.sg_tccon_tcbuz_r_tcchannel t1
+        join `tms`.sg_tccon_tcchannelfiber_b t2 on t2.PAR_CHANNEL = t1.CHANNEL_ID
+        join `tms`.SG_TCDEV_FIBERLINE_B t4 on t4.ID = t2.A_RES_ID or t4.ID = t2.Z_RES_ID
+        join `tms`.SG_TCDEV_FIBERSEG_R_FIBER t5 on t5.FIBERSEG_ID = t4.PAR_FIBER_SEG
+        WHERE t1.BUZ_ID = #{resId}
+    </select>
+    <select id="selectSiteInfoById" resultType="java.util.Map">
+        select id as id, name as name from sg_tccon_tcsite_b where id = #{id}
+    </select>
+
+    <resultMap id="RoomListBySiteIdMap" type="java.util.Map">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="location" column="location"/>
+        <result property="assetsOwnershipComId" column="assetsOwnershipComId"/>
+        <result property="unit" column="unit"/>
+        <collection property="rackList" javaType="java.util.List" ofType="java.util.Map">
+            <result property="id" column="rackId"/>
+            <result property="name" column="rackName"/>
+            <result property="rackType" column="rackType"/>
+            <result property="displaySn" column="displaySn"/>
+            <result property="capacity" column="capacity"/>
+        </collection>
+    </resultMap>
+    <select id="selectRoomListBySiteId" resultMap="RoomListBySiteIdMap">
+        SELECT
+            r.ID as id,
+            r.NAME as name,
+            r.LOCATION as location,
+            (select name from sg_org_company_b t where t.ID = r.ASSETS_OWNER_SHIP_COM_ID) as assetsOwnershipComId,
+            k.ID as rackId,
+            k.NAME as rackName,
+            (select name from SG_DIC_TCRACKTYPE t where t.CODE = k.RACK_TYPE) as rackType,
+            k.DISPLAY_S_N as displaySn,
+            k.capacity as capacity
+        from sg_tccon_tcroom_b r
+                 LEFT JOIN sg_tccon_tcrack_b k on k.PAR_ROOM = r.ID
+        where r.PAR_STATION = #{id}
+        ORDER BY r.LOCATION
+    </select>
+    <select id="getNeByRackId" resultType="java.util.Map">
+        select s.id     as id,
+               s.`NAME` as name,
+               n.id     as neId,
+               n.`NAME` as neName
+        from sg_tcdev_tcshelf_b s
+        left join (SELECT id, name from sg_tcdev_tcnesdh_b UNION SELECT id, name from sg_tcdev_tcneotn_b) n
+                      on n.ID = s.PAR_NE
+        where PAR_RACK = #{id}
+    </select>
+
+
+</mapper>

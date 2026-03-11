@@ -1,0 +1,13 @@
+twaver.Util.validateLicense(
+"l=1.0\n"+
+"type=3\n"+
+"gis=0\n"+
+"3d=0\n"+
+"start=2015-12-23\n"+
+"licensee=China Telecom Corporation Limited Guangdong Branch\n"+
+"licensedUser=1 Server\n"+
+"validity=Permanent\n"+
+"maintenanceandUpgrade=12 Month\n"+
+"buyer=China Communication Service Application and Solution Technology Co. Ltd\n"+
+"signature=59f7b92faf93792c8c23017a0e656767b9fb3b5a970fde62075865ca3c143818b5111ab328eecba2f5ef923eb2794b90115a3ef0a34153cb19bf133a943ef0212b721096d69aac05bcc22819abbbaaf97a523d9e6a5b656de69d1d3c3987597766562b949fec9af9e0bc29cc9c38f2b387539fcd5970cd0523168b7e267daafb24b93eff230d7c3eaad9379c3acc0bcb5c44db2f2410e761204df9026212b30a26d2d2fcef3bc228d745b784b3f58808ba6ed3f3719fe450ff210a950f2af3899be760d1b1dcaee685bc143ffc3aa0e7e75c686ac7def2b8228602e7cb319e96b5a6e2c396391c2c128dc388efaf7b45a97f0adc632125b6f908529eaf2f659425fbdbf8f7ef0715ad562f042efe341a4f20056d0ee1c9d392f1e5835d77711ef747338e12ca7136672f80df281bfe4542a387d32648f928971a127d8ca6267e56cb34274b25140aa7bae95f2671000d10a262820e0c7a523176663873d0a3ce327acada57bd4480de654d22849f80516f8db6239cc59c9d45206d45dac72353"
+);

@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mshz.cloud.tms.business.mapper.TMetaModelTechMapper">
+
+    <resultMap type="TMetaModelTech" id="TMetaModelTechResult">
+        <result property="id" column="id"/>
+        <result property="modelId" column="model_id"/>
+        <result property="columnName" column="column_name"/>
+        <result property="columnNameCn" column="column_name_cn"/>
+        <result property="columnType" column="column_type"/>
+        <result property="columnLength" column="column_length"/>
+        <result property="isNotNull" column="is_not_null"/>
+        <result property="isPrimaryKey" column="is_primary_key"/>
+        <result property="modelVersion" column="model_version"/>
+        <result property="createDate" column="create_date"/>
+        <result property="updateDate" column="update_date"/>
+        <result property="productionForm" column="production_form"/>
+        <result property="remark" column="remark"/>
+        <result property="dataSources" column="data_sources"/>
+        <result property="updateOrNot" column="update_or_not"/>
+    </resultMap>
+
+    <sql id="selectTMetaModelTechVo">
+        select id, model_id, column_name, column_name_cn, column_type, column_length, is_not_null, is_primary_key, model_version, create_date, update_date, production_form, remark, data_sources,update_or_not from t_meta_model_tech
+    </sql>
+
+    <!--根据id查询技术元模型信息-->
+    <select id="selectTMetaModelTechById" resultType="com.mshz.cloud.tms.business.vo.MetadataTechInfoVo">
+        select  m.table_name tableName
+        FROM t_meta_model m
+        WHERE m.id= #{modelId}
+    </select>
+
+    <!--查询技术元模型属性列表-->
+    <select id="selectTMetaModelTechList" parameterType="TMetaModelTech"
+            resultMap="TMetaModelTechResult">
+        select t.id, column_name, column_name_cn, column_type, column_length, is_not_null, is_primary_key ,
+        t.create_date,sort_num, production_form, remark, data_sources,t.update_or_not
+        FROM t_meta_model_tech t
+        LEFT JOIN t_meta_model_show s on t.id=s.column_id
+        <where>
+            <if test="modelVersion!=null">
+                and  t.model_id = #{modelId}
+            </if>
+            <if test="modelVersion!=null">
+                and  (t.model_version = #{modelVersion})
+            </if>
+            <if test="columnName != null  and columnName  != ''">
+            and column_name like concat('%', #{columnName}, '%')
+            </if>
+        </where>
+        ORDER BY sort_num asc,t.create_date asc
+    </select>
+    <!--查询技术元模型属性列表校验-->
+    <select id="selectTMetaModelTechOne" parameterType="TMetaModelTech"
+            resultMap="TMetaModelTechResult">
+        select t.id, column_name, column_name_cn, column_type, column_length, is_not_null, is_primary_key ,
+        production_form, remark, data_sources,
+        t.create_date,sort_num
+        FROM t_meta_model_tech t
+        LEFT JOIN t_meta_model_show s on t.id=s.column_id
+        <where>
+            t.model_id = #{modelId} and (t.model_version = #{modelVersion})
+            <if test="columnName != null  and columnName  != ''">and column_name = #{columnName}</if>
+        </where>
+        ORDER BY sort_num asc,t.create_date asc
+    </select>
+
+    <!--查询技术属性类型int，char-->
+    <select id="selectTMetaModelTechType" resultType="java.lang.String">
+        select dict_label  columnType FROM sys_dict_data
+        where  dict_type='column_type'
+    </select>
+
+    <!--技术元模型属性表复制，根据modelId和版本号-->
+    <select id="selectMetaModelTechListCopy" resultType="TMetaModelTech">
+        select id, model_id, column_name, column_name_cn, column_type, column_length, is_not_null, is_primary_key,
+        production_form, remark, data_sources,update_or_not,
+        create_date from t_meta_model_tech
+        <where>
+            <if test="modelId != null ">and model_id = #{modelId}</if>
+            <if test="modelVersion != null  and modelVersion != ''">and model_version = #{modelVersion}</if>
+        </where>
+    </select>
+
+    <!--新增技术元模型属性-->
+    <insert id="insertTMetaModelTech" parameterType="TMetaModelTech">
+        insert into t_meta_model_tech
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="t.id != null">id,</if>
+            <if test="t.modelId != null">model_id,</if>
+            <if test="t.columnName != null">column_name,</if>
+            <if test="t.columnNameCn != null">column_name_cn,</if>
+            <if test="t.columnType != null">column_type,</if>
+            <if test="t.columnLength != null">column_length,</if>
+            <if test="t.isNotNull != null">is_not_null,</if>
+            <if test="t.isPrimaryKey != null">is_primary_key,</if>
+            <if test="t.modelVersion != null">model_version,</if>
+            <if test="t.createDate != null">create_date,</if>
+            <if test="t.productionForm != null">production_form,</if>
+            <if test="t.remark != null">remark,</if>
+            <if test="t.dataSources != null">data_sources,</if>
+            <if test="t.updateOrNot != null">update_or_not,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="t.id != null">#{t.id},</if>
+            <if test="t.modelId != null">#{t.modelId},</if>
+            <if test="t.columnName != null">#{t.columnName},</if>
+            <if test="t.columnNameCn != null">#{t.columnNameCn},</if>
+            <if test="t.columnType != null">#{t.columnType},</if>
+            <if test="t.columnLength != null">#{t.columnLength},</if>
+            <if test="t.isNotNull != null">#{t.isNotNull},</if>
+            <if test="t.isPrimaryKey != null">#{t.isPrimaryKey},</if>
+            <if test="t.modelVersion != null">#{t.modelVersion},</if>
+            <if test="t.createDate != null">#{t.createDate},</if>
+            <if test="t.productionForm != null">#{t.productionForm},</if>
+            <if test="t.remark != null">#{t.remark},</if>
+            <if test="t.dataSources != null">#{t.dataSources},</if>
+            <if test="t.updateOrNot != null">#{t.updateOrNot},</if>
+        </trim>
+    </insert>
+
+    <!--技术元模型属性表复制-新增技术元模型属性集合-->
+    <insert id="insertTMetaModelTechList">
+        <foreach collection="list" item="item" index="index" separator=";">
+            insert into t_meta_model_tech
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="item.id != null">id,</if>
+                <if test="item.modelId != null">model_id,</if>
+                <if test="item.columnName != null">column_name,</if>
+                <if test="item.columnNameCn != null">column_name_cn,</if>
+                <if test="item.columnType != null">column_type,</if>
+                <if test="item.columnLength != null">column_length,</if>
+                <if test="item.isNotNull != null">is_not_null,</if>
+                <if test="item.isPrimaryKey != null">is_primary_key,</if>
+                <if test="item.modelVersion != null">model_version,</if>
+                <if test="item.createDate != null">create_date,</if>
+                <if test="item.productionForm != null">production_form,</if>
+                <if test="item.remark != null">remark,</if>
+                <if test="item.dataSources != null">data_sources,</if>
+                <if test="item.updateOrNot != null">update_or_not,</if>
+            </trim>
+            <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="item.id != null">#{item.id},</if>
+                <if test="item.modelId != null">#{item.modelId},</if>
+                <if test="item.columnName != null">#{item.columnName},</if>
+                <if test="item.columnNameCn != null">#{item.columnNameCn},</if>
+                <if test="item.columnType != null">#{item.columnType},</if>
+                <if test="item.columnLength != null">#{item.columnLength},</if>
+                <if test="item.isNotNull != null">#{item.isNotNull},</if>
+                <if test="item.isPrimaryKey != null">#{item.isPrimaryKey},</if>
+                <if test="item.modelVersion != null">#{item.modelVersion},</if>
+                <if test="item.createDate != null">#{item.createDate},</if>
+                <if test="item.productionForm != null">#{item.productionForm},</if>
+                <if test="item.remark != null">#{item.remark},</if>
+                <if test="item.dataSources != null">#{item.dataSources},</if>
+                <if test="item.updateOrNot != null">#{item.updateOrNot},</if>
+            </trim>
+        </foreach>
+    </insert>
+
+
+    <update id="updateTMetaModelTech" parameterType="TMetaModelTech">
+        update t_meta_model_tech
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="modelId != null">model_id = #{modelId},</if>
+            <if test="columnName != null">column_name = #{columnName},</if>
+            <if test="columnNameCn != null">column_name_cn = #{columnNameCn},</if>
+            <if test="columnType != null">column_type = #{columnType},</if>
+            <if test="columnLength != null">column_length = #{columnLength},</if>
+            <if test="isNotNull != null">is_not_null = #{isNotNull},</if>
+            <if test="isPrimaryKey != null">is_primary_key = #{isPrimaryKey},</if>
+            <if test="modelVersion != null">model_version = #{modelVersion},</if>
+            <if test="createDate != null">create_date = #{createDate},</if>
+            <if test="updateDate != null">update_date = #{updateDate},</if>
+            <if test="productionForm != null">production_form = #{productionForm},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="dataSources != null">data_sources = #{dataSources},</if>
+            <if test="updateOrNot != null">update_or_not = #{updateOrNot},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTMetaModelTechById" parameterType="Long">
+        delete from t_meta_model_tech where id = #{id}
+    </delete>
+
+    <delete id="deleteTMetaModelTechByIds" parameterType="String">
+        delete from t_meta_model_tech where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

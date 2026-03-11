@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mshz.cloud.tms.business.mapper.QualityPublicTreeModelSetMapper">
+
+    <resultMap type="QualityPublicTreeModelSet" id="QualityPublicTreeModelSetResult">
+        <result property="id"    column="id"    />
+        <result property="metaModelId"    column="meta_model_id"    />
+        <result property="metaModelTechId"    column="meta_model_tech_id"    />
+        <result property="treeId"    column="tree_id"    />
+        <result property="nodeId"    column="node_id"    />
+        <result property="useTreeData"    column="use_tree_data"    />
+        <result property="isLastNode"    column="is_last_node"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectQualityPublicTreeModelSetVo">
+        select id, meta_model_id, meta_model_tech_id, tree_id, node_id, use_tree_data, is_last_node, create_time, update_time, remark from t_quality_public_tree_model_set
+    </sql>
+
+    <select id="selectQualityPublicTreeModelSetList" parameterType="QualityPublicTreeModelSet" resultMap="QualityPublicTreeModelSetResult">
+        <include refid="selectQualityPublicTreeModelSetVo"/>
+        <where>
+            <if test="metaModelId != null "> and meta_model_id = #{metaModelId}</if>
+            <if test="metaModelTechId != null "> and meta_model_tech_id = #{metaModelTechId}</if>
+            <if test="treeId != null "> and tree_id = #{treeId}</if>
+            <if test="nodeId != null "> and node_id = #{nodeId}</if>
+            <if test="useTreeData != null  and useTreeData != ''"> and use_tree_data = #{useTreeData}</if>
+            <if test="isLastNode != null  and isLastNode != ''"> and is_last_node = #{isLastNode}</if>
+        </where>
+    </select>
+
+    <select id="selectQualityPublicTreeModelSetById" parameterType="Long" resultMap="QualityPublicTreeModelSetResult">
+        <include refid="selectQualityPublicTreeModelSetVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertQualityPublicTreeModelSet" parameterType="QualityPublicTreeModelSet" useGeneratedKeys="true" keyProperty="id">
+        insert into t_quality_public_tree_model_set
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="metaModelId != null">meta_model_id,</if>
+            <if test="metaModelTechId != null">meta_model_tech_id,</if>
+            <if test="treeId != null">tree_id,</if>
+            <if test="nodeId != null">node_id,</if>
+            <if test="useTreeData != null">use_tree_data,</if>
+            <if test="isLastNode != null">is_last_node,</if>
+            <if test="remark != null">remark,</if>
+            create_time
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="metaModelId != null">#{metaModelId},</if>
+            <if test="metaModelTechId != null">#{metaModelTechId},</if>
+            <if test="treeId != null">#{treeId},</if>
+            <if test="nodeId != null">#{nodeId},</if>
+            <if test="useTreeData != null">#{useTreeData},</if>
+            <if test="isLastNode != null">#{isLastNode},</if>
+            <if test="remark != null">#{remark},</if>
+            sysdate()
+         </trim>
+    </insert>
+
+    <update id="updateQualityPublicTreeModelSet" parameterType="QualityPublicTreeModelSet">
+        update t_quality_public_tree_model_set
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="metaModelId != null">meta_model_id = #{metaModelId},</if>
+            <if test="metaModelTechId != null">meta_model_tech_id = #{metaModelTechId},</if>
+            <if test="treeId != null">tree_id = #{treeId},</if>
+            <if test="nodeId != null">node_id = #{nodeId},</if>
+            <if test="useTreeData != null">use_tree_data = #{useTreeData},</if>
+            <if test="isLastNode != null">is_last_node = #{isLastNode},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            update_time = sysdate()
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteQualityPublicTreeModelSetById" parameterType="Long">
+        delete from t_quality_public_tree_model_set where id = #{id}
+    </delete>
+
+    <delete id="deleteQualityPublicTreeModelSetByIds" parameterType="String">
+        delete from t_quality_public_tree_model_set where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectTreeNodeModelSetByTech" parameterType="QualityPublicTreeModelSet" resultMap="QualityPublicTreeModelSetResult">
+        <include refid="selectQualityPublicTreeModelSetVo"/>
+        <where>
+            <if test="metaModelId != null "> and meta_model_id = #{metaModelId}</if>
+            <if test="metaModelTechId != null "> and meta_model_tech_id = #{metaModelTechId}</if>
+            <if test="treeId != null "> and tree_id = #{treeId}</if>
+            <if test="nodeId != null "> and node_id = #{nodeId}</if>
+        </where>
+    </select>
+
+    <select id="selectTreeNodeModelSetByPNode" parameterType="java.util.Map" resultType="QualityPublicTreeModelSet">
+        select s.id as id, s.meta_model_id as metaModelId, s.meta_model_tech_id as metaModelTechId,
+               s.tree_id as treeId, s.node_id as nodeId, s.use_tree_data as userTreeData, s.is_last_node as siLastNode
+        from t_quality_public_tree_model_set s
+        join t_quality_public_tree_node n on s.node_id = n.id
+        <where>
+            <if test="treeId != null "> and n.tree_id = #{treeId}</if>
+            <if test="nodeId != null "> and n.id = #{nodeId}</if>
+            <if test="nodeLevel != null "> and n.node_level = #{nodeLevel}</if>
+            <if test="parentId != null "> and n.parent_id = #{parentId}</if>
+        </where>
+    </select>
+</mapper>

@@ -1,0 +1,62 @@
+spring:
+  application:
+    # 应用名称
+    name: txqj-cloud-system
+  profiles:
+    # 环境配置
+    active: '@profiles.active@'
+  main:
+    allow-bean-definition-overriding: true
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+        namespace: 09091c07-8c47-46c3-9633-5673db21a9b0
+        group: DEFAULT_GROUP
+#        username: nacos
+#        password: nacos
+      config:
+        server-addr: localhost:8848
+        namespace: 09091c07-8c47-46c3-9633-5673db21a9b0
+        group: DEFAULT_GROUP
+#        username: nacos
+#        password: nacos
+        # 配置文件格式
+        file-extension: yml
+        # 共享配置
+        shared-configs:
+          - application-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
+
+server:
+  servlet:
+    context-path: /${spring.application.name}
+  compression:
+    enabled: true
+    mime-types: application/json,application/xml
+    min-response-size: 1024
+  tomcat:
+    accept-count: 1200
+    max-threads: 600
+    min-spare-threads: 200
+    max-connections: 15000
+    connection-timeout: 20000
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 3200000
+        readTimeout: 3200000
+  httpclient:
+    connection-timeout: 3200000
+
+logging:
+  level:
+    com:
+      alibaba:
+        nacos:
+          client:
+            naming: warn
+      baomidou:
+        mybatis plus: error
+

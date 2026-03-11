@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mshz.cloud.tms.business.mapper.TMetaModelVersionMapper">
+
+    <resultMap type="TMetaModelVersion" id="TMetaModelVersionResult">
+        <result property="id"    column="id"    />
+        <result property="modelId"    column="model_id"    />
+        <result property="modelVersion"    column="model_version"    />
+        <result property="modelVersionAlias"    column="model_version_alias"    />
+        <result property="createDate"    column="create_date"    />
+        <result property="updateDate"    column="update_date"    />
+    </resultMap>
+
+    <sql id="selectTMetaModelVersionVo">
+        select id, model_id, model_version, model_version_alias, create_date, update_date from t_meta_model_version
+    </sql>
+
+    <select id="selectTMetaModelVersionList" parameterType="TMetaModelVersion" resultMap="TMetaModelVersionResult">
+        <include refid="selectTMetaModelVersionVo"/>
+        <where>
+            <if test="modelId != null "> and model_id = #{modelId}</if>
+            <if test="modelVersion != null  and modelVersion != ''"> and model_version = #{modelVersion}</if>
+            <if test="modelVersionAlias != null  and modelVersionAlias != ''"> and model_version_alias = #{modelVersionAlias}</if>
+            <if test="createDate != null  and createDate != ''"> and create_date = #{createDate}</if>
+            <if test="updateDate != null  and updateDate != ''"> and update_date = #{updateDate}</if>
+        </where>
+    </select>
+
+    <select id="selectTMetaModelVersionById" parameterType="Long" resultMap="TMetaModelVersionResult">
+        <include refid="selectTMetaModelVersionVo"/>
+        where id = #{id}
+    </select>
+    <select id="selectModelVersionAlias" resultType="java.lang.String">
+        select model_version_alias FROM t_meta_model_version
+        where model_version = #{modelVersion}
+          and model_id = #{modelId}
+    </select>
+
+    <insert id="insertTMetaModelVersion" parameterType="TMetaModelVersion">
+        insert into t_meta_model_version
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="modelId != null">model_id,</if>
+            <if test="modelVersion != null">model_version,</if>
+            <if test="modelVersionAlias != null">model_version_alias,</if>
+            <if test="createDate != null">create_date,</if>
+            <if test="updateDate != null">update_date,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="modelId != null">#{modelId},</if>
+            <if test="modelVersion != null">#{modelVersion},</if>
+            <if test="modelVersionAlias != null">#{modelVersionAlias},</if>
+            <if test="createDate != null">#{createDate},</if>
+            <if test="updateDate != null">#{updateDate},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTMetaModelVersion" parameterType="TMetaModelVersion">
+        update t_meta_model_version
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="modelId != null">model_id = #{modelId},</if>
+            <if test="modelVersion != null">model_version = #{modelVersion},</if>
+            <if test="modelVersionAlias != null">model_version_alias = #{modelVersionAlias},</if>
+            <if test="createDate != null">create_date = #{createDate},</if>
+            <if test="updateDate != null">update_date = #{updateDate},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTMetaModelVersionById" parameterType="Long">
+        delete from t_meta_model_version where id = #{id}
+    </delete>
+
+    <delete id="deleteTMetaModelVersionByIds" parameterType="String">
+        delete from t_meta_model_version where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

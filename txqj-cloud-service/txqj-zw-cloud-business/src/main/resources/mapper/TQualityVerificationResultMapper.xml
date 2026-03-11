@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mshz.cloud.tms.business.mapper.TQualityVerificationResultMapper">
+
+    <resultMap type="TQualityVerificationResult" id="TQualityVerificationResultResult">
+        <result property="id"    column="id"    />
+        <result property="ruleCategory"    column="rule_category"    />
+        <result property="verificationRuleId"    column="verification_rule_id"    />
+        <result property="errorId"    column="error_id"    />
+        <result property="errorColumnNameCn"    column="error_column_name_cn"    />
+        <result property="errorColumnName"    column="error_column_name"    />
+        <result property="errorColumnValue"    column="error_column_value"    />
+        <result property="errorData"    column="error_data"    />
+        <result property="resourceType"    column="resource_type"    />
+        <result property="problemType"    column="problem_type"    />
+        <result property="ruleDescription"    column="rule_description"    />
+        <result property="modificationSuggestions"    column="modification_suggestions"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectTQualityVerificationResultVo">
+        select id, rule_category, verification_rule_id, error_id, error_column_name_cn, error_column_name, error_column_value, error_data, resource_type, problem_type, rule_description, modification_suggestions, create_time, update_time from t_quality_verification_result
+    </sql>
+
+    <sql id="selectTQualityVerificationResultVo1">
+        select id, rule_category, verification_rule_id, error_id, error_column_name_cn, error_column_name, error_column_value, error_data, (select t.table_name_cn from t_meta_model t WHERE CONCAT(t.id) = resource_type) resource_type, problem_type, rule_description, modification_suggestions, create_time, update_time from t_quality_verification_result
+    </sql>
+
+    <select id="selectTQualityVerificationResultList" parameterType="TQualityVerificationResult" resultMap="TQualityVerificationResultResult">
+        <include refid="selectTQualityVerificationResultVo"/>
+        <where>
+            <if test="ruleCategory != null  and ruleCategory != ''"> and rule_category = #{ruleCategory}</if>
+            <if test="verificationRuleId != null  and verificationRuleId != ''"> and verification_rule_id = #{verificationRuleId}</if>
+            <if test="errorId != null  and errorId != ''"> and error_id = #{errorId}</if>
+            <if test="errorColumnNameCn != null  and errorColumnNameCn != ''"> and error_column_name_cn = #{errorColumnNameCn}</if>
+            <if test="errorColumnName != null  and errorColumnName != ''"> and error_column_name like concat('%', #{errorColumnName}, '%')</if>
+            <if test="errorColumnValue != null  and errorColumnValue != ''"> and error_column_value = #{errorColumnValue}</if>
+            <if test="errorData != null  and errorData != ''"> and error_data = #{errorData}</if>
+            <if test="resourceType != null  and resourceType != ''"> and resource_type = #{resourceType}</if>
+            <if test="problemType != null  and problemType != ''"> and problem_type = #{problemType}</if>
+            <if test="ruleDescription != null  and ruleDescription != ''"> and rule_description = #{ruleDescription}</if>
+            <if test="modificationSuggestions != null  and modificationSuggestions != ''"> and modification_suggestions = #{modificationSuggestions}</if>
+        </where>
+    </select>
+
+    <select id="selectTQualityVerificationResultById" parameterType="Long" resultMap="TQualityVerificationResultResult">
+        <include refid="selectTQualityVerificationResultVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectTQualityVerificationResultByCondition"  resultMap="TQualityVerificationResultResult">
+        <include refid="selectTQualityVerificationResultVo"/>
+        where verification_rule_id = #{ruleId} and  error_id =#{errorId} and error_column_name=#{commName} and rule_category='0'
+    </select>
+
+    <insert id="insertTQualityVerificationResult" parameterType="TQualityVerificationResult">
+        insert into t_quality_verification_result
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="ruleCategory != null">rule_category,</if>
+            <if test="verificationRuleId != null">verification_rule_id,</if>
+            <if test="errorId != null">error_id,</if>
+            <if test="errorColumnNameCn != null">error_column_name_cn,</if>
+            <if test="errorColumnName != null">error_column_name,</if>
+            <if test="errorColumnValue != null">error_column_value,</if>
+            <if test="errorData != null">error_data,</if>
+            <if test="resourceType != null">resource_type,</if>
+            <if test="problemType != null">problem_type,</if>
+            <if test="ruleDescription != null">rule_description,</if>
+            <if test="modificationSuggestions != null">modification_suggestions,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="ruleCategory != null">#{ruleCategory},</if>
+            <if test="verificationRuleId != null">#{verificationRuleId},</if>
+            <if test="errorId != null">#{errorId},</if>
+            <if test="errorColumnNameCn != null">#{errorColumnNameCn},</if>
+            <if test="errorColumnName != null">#{errorColumnName},</if>
+            <if test="errorColumnValue != null">#{errorColumnValue},</if>
+            <if test="errorData != null">#{errorData},</if>
+            <if test="resourceType != null">#{resourceType},</if>
+            <if test="problemType != null">#{problemType},</if>
+            <if test="ruleDescription != null">#{ruleDescription},</if>
+            <if test="modificationSuggestions != null">#{modificationSuggestions},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTQualityVerificationResult" parameterType="TQualityVerificationResult">
+        update t_quality_verification_result
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="ruleCategory != null">rule_category = #{ruleCategory},</if>
+            <if test="verificationRuleId != null">verification_rule_id = #{verificationRuleId},</if>
+            <if test="errorId != null">error_id = #{errorId},</if>
+            <if test="errorColumnNameCn != null">error_column_name_cn = #{errorColumnNameCn},</if>
+            <if test="errorColumnName != null">error_column_name = #{errorColumnName},</if>
+            <if test="errorColumnValue != null">error_column_value = #{errorColumnValue},</if>
+            <if test="errorData != null">error_data = #{errorData},</if>
+            <if test="resourceType != null">resource_type = #{resourceType},</if>
+            <if test="problemType != null">problem_type = #{problemType},</if>
+            <if test="ruleDescription != null">rule_description = #{ruleDescription},</if>
+            <if test="modificationSuggestions != null">modification_suggestions = #{modificationSuggestions},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTQualityVerificationResultById" parameterType="Long">
+        delete from t_quality_verification_result where id = #{id}
+    </delete>
+
+    <delete id="deleteTQualityVerificationResultBySiteId">
+        delete from t_quality_verification_result where error_id = #{errorId}
+    </delete>
+    <delete id="deleteTQualityVerificationResultBySiteIdName">
+        delete from t_quality_verification_result where error_id = #{errorId} and error_column_name = #{errorName}
+    </delete>
+
+    <delete id="deleteTQualityVerificationResultByIds" parameterType="String">
+        delete from t_quality_verification_result where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectCheckResult" resultType="CheckResultVo">
+        SELECT
+        distinct
+	res.id id,
+	site.`NAME` name,
+	site.id siteId,
+    model.table_name_cn as   resourceType,
+	tech.column_name columnName,
+	tech.column_name_cn columnNameCn,
+	brule.rule_name ruleName,
+	brule.rule_description ruleDescription,
+	rule.modification_suggestions  modificationSuggestions,
+        res.create_time time,
+        rule.meta_mode_id as modelId
+FROM
+	t_quality_verification_result res
+	LEFT JOIN sg_tccon_tcsite_b site ON CONCAT( site.id ) = res.error_id
+	LEFT JOIN t_quality_verification_rules rule ON rule.id = res.verification_rule_id
+	LEFT JOIN t_quality_basic_rules brule ON brule.id = rule.rule_id
+	LEFT JOIN t_meta_model_tech tech ON tech.id = rule.meta_model_column_id
+    left join t_meta_model model on  rule.meta_mode_id = model.id
+	<where>
+	    and rule.id IS NOT NULL
+        <if test="siteName != null and siteName != ''">
+           and  site.name like concat('%',#{siteName},'%')
+        </if>
+        <if test="ownerId != null and ownerId != ''">
+            and site.ASSETS_OWNERSHIP_COM_ID = #{ownerId}
+        </if>
+        <if test="bRuleId != null and bRuleId != ''">
+            and brule.id = #{bRuleId}
+        </if>
+        <if test="type != null and type != ''">
+            and  res.rule_category = #{type}
+        </if>
+        <if test="columnName != null and columnName != ''">
+            and  tech.column_name_cn like concat('%',#{columnName},'%')
+        </if>
+        <if test="modelId != null and modelId != ''">
+            and  rule.meta_mode_id like concat('%',#{modelId},'%')
+        </if>
+    </where>
+        UNION
+SELECT
+        distinct
+	res.id id,
+	site.`NAME` name,
+        site.id siteId,
+    model.table_name_cn as   resourceType,
+	'' columnName,
+	'' columnNameCn,
+	brule.rule_name ruleName,
+	brule.rule_description ruleDescription,
+	rule.modification_suggestions  modificationSuggestions,
+        res.create_time time,
+    rule.meta_mode_id as modelId
+
+FROM
+	t_quality_verification_result res
+	LEFT JOIN sg_tccon_tcsite_b site ON CONCAT( site.id ) = res.error_id
+	LEFT JOIN t_quality_ass_rule_verification rule ON rule.id = res.verification_rule_id
+	LEFT JOIN t_quality_association_rules brule ON brule.id = rule.verification_rule_id
+    left join t_meta_model model on  rule.meta_mode_id = model.id
+        <where>
+            and rule.id IS NOT NULL
+            <if test="siteName != null and siteName != ''">
+                and  site.name like concat('%',#{siteName},'%')
+            </if>
+            <if test="ownerId != null and ownerId != ''">
+                and site.ASSETS_OWNERSHIP_COM_ID = #{ownerId}
+            </if>
+            <if test="bRuleId != null and bRuleId != ''">
+                and  brule.id = #{bRuleId}
+            </if>
+            <if test="type != null and type != ''">
+                and res.rule_category = #{type}
+            </if>
+            <if test="columnName != null and columnName != ''">
+                and  res.error_column_name_cn like concat('%',#{columnName},'%')
+            </if>
+            <if test="modelId != null and modelId != ''">
+                and  rule.meta_mode_id like concat('%',#{modelId},'%')
+            </if>
+        </where>
+        ORDER BY name, time desc
+    </select>
+
+    <select id="selectCompany" resultType="DictionariesVo">
+        SELECT
+        t.tms_id code,
+        t.name name
+        FROM
+        sg_org_company_b t
+        where t.name is not null
+        <if test="name!= null and name != '' ">
+            and t.name like concat('%', #{name}, '%')
+        </if>
+        ORDER BY
+        t.name
+        LIMIT 0,10;
+    </select>
+
+    <select id="selectType" resultType="DictionariesVo">
+        SELECT
+	id code,
+	rule_name NAME,
+	'0' type
+FROM
+	t_quality_basic_rules UNION
+SELECT
+	id,
+	rule_name NAME,
+	'1' type
+FROM
+	t_quality_association_rules
+    </select>
+
+
+    <select id="queryRes" resultType="DictionariesVo">
+            select  id code,table_name_cn name from t_meta_model
+    </select>
+</mapper>

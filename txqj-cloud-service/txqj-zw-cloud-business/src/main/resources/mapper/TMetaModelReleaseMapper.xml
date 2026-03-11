@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mshz.cloud.tms.business.mapper.TMetaModelReleaseMapper">
+
+
+    <resultMap type="TMetaModelRelease" id="TMetaModelReleaseResult">
+        <result property="id"    column="id"    />
+        <result property="modelId"    column="model_id"    />
+        <result property="categoryNameId"    column="category_name_id"    />
+        <result property="modelVersion"    column="model_version"    />
+        <result property="modelStatus"    column="model_status"    />
+        <result property="dbId"    column="db_id"    />
+        <result property="tableName"    column="table_name"    />
+        <result property="tableNameCn"    column="table_name_cn"    />
+        <result property="safetyLevel"    column="safety_level"    />
+        <result property="updateLog"    column="update_log"    />
+        <result property="operator"    column="operator"    />
+        <result property="createDate"    column="create_date"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectTMetaModelReleaseVo">
+        select id, model_id, category_name_id, model_version, model_status, db_id, table_name, table_name_cn, safety_level, update_log, operator, create_date, remark from t_meta_model_release
+    </sql>
+
+    <!--查询元模型发布-拷贝-->
+    <select id="selectTMetaModelReleaseCopy" resultType="TMetaModelRelease">
+        select  category_name_id, db_id, safety_level from t_meta_model_release
+        <where>
+            <if test="modelId != null "> and model_id = #{modelId}</if>
+            <if test="modelVersion != null  and modelVersion != ''"> and model_version = #{modelVersion}</if>
+        </where>
+    </select>
+
+    <!---->
+    <select id="selectTMetaModelRelease" resultType="com.mshz.cloud.tms.business.vo.MetadataBuzInfoVo">
+        SELECT table_name tableName, table_name_cn tableNameCn,
+               model_version modelVersion, model_status modelStatus,update_log updateLog,category_name_id cateGoryNameId
+        FROM t_meta_model_release
+        WHERE model_id = #{modelId}
+         and model_version = #{modelVersion}
+    </select>
+
+    <!--历史版本管理-->
+    <select id="selectHistoricalVersionManagement" resultType="TMetaModelRelease">
+        select id, model_id, model_version, table_name, update_log, operator, create_date from t_meta_model_release
+      <where>
+            <if test="r.id != null "> and id = #{r.id}</if>
+            <if test="r.modelId != null "> and model_id = #{modelId}</if>
+            <if test="r.modelVersion != null  and r.modelVersion != ''"> and model_version like concat('%', #{r.modelVersion}, '%')</if>
+            <if test="r.tableName != null  and r.tableName != ''"> and table_name like concat('%', #{r.tableName}, '%')</if>
+            <if test="r.updateLog != null  and r.updateLog != ''"> and update_log like concat('%', #{r.updateLog}, '%')</if>
+            <if test="r.operator != null  and r.operator != ''"> and operator like concat('%', #{r.operator}, '%')</if>
+          <if test="start!=null and start!=''">
+              and create_date >=#{start}
+          </if>
+          <if test="end!=null and end!=''">
+              <![CDATA[   and create_date <=#{end}]]>
+          </if>
+        </where>
+    </select>
+
+    <!--新增元模型发布-->
+    <insert id="insertTMetaModelRelease" parameterType="TMetaModelRelease">
+        insert into t_meta_model_release
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="modelId != null">model_id,</if>
+            <if test="categoryNameId != null">category_name_id,</if>
+            <if test="modelVersion != null">model_version,</if>
+            <if test="modelStatus != null">model_status,</if>
+            <if test="dbId != null">db_id,</if>
+            <if test="tableName != null">table_name,</if>
+            <if test="tableNameCn != null">table_name_cn,</if>
+            <if test="safetyLevel != null">safety_level,</if>
+            <if test="updateLog != null">update_log,</if>
+            <if test="createDate != null">create_Date,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="modelId != null">#{modelId},</if>
+            <if test="categoryNameId != null">#{categoryNameId},</if>
+            <if test="modelVersion != null">#{modelVersion},</if>
+            <if test="modelStatus != null">#{modelStatus},</if>
+            <if test="dbId != null">#{dbId},</if>
+            <if test="tableName != null">#{tableName},</if>
+            <if test="tableNameCn != null">#{tableNameCn},</if>
+            <if test="safetyLevel != null">#{safetyLevel},</if>
+            <if test="updateLog != null">#{updateLog},</if>
+            <if test="createDate != null">#{createDate},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+
+</mapper>

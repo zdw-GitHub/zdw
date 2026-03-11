@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>拓扑</title>
+
+  <style type="text/css">
+    body, #container {
+      margin: 0 auto;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      overflow: hidden;
+    }
+
+  </style>
+</head>
+<body>
+<div  id="container">
+  <div style="width: 100%;height: 100%;">
+    <div id="transtopofib" style="visibility: visible; background: #fff" ondragover="dragover(event)"/>
+  </div>
+</div>
+
+<!--<script src="../js/data.js"></script>-->
+<script src="../js/jquery-2.1.4.min.js"></script>
+<script src="../js/twaver.js"></script>
+<script src="../js/license.js"></script>
+<script src="../js/demo.js"></script>
+</body>
+<script>
+  var box
+  var network
+  var tree;
+
+  $(function () {
+    init()
+  });
+  function dragover(e) {
+        // dragover事件不能缺少
+      e.preventDefault();
+    }
+  function init () {
+    network = new twaver.network.Network();
+    box = network.getElementBox();
+    network.setLinkFlowEnabled(true);
+    network.setKeyboardRemoveEnabled(false);//屏蔽键盘delete操作
+    network.setTransparentSelectionEnable(true)/* 设置点击网元的透明部分网元是否能被选中，暂时没发现去掉有什么影响 */
+
+    var networkDom = network.getView();
+    networkDom.style.width = "100%";
+    networkDom.style.height = "100%";
+    $('#transtopofib').append(networkDom)
+
+    registerImage()
+    setMouseHover()
+  }
+  //注册图片对象
+  function registerNormalImage(url,name, width, height) {
+    var image = new Image();
+    image.src = url;
+    image.onload = function () {
+      twaver.Util.registerImage(name, image, width, height, true);
+      image.onload = null;
+      network.invalidateElementUIs();
+    };
+  }
+  // 传输拓扑图注册图片
+  function registerImage() {
+    registerNormalImage('../img/site.png', 'site')
+    registerNormalImage('../img/tbox.png', 'tbox')
+    registerNormalImage('../img/disabled.png', 'breakpoint')
+  }
+  // 设置鼠标悬停
+  function setMouseHover () {
+    var tooltipElement = document.createElement('div');
+    tooltipElement.style.fontSize = '12px';
+    tooltipElement.style.position = 'absolute';
+    tooltipElement.style.padding = '2px';
+    tooltipElement.style.border = '1px solid black';
+    tooltipElement.style.display = 'none'; // 初始时隐藏提示框
+    document.body.appendChild(tooltipElement); // 将提示框添加到文档中
+
+    network.getView().addEventListener('mouseover',(e)=>{
+      var element = network.getElementAt(e);
+      if (element){
+        let type = element.getClient('type')
+        let data = element.getClient('data')
+        if (type == 'node' && data.type == 'tbox'){
+          // 设置提示框的内容和位置
+          tooltipElement.textContent = data.name; // 你可以根据需要设置内容
+          tooltipElement.style.left = data.positionX+10 + 'px';
+          tooltipElement.style.top = data.positionY-25 + 'px';
+          tooltipElement.style.display = 'block'; // 显示提示框
+        }else if(type == 'link'){
+          let positionX = box.getDataById(data.from).getClient('data').positionX
+          let positionX2 = box.getDataById(data.to).getClient('data').positionX
+          let positionY = box.getDataById(data.to).getClient('data').positionY
+          console.log(box.getDataById(data.to).getClient('data'))
+          tooltipElement.textContent = data.name; // 你可以根据需要设置内容
+          tooltipElement.style.left = ((parseInt(positionX) + parseInt(positionX2)) / 2) + 'px';
+          tooltipElement.style.top = positionY-10 + 'px';
+          tooltipElement.style.display = 'block'; // 显示提示框
+        }else {
+          tooltipElement.style.display = 'none'; // 隐藏提示框
+        }
+      }else {
+        tooltipElement.style.display = 'none'; // 隐藏提示框
+      }
+    })
+  }
+  // 刷新toop
+  function reSetTopo (nodesData, linksData, groupsData) {
+    if (
+      nodesData == undefined ||
+      linksData == undefined ||
+      groupsData == undefined
+    ) {
+      return
+    }
+    var oldArr = box.getDatas()._as
+    for (let i = 0; oldArr.length > 0; i) {
+      box.remove(oldArr[i])
+    }
+
+    groupsData.forEach((item, index, arr) => {
+      addGroup(item)
+    })
+
+    nodesData.forEach((item, index, arr) => {
+      addNode(item)
+    })
+    linksData.forEach((item, index, arr) => {
+      addLink(item)
+    })
+  }
+  // 新增分组
+  function addGroup(item) {
+    if (item.id) {
+      if (box.getDataById(item.id) !== undefined) return
+
+      let group = new twaver.Group(item.id)
+      group.setStyle("group.fill.color", "#F4F4F4")
+      group.setStyle('label.position', 'top.top')
+      group.setStyle('label.padding.bottom', 100)
+      group.setStyle('label.yoffset', -10)
+      group.setStyle('group.padding', 13)
+      group.setStyle('group.outline.color', '#d6d6d6')
+      group.setStyle('group.outline.width', 3)
+      group.setStyle('group.shape', 'roundrect')
+      group.setStyle('select.style', 'none');
+      group.setName(item.name)
+      group.setExpanded(true)
+      group.setClient('data', item)
+      group.setClient('type', 'group')
+      box.add(group)
+    }
+  }
+  // 新增点
+  function addNode(item) {
+    if (
+      item.id !== undefined &&
+      item.id !== null &&
+      item.id !== ''
+    ) {
+      if (box.getDataById(item.id) === undefined) {
+        var node = new twaver.Node(item.id)
+        if(item.type == 'tbox'){
+          node.setImage('tbox')
+          node.setName(item.discription)
+        }else if(item.type == 'site'){
+          node.setImage('site')
+          node.setName(item.name)
+        }else if(item.type == 'breakpoint'){
+          node.setImage('breakpoint')
+          //node.setStyle('label.position','top.top')
+          node.setName(item.name)
+        }
+        node.setLocation(parseInt(item.positionX), parseInt(item.positionY))
+        node.setWidth(30);
+        node.setHeight(30);
+        node.setStyle('alarm.color', '#fff')
+        node.setStyle('select.color', '#67C23A')
+        node.setStyle('select.style', 'border')
+        node.setClient('data', item)
+        node.setClient('type', 'node')
+        node.setClient('treeShow', false)
+        box.add(node)
+        if (item.parId){
+          box.getDataById(item.parId).addChild(node)
+        }
+
+      }
+    }
+  }
+  // 新增线
+  function addLink (item) {
+    if (
+      item.from === undefined ||
+      item.from === null ||
+      item.from === '' ||
+      item.to === undefined ||
+      item.to === null ||
+      item.to === ''
+    ) return
+    if (
+      box.getDataById(item.id) !== undefined
+    ) return
+    var link = new twaver.Link(item.id)
+    link.setStyle('link.bundle.gap', 30)
+    link.setStyle('alarm.color', '#fff')
+    if(item.type == 1){
+      link.setStyle('link.color', '#67C23A')
+      // 此注释禁止删除 因为没找到怎么设置告警线颜色 所以直接在twaver.js中(源码)中修改了 改为#0084FF
+      link.setStyle('select.color', '#67C23A')
+    }else {
+      link.setStyle('link.color', '#ea0505')
+      // 此注释禁止删除 因为没找到怎么设置告警线颜色 所以直接在twaver.js中(源码)中修改了 改为#0084FF
+      link.setStyle('select.color', '#e30b0b')
+    }
+
+    link.setStyle('select.style', 'border')
+    //link.setName(item.name)
+    link.setClient('data', item)
+    link.setClient('type', 'link')
+    link.setIcon('../img/link.png')
+    if (
+      box.getDataById(item.from) !== undefined ||
+      box.getDataById(item.to) !== undefined
+    ) {
+      var from = box.getDataById(item.from)
+      var to = box.getDataById(item.to)
+      link.setFromNode(from)
+      link.setToNode(to)
+      box.add(link)
+    }
+  }
+</script>
+</html>

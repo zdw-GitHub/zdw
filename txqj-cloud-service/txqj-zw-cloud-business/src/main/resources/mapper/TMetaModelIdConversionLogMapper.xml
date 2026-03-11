@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mshz.cloud.tms.business.mapper.TMetaModelIdConversionLogMapper">
+
+    <resultMap type="TMetaModelIdConversionLog" id="TMetaModelIdConversionLogResult">
+        <result property="id"    column="id"    />
+        <result property="modelId"    column="model_id"    />
+        <result property="modelName"    column="model_name"    />
+        <result property="modelNameCn"    column="model_name_cn"    />
+        <result property="conversionResult"    column="conversion_result"    />
+        <result property="conversionTime"    column="conversion_time"    />
+        <result property="errorLog"    column="error_log"    />
+        <result property="createDate"    column="create_date"    />
+        <result property="updateDate"    column="update_date"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectTMetaModelIdConversionLogVo">
+        select id, model_id, model_name, model_name_cn, conversion_result, conversion_time, error_log, create_date, update_date, remark from t_meta_model_id_conversion_log
+    </sql>
+
+    <select id="selectTMetaModelIdConversionLogList" parameterType="com.mshz.cloud.tms.business.vo.TMetaModelIdConversionLogParaVo" resultMap="TMetaModelIdConversionLogResult">
+        <include refid="selectTMetaModelIdConversionLogVo"/>
+        <where>
+            <if test="modelId != null "> and model_id = #{modelId}</if>
+            <if test="modelName != null  and modelName != ''"> and model_name like concat('%', #{modelName}, '%')</if>
+            <if test="modelNameCn != null  and modelNameCn != ''"> and model_name_cn = #{modelNameCn}</if>
+            <if test="conversionResult != null  and conversionResult != ''"> and conversion_result = #{conversionResult}</if>
+            <if test="conversionTime != null  and conversionTime != ''"> and conversion_time = #{conversionTime}</if>
+            <if test="startTime != null  and startTime != ''"> and conversion_time > #{startTime}</if>
+            <if test="endTime != null  and endTime != ''"> and conversion_time <![CDATA[<=]]> #{endTime}</if>
+            <if test="errorLog != null  and errorLog != ''"> and error_log = #{errorLog}</if>
+            <if test="createDate != null  and createDate != ''"> and create_date = #{createDate}</if>
+            <if test="updateDate != null  and updateDate != ''"> and update_date = #{updateDate}</if>
+        </where>
+    </select>
+
+    <select id="selectTMetaModelIdConversionLogById" parameterType="Long" resultMap="TMetaModelIdConversionLogResult">
+        <include refid="selectTMetaModelIdConversionLogVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertTMetaModelIdConversionLog" parameterType="TMetaModelIdConversionLog">
+        insert into t_meta_model_id_conversion_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="modelId != null">model_id,</if>
+            <if test="modelName != null">model_name,</if>
+            <if test="modelNameCn != null">model_name_cn,</if>
+            <if test="conversionResult != null">conversion_result,</if>
+            <if test="conversionTime != null">conversion_time,</if>
+            <if test="errorLog != null">error_log,</if>
+            <if test="createDate != null">create_date,</if>
+            <if test="updateDate != null">update_date,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="modelId != null">#{modelId},</if>
+            <if test="modelName != null">#{modelName},</if>
+            <if test="modelNameCn != null">#{modelNameCn},</if>
+            <if test="conversionResult != null">#{conversionResult},</if>
+            <if test="conversionTime != null">#{conversionTime},</if>
+            <if test="errorLog != null">#{errorLog},</if>
+            <if test="createDate != null">#{createDate},</if>
+            <if test="updateDate != null">#{updateDate},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTMetaModelIdConversionLog" parameterType="TMetaModelIdConversionLog">
+        update t_meta_model_id_conversion_log
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="modelId != null">model_id = #{modelId},</if>
+            <if test="modelName != null">model_name = #{modelName},</if>
+            <if test="modelNameCn != null">model_name_cn = #{modelNameCn},</if>
+            <if test="conversionResult != null">conversion_result = #{conversionResult},</if>
+            <if test="conversionTime != null">conversion_time = #{conversionTime},</if>
+            <if test="errorLog != null">error_log = #{errorLog},</if>
+            <if test="createDate != null">create_date = #{createDate},</if>
+            <if test="updateDate != null">update_date = #{updateDate},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTMetaModelIdConversionLogById" parameterType="Long">
+        delete from t_meta_model_id_conversion_log where id = #{id}
+    </delete>
+
+    <delete id="deleteTMetaModelIdConversionLogByIds" parameterType="String">
+        delete from t_meta_model_id_conversion_log where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mshz.cloud.tms.business.mapper.TMetaModelRelationMapper">
+
+    <resultMap type="TMetaModelRelation" id="TMetaModelRelationResult">
+        <result property="id" column="id"/>
+        <result property="modelId" column="model_id"/>
+        <result property="columnId" column="column_id"/>
+        <result property="relationDbId" column="relation_db_id"/>
+        <result property="relationTableId" column="relation_table_id"/>
+        <result property="relationTableAlias" column="relation_table_alias"/>
+        <result property="relationColumnId" column="relation_column_id"/>
+        <result property="isExternalConnection" column="is_external_connection"/>
+        <result property="relationCondition" column="relation_condition"/>
+        <result property="sqlContent" column="sql_content"/>
+        <result property="modelVersion" column="model_version"/>
+        <result property="updateOrNot"    column="update_or_not"    />
+        <result property="createDate" column="create_date"/>
+        <result property="updateDate" column="update_date"/>
+    </resultMap>
+
+    <sql id="selectTMetaModelRelationVo">
+        select id, model_id, column_id, relation_db_id, relation_table_id, relation_table_alias, relation_column_id, is_external_connection, relation_condition, sql_content, model_version, update_or_not , create_date, update_date from t_meta_model_relation
+    </sql>
+
+    <select id="selectTMetaModelRelationList" parameterType="TMetaModelRelation"
+            resultMap="TMetaModelRelationResult">
+        <include refid="selectTMetaModelRelationVo"/>
+        <where>
+            <if test="modelId != null ">and model_id = #{modelId}</if>
+            <if test="columnId != null ">and column_id = #{columnId}</if>
+            <if test="relationDbId != null ">and relation_db_id = #{relationDbId}</if>
+            <if test="relationTableId != null ">and relation_table_id = #{relationTableId}</if>
+            <if test="relationTableAlias != null  and relationTableAlias != ''">and relation_table_alias =
+                #{relationTableAlias}
+            </if>
+            <if test="relationColumnId != null ">and relation_column_id = #{relationColumnId}</if>
+            <if test="isExternalConnection != null ">and is_external_connection = #{isExternalConnection}</if>
+            <if test="relationCondition != null  and relationCondition != ''">and relation_condition =
+                #{relationCondition}
+            </if>
+            <if test="sqlContent != null  and sqlContent != ''">and sql_content = #{sqlContent}</if>
+            <if test="modelVersion != null  and modelVersion != ''">and model_version = #{modelVersion}</if>
+            <if test="createDate != null  and createDate != ''">and create_date = #{createDate}</if>
+            <if test="updateDate != null  and updateDate != ''">and update_date = #{updateDate}</if>
+        </where>
+    </select>
+
+    <select id="selectTMetaModelRelationById" parameterType="Long" resultMap="TMetaModelRelationResult">
+        <include refid="selectTMetaModelRelationVo"/>
+        where id = #{id}
+    </select>
+
+    <!--组合关系表复制，根据modelId和版本号-->
+    <select id="selectMetaModelRelationListCopy" resultType="TMetaModelRelation">
+        select model_id, column_id, relation_db_id, relation_table_id, relation_table_alias, relation_column_id,
+        is_external_connection, relation_condition, sql_content, relation_type, update_date from t_meta_model_relation
+        <where>
+            <if test="modelId != null ">and model_id = #{modelId}</if>
+            <if test="modelVersion != null  and modelVersion != ''">and model_version = #{modelVersion}</if>
+        </where>
+    </select>
+
+    <!--根据id查询组合关联列表-字段关联-->
+    <select id="selectMetadataRelation" resultType="com.mshz.cloud.tms.business.vo.MetadataRelationColumnVo">
+       select
+        r.id relationId,
+        t.id techId,
+        t.column_name columnName,
+        t.column_name_cn columnNameCn,
+        t.column_type columnType,
+        t.column_length columnLength,
+        relation_db_id relationDbId,
+        db_name_cn relationDbName,
+        relation_table_id relationTableId,
+        table_name relationTableName,
+        relation_table_alias relationTableAlias,
+        relation_column_id relationColumnId,
+        co.column_name relationColumnName,
+        sql_content sqlContent,
+        t.create_date createDate,
+        is_external_connection isExternalConnection,
+        relation_condition relationCondition,
+        sort_num sortNum,
+        r.update_date updateDate,
+        r.update_or_not updateOrNot
+        FROM
+        t_meta_model_tech	 t
+        LEFT JOIN t_meta_model_relation r ON r.column_id = t.id
+        LEFT JOIN t_db_config c ON r.relation_db_id = c.id
+        LEFT JOIN t_db_table ta ON r.relation_table_id = ta.id
+        LEFT JOIN t_db_table_column co ON r.relation_column_id = co.id
+        LEFT JOIN t_meta_model_show s ON s.column_id = r.column_id
+        where
+        t.model_version = #{modelVersion}
+        <if test="columnName != null and columnName!='' ">
+            AND t.column_name LIKE concat('%', #{columnName} , '%')
+        </if>
+        and t.model_id = #{modelId}
+        ORDER BY sort_num asc,t.create_date asc
+    </select>
+
+    <!--关联数据源下拉框-->
+    <select id="selectRelationDbSelect" resultType="com.mshz.cloud.tms.business.entity.TDbConfig">
+        SELECT id ,db_name_cn dbNameCn FROM  t_db_config
+    </select>
+
+    <!--根据关联数据源查询关联表下拉框-->
+    <select id="selectRelationTableSelect" resultType="com.mshz.cloud.tms.business.entity.TDbTable">
+        SELECT tb.id ,tb.table_name tableName,model.relation_main_table_alias alias  FROM t_db_table tb  left join  t_meta_model model
+        on model.relation_main_table_id =  tb.id
+        where tb.db_id = #{dbId}
+    </select>
+
+    <!--根据关联表查询关联属性下拉框-->
+    <select id="selectRelationColumnSelect" resultType="com.mshz.cloud.tms.business.entity.TDbTableColumn">
+        select id, column_name columnName FROM t_db_table_column
+        WHERE table_id = #{tableId}
+    </select>
+
+    <!--根据id查询组合关联-sql关联-->
+    <select id="selectMetadataRelationSQL" resultType="java.lang.String">
+        select  DISTINCT sql_content FROM t_meta_model_relation
+        WHERE (model_version = #{modelVersion})   and model_id = #{modelId} and sql_content is not null
+    </select>
+    <!--根据关联表查询关联属性信息列表-->
+    <select id="selectRelationColumnInfoSelect" resultType="com.mshz.cloud.tms.business.entity.TDbTableColumn">
+        select id, column_name columnName, column_name_cn columnNameCn, column_type columnType, column_length columnLength, remark ,create_time createTime FROM
+        t_db_table_column
+        WHERE table_id = #{tableId}
+        <if test="columnName != null and columnName != ''">and column_name like concat('%', #{columnName}, '%')
+        </if>
+    </select>
+
+    <!--组合关联表新增-->
+    <insert id="insertTMetaModelRelation" parameterType="TMetaModelRelation">
+        insert into t_meta_model_relation
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="modelId != null">model_id,</if>
+            <if test="columnId != null">column_id,</if>
+            <if test="relationDbId != null">relation_db_id,</if>
+            <if test="relationTableId != null">relation_table_id,</if>
+            <if test="relationTableAlias != null">relation_table_alias,</if>
+            <if test="relationColumnId != null">relation_column_id,</if>
+            <if test="isExternalConnection != null">is_external_connection,</if>
+            <if test="relationCondition != null">relation_condition,</if>
+            <if test="sqlContent != null">sql_content,</if>
+            <if test="modelVersion != null">model_version,</if>
+            <if test="relationType != null">relation_type,</if>
+            <if test="updateOrNot != null">update_or_not,</if>
+            <if test="createDate != null">create_date,</if>
+            <if test="updateDate != null">update_date,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="modelId != null">#{modelId},</if>
+            <if test="columnId != null">#{columnId},</if>
+            <if test="relationDbId != null">#{relationDbId},</if>
+            <if test="relationTableId != null">#{relationTableId},</if>
+            <if test="relationTableAlias != null">#{relationTableAlias},</if>
+            <if test="relationColumnId != null">#{relationColumnId},</if>
+            <if test="isExternalConnection != null">#{isExternalConnection},</if>
+            <if test="relationCondition != null">#{relationCondition},</if>
+            <if test="sqlContent != null">#{sqlContent},</if>
+            <if test="modelVersion != null">#{modelVersion},</if>
+            <if test="relationType != null">#{relationType},</if>
+            <if test="updateOrNot != null">#{updateOrNot},</if>
+            <if test="createDate != null">#{createDate},</if>
+            <if test="updateDate != null">#{updateDate},</if>
+        </trim>
+    </insert>
+
+    <!--组合关系表复制-新增组合关系集合-->
+    <insert id="insertTMetaModelRelationList">
+        <foreach collection="list" item="item" index="index" separator=";">
+            insert into t_meta_model_relation
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="item.id != null">id,</if>
+                <if test="item.modelId != null">model_id,</if>
+                <if test="item.columnId != null">column_id,</if>
+                <if test="item.relationDbId != null">relation_db_id,</if>
+                <if test="item.relationTableId != null">relation_table_id,</if>
+                <if test="item.relationTableAlias != null">relation_table_alias,</if>
+                <if test="item.relationColumnId != null">relation_column_id,</if>
+                <if test="item.isExternalConnection != null">is_external_connection,</if>
+                <if test="item.relationCondition != null">relation_condition,</if>
+                <if test="item.sqlContent != null">sql_content,</if>
+                <if test="item.modelVersion != null">model_version,</if>
+                <if test="item.relationType != null">relation_type,</if>
+                <if test="item.updateOrNot != null">update_or_not,</if>
+                <if test="item.createDate != null">create_date,</if>
+                <if test="item.updateDate != null">update_date,</if>
+            </trim>
+            <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="item.id != null">#{item.id},</if>
+                <if test="item.modelId != null">#{item.modelId},</if>
+                <if test="item.columnId != null">#{item.columnId},</if>
+                <if test="item.relationDbId != null">#{item.relationDbId},</if>
+                <if test="item.relationTableId != null">#{item.relationTableId},</if>
+                <if test="item.relationTableAlias != null">#{item.relationTableAlias},</if>
+                <if test="item.relationColumnId != null">#{item.relationColumnId},</if>
+                <if test="item.isExternalConnection != null">#{item.isExternalConnection},</if>
+                <if test="item.relationCondition != null">#{item.relationCondition},</if>
+                <if test="item.sqlContent != null">#{item.sqlContent},</if>
+                <if test="item.modelVersion != null">#{item.modelVersion},</if>
+                <if test="item.relationType != null">#{item.relationType},</if>
+                <if test="item.updateOrNot != null">#{item.updateOrNot},</if>
+                <if test="item.createDate != null">#{item.createDate},</if>
+                <if test="item.updateDate != null">#{item.updateDate},</if>
+            </trim>
+        </foreach>
+    </insert>
+
+    <update id="updateTMetaModelRelation" parameterType="TMetaModelRelation">
+        update t_meta_model_relation
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="modelId != null">model_id = #{modelId},</if>
+            <if test="columnId != null">column_id = #{columnId},</if>
+            <if test="relationDbId != null">relation_db_id = #{relationDbId},</if>
+            <if test="relationTableId != null">relation_table_id = #{relationTableId},</if>
+            <if test="relationTableAlias != null">relation_table_alias = #{relationTableAlias},</if>
+            <if test="relationColumnId != null">relation_column_id = #{relationColumnId},</if>
+            <if test="isExternalConnection !=  null">is_external_connection = #{isExternalConnection},</if>
+
+            <!--
+            <if test="relationDbId == null or relationDbId == ''">relation_db_id = null,</if>
+            <if test="relationTableId == null or relationTableId == ''">relation_table_id = null,</if>
+            <if test="relationTableAlias == null or relationTableAlias == ''">relation_table_alias = null,</if>
+            <if test="relationColumnId == null ">relation_column_id = null,</if>
+            -->
+
+            <if test="relationCondition != null">relation_condition = #{relationCondition},</if>
+            <if test="sqlContent != null">sql_content = #{sqlContent},</if>
+            <if test="modelVersion != null">model_version = #{modelVersion},</if>
+            <if test="updateOrNot != null">update_or_not = #{updateOrNot},</if>
+            <if test="createDate != null">create_date = #{createDate},</if>
+            <if test="updateDate != null">update_date = #{updateDate},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTMetaModelRelationById" parameterType="Long">
+        delete from t_meta_model_relation where id = #{id}
+    </delete>
+
+    <delete id="deleteTMetaModelRelationByIds" parameterType="String">
+        delete from t_meta_model_relation where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <!--清空编辑下sql关联下的属性-->
+    <delete id="deleteTMetaModelRelationByType">
+        delete from t_meta_model_relation
+        where model_id = #{modelId}
+        <if test="columnId!=null">
+            and column_id = #{columnId}
+        </if>
+        and (model_version ='edit')
+    </delete>
+
+    <update id="updateColumnOrSql">
+        update t_meta_model_relation
+         SET relation_type = #{relationType}
+        where model_id = #{modelId}   and  model_version ='edit';
+
+    </update>
+<!--    &#45;&#45;         update t_meta_model_relation-->
+<!--    &#45;&#45;         SET is_used = 0-->
+<!--    &#45;&#45;         where model_id = #{modelId} and relation_type = #{notIsUsed} and model_version ='edit';-->
+
+    <select id="selectMetadataRelationByModeId" resultType="string">
+        select  id FROM t_meta_model_relation
+        WHERE (column_id = #{colId})   and model_id = #{modelId}
+    </select>
+</mapper>

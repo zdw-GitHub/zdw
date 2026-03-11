@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mshz.cloud.tms.business.mapper.QualityPublicTreeNodeMapper">
+
+    <resultMap type="QualityPublicTreeNode" id="QualityPublicTreeNodeResult">
+        <result property="id"    column="id"    />
+        <result property="treeId"    column="tree_id"    />
+        <result property="name"    column="name"    />
+        <result property="nodeLevel"    column="node_level"    />
+        <result property="parentId"    column="parent_id"    />
+        <result property="nodeDataSql"    column="node_data_sql"    />
+        <result property="parentColumnId"    column="parent_column_id"    />
+        <result property="parentColumn"    column="parent_column"    />
+        <result property="isLastNode"    column="is_last_node"    />
+        <result property="isMultistageSearch"    column="is_multistage_search"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectQualityPublicTreeNodeVo">
+        select id, tree_id, name, node_level, parent_id, node_data_sql, parent_column_id, parent_column, is_last_node, is_multistage_search, create_time, update_time, remark from t_quality_public_tree_node
+    </sql>
+
+    <select id="selectQualityPublicTreeNodeList" parameterType="QualityPublicTreeNode" resultMap="QualityPublicTreeNodeResult">
+        <include refid="selectQualityPublicTreeNodeVo"/>
+        <where>
+            <if test="treeId != null "> and tree_id = #{treeId}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="nodeLevel != null  and nodeLevel != ''"> and node_level = #{nodeLevel}</if>
+            <if test="parentId != null "> and parent_id = #{parentId}</if>
+            <if test="nodeDataSql != null  and nodeDataSql != ''"> and node_data_sql = #{nodeDataSql}</if>
+            <if test="parentColumnId != null "> and parent_column_id = #{parentColumnId}</if>
+            <if test="parentColumn != null  and parentColumn != ''"> and parent_column = #{parentColumn}</if>
+            <if test="isLastNode != null  and isLastNode != ''"> and is_last_node = #{isLastNode}</if>
+        </where>
+    </select>
+
+    <select id="selectQualityPublicTreeNodeById" parameterType="Long" resultMap="QualityPublicTreeNodeResult">
+        <include refid="selectQualityPublicTreeNodeVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertQualityPublicTreeNode" parameterType="QualityPublicTreeNode" useGeneratedKeys="true" keyProperty="id">
+        insert into t_quality_public_tree_node
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="treeId != null">tree_id,</if>
+            <if test="name != null">name,</if>
+            <if test="nodeLevel != null">node_level,</if>
+            <if test="parentId != null">parent_id,</if>
+            <if test="nodeDataSql != null">node_data_sql,</if>
+            <if test="parentColumnId != null">parent_column_id,</if>
+            <if test="parentColumn != null">parent_column,</if>
+            <if test="isLastNode != null">is_last_node,</if>
+            <if test="isMultistageSearch != null">is_multistage_search,</if>
+            <if test="remark != null">remark,</if>
+            create_time
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="treeId != null">#{treeId},</if>
+            <if test="name != null">#{name},</if>
+            <if test="nodeLevel != null">#{nodeLevel},</if>
+            <if test="parentId != null">#{parentId},</if>
+            <if test="nodeDataSql != null">#{nodeDataSql},</if>
+            <if test="parentColumnId != null">#{parentColumnId},</if>
+            <if test="parentColumn != null">#{parentColumn},</if>
+            <if test="isLastNode != null">#{isLastNode},</if>
+            <if test="isMultistageSearch != null">#{isMultistageSearch},</if>
+            <if test="remark != null">#{remark},</if>
+            sysdate()
+        </trim>
+    </insert>
+
+    <update id="updateQualityPublicTreeNode" parameterType="QualityPublicTreeNode">
+        update t_quality_public_tree_node
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="treeId != null">tree_id = #{treeId},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="nodeLevel != null">node_level = #{nodeLevel},</if>
+            <if test="parentId != null">parent_id = #{parentId},</if>
+            <if test="nodeDataSql != null">node_data_sql = #{nodeDataSql},</if>
+            <if test="parentColumnId != null">parent_column_id = #{parentColumnId},</if>
+            <if test="parentColumn != null">parent_column = #{parentColumn},</if>
+            <if test="isLastNode != null">is_last_node = #{isLastNode},</if>
+            <if test="isMultistageSearch != null">is_multistage_search = #{isMultistageSearch},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            update_time = sysdate()
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteQualityPublicTreeNodeById" parameterType="Long">
+        delete from t_quality_public_tree_node where id = #{id}
+    </delete>
+
+    <delete id="deleteQualityPublicTreeNodeByIds" parameterType="String">
+        delete from t_quality_public_tree_node where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectTreeNodeList" parameterType="QualityPublicTreeNode" resultMap="QualityPublicTreeNodeResult">
+        <include refid="selectQualityPublicTreeNodeVo"/>
+        <where>
+            <if test="treeId != null "> and tree_id = #{treeId}</if>
+            <if test="nodeLevel != null  and nodeLevel != ''"> and node_level = #{nodeLevel}</if>
+            <if test="parentId != null "> and parent_id = #{parentId}</if>
+        </where>
+        order by node_level asc
+    </select>
+
+    <select id="selectTreeNodeListByParam" parameterType="QualityPublicTreeNode" resultType="java.util.Map">
+        select  n.id as id, n.tree_id as treeId, n.name as name, n.node_level as nodeLevel, n.parent_id as parentId, n.node_data_sql as nodeDataSql,
+                n.parent_column_id as parentColumnId, n.parent_column as parentColumn, n.is_last_node as isLastNode, n.is_multistage_search as isMultistageSearch, n.remark,
+                m.meta_model_id as metaModelId, m.meta_model_tech_id as metaModelTechId, c.node_query_column as tableName
+        from t_quality_public_tree_node n
+        left join t_quality_public_tree_model_set m on m.node_id = n.id
+        left join t_quality_public_tree_node_column c on c.node_id = n.id and c.node_query_column_alias = 'tableName'
+        <where>
+            <if test="treeId != null "> and n.tree_id = #{treeId}</if>
+            <if test="nodeLevel != null  and nodeLevel != ''"> and n.node_level = #{nodeLevel}</if>
+            <if test="parentId != null "> and n.parent_id = #{parentId}</if>
+        </where>
+        order by node_level asc
+    </select>
+
+    <select id="selectTreeNodeByParent" parameterType="QualityPublicTreeNode" resultMap="QualityPublicTreeNodeResult">
+        <include refid="selectQualityPublicTreeNodeVo"/>
+        <where>
+            <if test="treeId != null "> and tree_id = #{treeId}</if>
+            <if test="nodeLevel != null  and nodeLevel != ''"> and node_level = #{nodeLevel}</if>
+            <if test="parentId != null "> and parent_id = #{parentId}</if>
+        </where>
+    </select>
+
+    <select id="nodeDataSql" parameterType="java.lang.String" resultType="java.util.LinkedHashMap">
+        ${sql}
+    </select>
+
+    <!-- 根据传入节点查询其所有父级节点信息 -->
+    <select id="getTreeNodeListByLastNode" parameterType="Long" resultType="TreeNodeVo">
+        SELECT n2.id as id, n2.tree_id as treeId, n2.name as name, n2.node_level as nodeLevel, n2.parent_id as parentId,
+               n2.node_data_sql as nodeDataSql, n2.parent_column_id as parentColumnId, n2.parent_column as parentColumn, n2.remark,
+               IFNULL(s.meta_model_tech_id, 0) as metaModelTechId
+        FROM (
+            SELECT  @R AS nid,
+                    (SELECT @R := parent_id FROM t_quality_public_tree_node WHERE id = nid ) AS parent_id,
+                    @L := @L + 1 AS LVL
+            FROM (SELECT @R := #{lastNodeId}, @L := 1) VARS, t_quality_public_tree_node h
+            WHERE @R >= 0
+        ) n1
+        INNER JOIN t_quality_public_tree_node n2 ON n1.nid = n2.id
+        LEFT JOIN t_quality_public_tree_model_set s on n1.nid = s.node_id
+        ORDER BY n1.LVL ASC
+    </select>
+    <select id="getTreeNodeListByTreeID" parameterType="long" resultMap="QualityPublicTreeNodeResult">
+        <include refid="selectQualityPublicTreeNodeVo"/>
+        where tree_id = #{treeId}
+    </select>
+    <select id="nodeDataSqlMap" resultType="java.util.LinkedHashMap">
+        ${sql}
+    </select>
+
+</mapper>

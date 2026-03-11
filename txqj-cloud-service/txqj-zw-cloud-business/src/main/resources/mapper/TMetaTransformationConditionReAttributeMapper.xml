@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mshz.cloud.tms.business.mapper.TMetaTransformationConditionReAttributeMapper">
+
+    <resultMap type="TMetaTransformationConditionReAttribute" id="TMetaTransformationConditionReAttributeResult">
+        <result property="id"    column="id"    />
+        <result property="conditionId"    column="condition_id"    />
+        <result property="dbId"    column="db_id"    />
+        <result property="dbName"    column="db_name"    />
+        <result property="tableId"    column="table_id"    />
+        <result property="tableName"    column="table_name"    />
+        <result property="tableType"    column="table_type"    />
+        <result property="attributeId"    column="attribute_id"    />
+        <result property="attributeName"    column="attribute_name"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectTMetaTransformationConditionReAttributeVo">
+        select id, condition_id, db_id, db_name, table_id, table_name, table_type, attribute_id, attribute_name, create_by, create_time, update_by, update_time, remark from t_meta_transformation_condition_re_attribute
+    </sql>
+
+    <select id="selectTMetaTransformationConditionReAttributeList" parameterType="TMetaTransformationConditionReAttribute" resultMap="TMetaTransformationConditionReAttributeResult">
+        <include refid="selectTMetaTransformationConditionReAttributeVo"/>
+        <where>
+            <if test="conditionId != null "> and condition_id = #{conditionId}</if>
+            <if test="dbId != null "> and db_id = #{dbId}</if>
+            <if test="dbName != null  and dbName != ''"> and db_name like concat('%', #{dbName}, '%')</if>
+            <if test="tableId != null "> and table_id = #{tableId}</if>
+            <if test="tableName != null  and tableName != ''"> and table_name like concat('%', #{tableName}, '%')</if>
+            <if test="tableType != null  and tableType != ''"> and table_type = #{tableType}</if>
+            <if test="attributeId != null "> and attribute_id = #{attributeId}</if>
+            <if test="attributeName != null  and attributeName != ''"> and attribute_name like concat('%', #{attributeName}, '%')</if>
+        </where>
+    </select>
+
+    <select id="selectTMetaTransformationConditionReAttributeById" parameterType="Long" resultMap="TMetaTransformationConditionReAttributeResult">
+        <include refid="selectTMetaTransformationConditionReAttributeVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertTMetaTransformationConditionReAttribute" parameterType="TMetaTransformationConditionReAttribute" useGeneratedKeys="true" keyProperty="id">
+        insert into t_meta_transformation_condition_re_attribute
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="conditionId != null">condition_id,</if>
+            <if test="dbId != null">db_id,</if>
+            <if test="dbName != null">db_name,</if>
+            <if test="tableId != null">table_id,</if>
+            <if test="tableName != null">table_name,</if>
+            <if test="tableType != null">table_type,</if>
+            <if test="attributeId != null">attribute_id,</if>
+            <if test="attributeName != null">attribute_name,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="conditionId != null">#{conditionId},</if>
+            <if test="dbId != null">#{dbId},</if>
+            <if test="dbName != null">#{dbName},</if>
+            <if test="tableId != null">#{tableId},</if>
+            <if test="tableName != null">#{tableName},</if>
+            <if test="tableType != null">#{tableType},</if>
+            <if test="attributeId != null">#{attributeId},</if>
+            <if test="attributeName != null">#{attributeName},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTMetaTransformationConditionReAttribute" parameterType="TMetaTransformationConditionReAttribute">
+        update t_meta_transformation_condition_re_attribute
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="conditionId != null">condition_id = #{conditionId},</if>
+            <if test="dbId != null">db_id = #{dbId},</if>
+            <if test="dbName != null">db_name = #{dbName},</if>
+            <if test="tableId != null">table_id = #{tableId},</if>
+            <if test="tableName != null">table_name = #{tableName},</if>
+            <if test="tableType != null">table_type = #{tableType},</if>
+            <if test="attributeId != null">attribute_id = #{attributeId},</if>
+            <if test="attributeName != null">attribute_name = #{attributeName},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTMetaTransformationConditionReAttributeById" parameterType="Long">
+        delete from t_meta_transformation_condition_re_attribute where id = #{id}
+    </delete>
+
+    <delete id="deleteTMetaTransformationConditionReAttributeByIds" parameterType="String">
+        delete from t_meta_transformation_condition_re_attribute where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

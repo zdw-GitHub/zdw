@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mshz.cloud.tms.business.mapper.TMetaModelCategoryMapper">
+
+    <resultMap type="TMetaModelCategory" id="TMetaModelCategoryResult">
+        <result property="id"    column="id"    />
+        <result property="categoryName"    column="category_name"    />
+        <result property="categoryNameCn"    column="category_name_cn"    />
+        <result property="remark"    column="remark"    />
+        <result property="updateDate"    column="update_date"    />
+        <result property="createDate"    column="create_date"    />
+    </resultMap>
+
+    <sql id="selectTMetaModelCategoryVo">
+        select id, category_name, category_name_cn, remark, update_date, create_date from t_meta_model_category
+    </sql>
+
+    <select id="selectTMetaModelCategoryList" parameterType="TMetaModelCategory" resultMap="TMetaModelCategoryResult">
+        <include refid="selectTMetaModelCategoryVo"/>
+        <where>
+            <if test="categoryName != null  and categoryName != ''"> and category_name like concat('%', #{categoryName}, '%')</if>
+            <if test="categoryNameCn != null  and categoryNameCn != ''"> and category_name_cn like concat('%', #{categoryNameCn}, '%')</if>
+            <if test="updateDate != null  and updateDate != ''"> and update_date = #{updateDate}</if>
+            <if test="createDate != null  and createDate != ''"> and create_date = #{createDate}</if>
+        </where>
+    </select>
+
+    <select id="selectTMetaModelCategoryById" parameterType="Long" resultMap="TMetaModelCategoryResult">
+        <include refid="selectTMetaModelCategoryVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertTMetaModelCategory" parameterType="TMetaModelCategory">
+        insert into t_meta_model_category
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="categoryName != null">category_name,</if>
+            <if test="categoryNameCn != null">category_name_cn,</if>
+            <if test="remark != null">remark,</if>
+            <if test="updateDate != null">update_date,</if>
+            <if test="createDate != null">create_date,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="categoryName != null">#{categoryName},</if>
+            <if test="categoryNameCn != null">#{categoryNameCn},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="updateDate != null">#{updateDate},</if>
+            <if test="createDate != null">#{createDate},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTMetaModelCategory" parameterType="TMetaModelCategory">
+        update t_meta_model_category
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="categoryName != null">category_name = #{categoryName},</if>
+            <if test="categoryNameCn != null">category_name_cn = #{categoryNameCn},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="updateDate != null">update_date = #{updateDate},</if>
+            <if test="createDate != null">create_date = #{createDate},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTMetaModelCategoryById" parameterType="Long">
+        delete from t_meta_model_category where id = #{id}
+    </delete>
+
+    <delete id="deleteTMetaModelCategoryByIds" parameterType="String">
+        delete from t_meta_model_category where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

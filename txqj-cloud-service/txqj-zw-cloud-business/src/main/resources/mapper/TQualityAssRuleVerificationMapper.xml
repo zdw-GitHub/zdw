@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mshz.cloud.tms.business.mapper.TQualityAssRuleVerificationMapper">
+
+    <resultMap type="TQualityAssRuleVerification" id="TQualityAssRuleVerificationResult">
+        <result property="id"    column="id"    />
+        <result property="metaModeId"    column="meta_mode_id"    />
+        <result property="verificationRuleType"    column="verification_rule_type"    />
+        <result property="verificationRuleId"    column="verification_rule_id"    />
+        <result property="alarmLevel"    column="alarm_level"    />
+        <result property="ruleDescription"    column="rule_description"    />
+        <result property="modificationSuggestions"    column="modification_suggestions"    />
+        <result property="state"    column="state"    />
+        <result property="useDefinedVerSql"    column="use_defined_ver_sql"    />
+        <result property="superiorUnitId"    column="superior_unit_id"    />
+        <result property="modelVersion"    column="model_version"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectTQualityAssRuleVerificationVo">
+        select id, meta_mode_id, verification_rule_type, verification_rule_id, alarm_level, rule_description, modification_suggestions, state, use_defined_ver_sql, superior_unit_id, model_version, create_time, update_time from t_quality_ass_rule_verification
+    </sql>
+
+    <select id="selectTQualityAssRuleVerificationList" parameterType="TQualityAssRuleVerification" resultMap="TQualityAssRuleVerificationResult">
+        <include refid="selectTQualityAssRuleVerificationVo"/>
+        <where>
+            <if test="metaModeId != null  and metaModeId != ''"> and meta_mode_id = #{metaModeId}</if>
+            <if test="verificationRuleType != null  and verificationRuleType != ''"> and verification_rule_type = #{verificationRuleType}</if>
+            <if test="verificationRuleId != null  and verificationRuleId != ''"> and verification_rule_id = #{verificationRuleId}</if>
+            <if test="alarmLevel != null  and alarmLevel != ''"> and alarm_level = #{alarmLevel}</if>
+            <if test="ruleDescription != null  and ruleDescription != ''"> and rule_description = #{ruleDescription}</if>
+            <if test="modificationSuggestions != null  and modificationSuggestions != ''"> and modification_suggestions = #{modificationSuggestions}</if>
+            <if test="state != null  and state != ''"> and state = #{state}</if>
+            <if test="useDefinedVerSql != null  and useDefinedVerSql != ''"> and use_defined_ver_sql = #{useDefinedVerSql}</if>
+            <if test="superiorUnitId != null  and superiorUnitId != ''"> and superior_unit_id = #{superiorUnitId}</if>
+            <if test="modelVersion != null  and modelVersion != ''"> and model_version = #{modelVersion}</if>
+        </where>
+    </select>
+
+    <select id="selectTQualityAssRuleVerificationById" parameterType="Long" resultMap="TQualityAssRuleVerificationResult">
+        <include refid="selectTQualityAssRuleVerificationVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertTQualityAssRuleVerification" parameterType="TQualityAssRuleVerification">
+        insert into t_quality_ass_rule_verification
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="metaModeId != null">meta_mode_id,</if>
+            <if test="verificationRuleType != null">verification_rule_type,</if>
+            <if test="verificationRuleId != null">verification_rule_id,</if>
+            <if test="alarmLevel != null">alarm_level,</if>
+            <if test="ruleDescription != null">rule_description,</if>
+            <if test="modificationSuggestions != null">modification_suggestions,</if>
+            <if test="state != null">state,</if>
+            <if test="useDefinedVerSql != null">use_defined_ver_sql,</if>
+            <if test="superiorUnitId != null">superior_unit_id,</if>
+            <if test="modelVersion != null">model_version,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="metaModeId != null">#{metaModeId},</if>
+            <if test="verificationRuleType != null">#{verificationRuleType},</if>
+            <if test="verificationRuleId != null">#{verificationRuleId},</if>
+            <if test="alarmLevel != null">#{alarmLevel},</if>
+            <if test="ruleDescription != null">#{ruleDescription},</if>
+            <if test="modificationSuggestions != null">#{modificationSuggestions},</if>
+            <if test="state != null">#{state},</if>
+            <if test="useDefinedVerSql != null">#{useDefinedVerSql},</if>
+            <if test="superiorUnitId != null">#{superiorUnitId},</if>
+            <if test="modelVersion != null">#{modelVersion},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTQualityAssRuleVerification" parameterType="TQualityAssRuleVerification">
+        update t_quality_ass_rule_verification
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="metaModeId != null">meta_mode_id = #{metaModeId},</if>
+            <if test="verificationRuleType != null">verification_rule_type = #{verificationRuleType},</if>
+            <if test="verificationRuleId != null">verification_rule_id = #{verificationRuleId},</if>
+            <if test="alarmLevel != null">alarm_level = #{alarmLevel},</if>
+            <if test="ruleDescription != null">rule_description = #{ruleDescription},</if>
+            <if test="modificationSuggestions != null">modification_suggestions = #{modificationSuggestions},</if>
+            <if test="state != null">state = #{state},</if>
+            <if test="useDefinedVerSql != null">use_defined_ver_sql = #{useDefinedVerSql},</if>
+            <if test="superiorUnitId != null">superior_unit_id = #{superiorUnitId},</if>
+            <if test="modelVersion != null">model_version = #{modelVersion},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTQualityAssRuleVerificationById" parameterType="Long">
+        delete from t_quality_ass_rule_verification where id = #{id}
+    </delete>
+
+    <delete id="deleteTQualityAssRuleVerificationByIds" parameterType="String">
+        delete from t_quality_ass_rule_verification where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

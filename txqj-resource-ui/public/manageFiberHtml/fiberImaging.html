@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>拓扑</title>
+
+  <style type="text/css">
+    body, #container {
+      margin: 0 auto;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      overflow: hidden;
+    }
+
+  </style>
+</head>
+<body>
+<div  id="container">
+  <div style="width: 100%;height: 100%;">
+    <div id="transtopofib" style="visibility: visible; background: #fff" ondragover="dragover(event)"/>
+  </div>
+</div>
+
+<!--<script src="../js/data.js"></script>-->
+<script src="../js/jquery-2.1.4.min.js"></script>
+<script src="../js/twaver.js"></script>
+<script src="../js/license.js"></script>
+<script src="../js/demo.js"></script>
+</body>
+<script>
+  var box
+  var network
+  var tree;
+
+  $(function () {
+    init()
+  });
+  function dragover(e) {
+        // dragover事件不能缺少
+      e.preventDefault();
+    }
+  function init () {
+    network = new twaver.network.Network();
+    box = network.getElementBox();
+    network.setLinkFlowEnabled(true);
+    network.setKeyboardRemoveEnabled(false);//屏蔽键盘delete操作
+    network.setTransparentSelectionEnable(true)/* 设置点击网元的透明部分网元是否能被选中，暂时没发现去掉有什么影响 */
+
+    var networkDom = network.getView();
+    networkDom.style.width = "100%";
+    networkDom.style.height = "100%";
+    $('#transtopofib').append(networkDom)
+
+    registerImage()
+    setRightClick(network)
+  }
+  //注册图片对象
+  function registerNormalImage(url,name, width, height) {
+    var image = new Image();
+    image.src = url;
+    image.onload = function () {
+      twaver.Util.registerImage(name, image, width, height, true);
+      image.onload = null;
+      network.invalidateElementUIs();
+    };
+  }
+  // 传输拓扑图注册图片
+  function registerImage() {
+    registerNormalImage('../img/site.png', 'site')
+    registerNormalImage('../img/tbox.png', 'tbox')
+  }
+  // 设置鼠标右键
+  function setRightClick (box) {
+    var popupMenu = new twaver.controls.PopupMenu(box);
+    popupMenu.setMenuItems([
+      { label: '纤芯接续', group: 'jths'},
+    ])
+    //右键菜单的隐藏与出现
+    popupMenu.isVisible = function (menuItem) {
+      if(network.getSelectionModel().getSelection().size() > 0){
+        selectData = network.getSelectionModel().getSelection().get(0);
+        console.log(selectData)
+        if(menuItem.group === 'jths' && selectData.getClient('data').type == 1){
+          return true;
+        }
+      }
+    };
+    popupMenu.onAction = function (menuItem) {
+      var data = selectData.getLinks()._as
+      var a = data[0].getClient('data')
+      var z = data[1].getClient('data')
+      var t = selectData.getClient('data')
+      if (menuItem.label === '纤芯接续') {
+        window.parent['coreConnect']({aId: a.id, zId: z.id, id: t.id});
+      }
+    }
+  }
+  // 刷新toop
+  function reSetTopo (nodesData, linksData) {
+    if (
+      nodesData == undefined ||
+      linksData == undefined
+    ) {
+      return
+    }
+    var oldArr = box.getDatas()._as
+    for (let i = 0; oldArr.length > 0; i) {
+      box.remove(oldArr[i])
+    }
+    nodesData.forEach((item, index, arr) => {
+      addNode(item, (index + 1) * 300, 300)
+    })
+    linksData.forEach((item, index, arr) => {
+      addLink(item)
+    })
+  }
+  // 新增点
+  function addNode(item,x,y) {
+    if (
+      item.id !== undefined &&
+      item.id !== null &&
+      item.id !== ''
+    ) {
+      if (box.getDataById(item.id) === undefined) {
+        var node = new twaver.Node(item.id)
+        node.setLocation(x, y)
+        node.setName(item.name)
+        if(item.type == 1){
+          node.setImage('tbox')
+        }else{
+          node.setImage('site')
+        }
+        node.setWidth(30);
+        node.setHeight(30);
+        node.setStyle('alarm.color', '#fff')
+        node.setStyle('select.color', '#67C23A')
+        node.setStyle('select.style', 'border')
+        node.setClient('data', item)
+        node.setClient('treeShow', false)
+        box.add(node)
+      }
+    }
+  }
+  // 新增线
+  function addLink (item) {
+    if (
+      item.aId === undefined ||
+      item.aId === null ||
+      item.aId === '' ||
+      item.zId === undefined ||
+      item.zId === null ||
+      item.zId === ''
+    ) return
+    if (
+      box.getDataById(item.id) !== undefined
+    ) return
+    var link = new twaver.Link(item.id)
+    link.setStyle('link.bundle.gap', 30)
+    link.setStyle('alarm.color', '#fff')
+    link.setStyle('link.color', '#67C23A')
+    // 此注释禁止删除 因为没找到怎么设置告警线颜色 所以直接在twaver.js中(源码)中修改了 改为#0084FF
+    link.setStyle('select.color', '#67C23A')
+    link.setStyle('select.style', 'border')
+    link.setName(item.name)
+    link.setClient('data', item)
+    link.setIcon('../img/link.png')
+    if (
+      box.getDataById(item.aId) !== undefined ||
+      box.getDataById(item.zId) !== undefined
+    ) {
+      var from = box.getDataById(item.aId)
+      var to = box.getDataById(item.zId)
+      link.setFromNode(from)
+      link.setToNode(to)
+      box.add(link)
+    }
+  }
+</script>
+</html>

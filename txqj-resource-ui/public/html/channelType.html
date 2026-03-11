@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+    *{
+      padding: 0;
+      margin: 0;
+    }
+    body, #drawingBoard {
+      margin: 0 auto;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      overflow: hidden;
+    }
+  </style>
+
+  <script src="../js/jquery-2.1.4.min.js"></script>
+  <script src="../js/twaver.js"></script>
+  <script src="../js/license.js"></script>
+  <script src="../js/demo.js"></script>
+  <script>
+    $(function () {
+      init()
+    });
+    var box
+    var network
+    var toolbar
+    var selectData
+    var addPoint = false
+    var rightX
+    var rightY
+    var clickType
+    var isEdit = false
+    // 首次进入页面 初始化topo box
+    function init () {
+      box = new twaver.ElementBox()//创建一个容器
+      /* 图层的层次和创建顺序无关，和添加到容器的顺序有关 */
+      box.getLayerBox().add(new twaver.Layer('area'))//创建第一层图层，区域
+      let nodeLayer = new twaver.Layer('node')//创建深井，站点图层
+      box.getLayerBox().add(new twaver.Layer('link'))//创建第二层图层，沟道
+      box.getLayerBox().add(new twaver.Layer('fiber'))//创建第三层图层，光缆
+      let nodeAzLayer = new twaver.Layer('nodeAz')//创建AZ点图层
+      nodeAzLayer.setEditable(false);//设置AZ端点不可编辑
+      box.getLayerBox().add(nodeAzLayer)//将AZ端点添加到容器中
+      nodeLayer.setEditable(false);
+      box.getLayerBox().add(nodeLayer)
+
+      /* 监听鼠标事件在可拖动元素或选取的文本拖动到放置目标 */
+      network = demo.Util.createDraggableNetwork(box);
+      // network.setLimitViewInCanvas(true);//防止无限拖拽
+      network.setKeyboardRemoveEnabled(false);//屏蔽键盘delete操作
+      /* 设置组件新的位置及大小，值为包含x、y、width和height属性的Object对象 */
+      network.adjustBounds({x:0, y:0})/* 暂时没发现放在这的作用是什么 */
+      /* 切换到可编辑模式（改变大小等~） */
+      network.setEditInteractions()
+
+      /* 注册工具栏 */
+      setToolebar()
+
+      /* 设置分批面板 */
+      var mainPane = new BorderPane(network, toolbar)
+      /* 设置分批面板的高度 */
+      mainPane.setTopHeight(36);
+      /* 获取整个画布 */
+      var networkDom = mainPane.getView();
+
+      /* 设置画布的宽高 */
+      networkDom.style.width = "100%"
+      networkDom.style.height = "100%"
+
+
+      $('#drawingBoard').append(networkDom)
+      /* 设置画布颜色 */
+      network.getView().style.backgroundColor = "#fff"
+      network.getView().style.cursor = "hand"/* 将光标变成手势，暂时没发现去掉有什么影响 */
+      network.setTransparentSelectionEnable(true)/* 设置点击网元的透明部分网元是否能被选中，暂时没发现去掉有什么影响 */
+
+      // 禁止拖动
+      network.getSelectionModel().setFilterFunction(function (element) {
+        return isEdit
+      });
+      registerImage()
+      setRightClick(network)
+      setLedtClick(network)
+    }
+    // 进入页面 初始化topo图形
+    async function reSetTopo (link, fiber, area, node) {
+      var oldArr = box.getDatas()._as
+      for (let i = 0; oldArr.length > 0; i) {
+        box.remove(oldArr[i])
+      }
+      await link.forEach(function (item, index, arr) {
+        addLink(item, 'link', index + 1)
+      })
+      await fiber.forEach(function (item, index, arr) {
+        addLink(item, 'fiber')
+      })
+      await area.forEach(function (item, index, arr) {
+        addArea(item)
+      })
+      await node.forEach(function (item, index, arr) {
+        addNode(item, 'node')
+      })
+      setTimeout(function () {
+        network.zoomOverview()
+        network.setZoom(1)
+      }, 100)
+    }
+    // 提交topo图 获取topo所有图形数据
+    async function getBoxAllData (parSite) {
+      let link = []
+      let fiber = []
+      let area = []
+      let node = []
+      box.getDatas()._as.forEach(function (item, index, arr) {
+        let type = item.getClient('type')
+        let data = item.getClient('data')
+        if (type == 'link' || type == 'fiber') {
+          let obj = {
+            parSite: parSite,
+            id: data.id,
+            aAddresX: item.getFromNode().getLocation().x,
+            aAddresY: item.getFromNode().getLocation().y,
+            zAddresX: item.getToNode().getLocation().x,
+            zAddresY: item.getToNode().getLocation().y,
+            name: item.getName(),
+            pointArray: [],
+          }
+          for (let i = 0; i < item.getPoints()._as.length; i++) {
+            obj.pointArray[i] = {
+              addresX: item.getPoints()._as[i].x,
+              addresY: item.getPoints()._as[i].y,
+            }
+          }
+          if (type == 'link') {
+            link.push(obj)
+          } else {
+            obj.level = data.level
+            fiber.push(obj)
+          }
+        } else if (type == 'area') {
+          let obj = getArea(item)
+          obj.id = data.id
+          obj.parSite = parSite
+          area.push(obj)
+        } else if (type == 'node') {
+          let obj = {
+            parSite: parSite,
+            id: data.id,
+            addresX: item.getLocation().x,
+            addresY: item.getLocation().y,
+            nodetype: data.nodetype,
+          }
+          node.push(obj)
+        }
+      })
+      return {
+        link: link,
+        fiber: fiber,
+        area: area,
+        node: node,
+      }
+    }
+    // 画线
+    function addLink (item, type, index) {
+      let a = {
+        id: item.id + 'A',
+        addresX: item.aAddresX == null ? 100 : item.aAddresX,
+        addresY: item.aAddresY == null ? 100 * (index * 0.5) : item.aAddresY,
+      }
+      let z = {
+        id: item.id + 'Z',
+        addresX: item.zAddresX == null ? 300 : item.zAddresX,
+        addresY: item.zAddresY == null ? 100 * (index * 0.5) : item.zAddresY,
+      }
+      addNode(a, 'nodeAz')
+      addNode(z, 'nodeAz')
+      if (box.getDataById(item.id) !== undefined) return
+      let link = new twaver.ShapeLink(item.id)
+      link.setLayerId(type)
+      link.setName(item.name)
+      link.setStyle('label.color', 'Transparent')
+      if (type == 'link') {
+        link.setStyle('link.color', '#d1ddea')
+        link.setStyle('link.width', 15);
+        link.setStyle('label.position', 'center')
+      } else {
+        link.setStyle('link.color', getColor(item.level))
+      }
+      if (item.pointArray) {
+          item.pointArray.forEach(function (i, arr, index) {
+            link.addPoint({x: i.addresX, y: i.addresY})
+          })
+      }
+      link.setClient('data', item)
+      link.setClient('type', type)
+      let from = box.getDataById(a.id)
+      let to = box.getDataById(z.id)
+      link.setFromNode(from)
+      link.setToNode(to)
+      box.add(link)
+    }
+    // 画点
+    function addNode (item, type) {
+      var node = new twaver.Node(item.id)
+      node.setLocation(parseInt(item.addresX), parseInt(item.addresY))
+      node.setLayerId(type)
+      node.setImage(item.nodetype)
+      node.setWidth(type == 'nodeAz' ? 40 : 20)
+      node.setHeight(type == 'nodeAz' ? 40 : 20)
+      node.setClient('data', item)
+      node.setClient('type', type)
+      box.add(node)
+    }
+    // 划区域
+    function addArea (item) {
+      var grid = new twaver.Grid(item.id)
+      grid.setLayerId('area')
+      // 去边框
+      grid.setStyle("grid.border", 0)
+      // 去阴影
+      grid.setStyle("grid.deep", 0)
+      // 去阴影
+      grid.setStyle("grid.cell.deep", 0),
+        // 去内容填充
+      grid.setStyle("grid.padding", 0)
+
+      // 位置
+      grid.setLocation(parseInt(item.addresX), parseInt(item.addresY))
+      // 大小
+      grid.setSize(parseInt(item.width), parseInt(item.height))
+      // 填充色
+      grid.setStyle('grid.fill.color', item.bgcolor)
+      grid.setName(item.name)
+      grid.setStyle("label.color", item.labelcolor)
+      grid.setStyle("label.position", item.labelposition)
+
+      grid.setClient('type', 'area')
+      grid.setClient('data', item)
+      box.add(grid)
+    }
+    // 左键点击事件
+    function setLedtClick (box1) {
+      box1.addInteractionListener(function (e) {
+        // 清空所有连线name
+        box.getDatas()._as.forEach(function (item, index, arr) {
+          if (item.getClient('type') == 'link' || item.getClient('type') == 'fiber') {
+            item.setStyle('label.color', 'Transparent')
+          }
+        })
+        // 为选中连线添加name
+        if (e.kind == 'clickElement' && (e.element.getClient('type') == 'fiber' || e.element.getClient('type') == 'link')) {
+          e.element.setStyle('label.color', '#000')
+          if (e.element.getClient('type') == 'link') {
+            window.parent.getChannelFiber(e.element.getClient('data').id)
+          }
+        }
+        // 添加拐点
+        if (e.kind == 'clickElement' || e.kind == 'liveMovePointStart') {
+          selectData = e.element
+          clickType = e.element.getClient('type')
+        }
+        if (e.kind == 'liveMovePointEnd') {
+          if (selectData.getClient('data').id == window.parent.getObj('setDrawId')) {
+            window.parent.setObj('setLinePointArr', getLinePoint(selectData))
+          }
+        }
+        if (e.kind == 'liveMoveEnd') {
+          if (clickType == 'nodeAz') {
+            let link = selectData.getLinks()._as[0]
+            if (link.getClient('data').id == window.parent.getObj('setDrawId')) {
+              window.parent.setObj('setLinePointArr', getLinePoint(link))
+            }
+          }
+          if (clickType == 'area') {
+            let areaData = {
+              name: selectData.getName(),
+              addresX: selectData.getLocation().x,
+              addresY: selectData.getLocation().y,
+              width: selectData.getSize().width,
+              height: selectData.getSize().height,
+              labelcolor: selectData.getStyle("label.color"),
+              labelposition: selectData.getStyle("label.position"),
+              bgcolor: selectData.getStyle('grid.fill.color'),
+            }
+            window.parent.setObj('setAreaData', getArea(selectData))
+          }
+        }
+        if (e.kind == 'liveResizeEnd') {
+          selectData = e.element
+          if (e.element.getClient('data').id == window.parent.getObj('setDrawId')) {
+            window.parent.setObj('setAreaData', getArea(selectData))
+          }
+        }
+      })
+    }
+    // 修改拐点
+    function setPoint (id, index, x, y) {
+      if (index == 'str') {
+        box.getDataById(id).getFromNode().setLocation(x, y)
+      } else if (index == 'end') {
+        box.getDataById(id).getToNode().setLocation(x, y)
+      } else {
+        box.getDataById(id).setPoint(index - 1,  {x: x + 15 * 1.5, y: y + 15 * 1.5})
+      }
+    }
+    // 删除拐点
+    function delPoint (id, index) {
+      box.getDataById(id).removeAt(0)
+      window.parent.setObj('setLinePointArr', getLinePoint(box.getDataById(id)))
+    }
+    // 获取线上点
+    function getLinePoint (line) {
+      let arr = JSON.parse(JSON.stringify(line.getPoints()._as))
+      let id = line.getClient('data').id
+      let str = {
+        addresX: box.getDataById(id).getFromNode().getLocation().x,
+        addresY: box.getDataById(id).getFromNode().getLocation().y,
+        name: '起点'
+      }
+      let end = {
+        addresX: box.getDataById(id).getToNode().getLocation().x,
+        addresY: box.getDataById(id).getToNode().getLocation().y,
+        name: '终点'
+      }
+      str.del = false
+      end.del = false
+      for (let i = 0; i < arr.length; i++) {
+        arr[i].name = '拐点' + (i + 1)
+        arr[i].del = true
+        arr[i].addresX = arr[i].x -15 * 1.5
+        arr[i].addresY = arr[i].y -15 * 1.5
+      }
+      arr.push(end)
+      arr.unshift(str)
+      return arr
+    }
+    // 获取区域
+    function getArea (area) {
+      let areaData = {
+        name: area.getName(),
+        addresX: area.getLocation().x,
+        addresY: area.getLocation().y,
+        width: area.getSize().width,
+        height: area.getSize().height,
+        labelcolor: area.getStyle("label.color"),
+        labelposition: area.getStyle("label.position"),
+        bgcolor: area.getStyle('grid.fill.color'),
+      }
+      return areaData
+    }
+    // 编辑区域
+    function setArea (id, data) {
+      let area = box.getDataById(id)
+      area.setLocation(parseInt(data.addresX), parseInt(data.addresY))
+      area.setSize(parseInt(data.width), parseInt(data.height))
+      area.setStyle('grid.fill.color', data.bgcolor)
+      area.setName(data.name)
+      area.setStyle("label.color", data.labelcolor)
+      area.setStyle("label.position", data.labelposition)
+    }
+    // 编辑光缆
+    function setFiber (id, data) {
+      let fiber = box.getDataById(id)
+      fiber.setName(data.name)
+      fiber.setStyle('link.color', getColor(data.level))
+    }
+    // 获取光缆颜色
+    function getColor (level) {
+      switch (level) {
+        case '1000kV':
+          return '#9f5de5'
+        case '500kV':
+          return '#006fe2'
+        case '220kV':
+          return '#328857'
+        case '110kV':
+          return '#6bc8e7'
+      }
+    }
+    // 右键菜单
+    function setRightClick (box1) {
+      var popupMenu = new twaver.controls.PopupMenu(box1);
+
+
+      popupMenu.onMenuShowing = function (e) {
+        rightX = network.getLogicalPoint(e).x
+        rightY = network.getLogicalPoint(e).y
+        return true;
+      }
+
+      popupMenu.setMenuItems([
+        { label: '添加拐点', group: 'link',},
+        { label: '编辑拐点', group: 'link',},
+
+        { label: '添加拐点', group: 'fiber',},
+        { label: '编辑光缆', group: 'fiber',},
+        { label: '删除光缆', group: 'fiber',},
+
+        { label: '删除元素', group: 'node',},
+
+        { label: '编辑区域', group: 'area',},
+        { label: '删除区域', group: 'area',},
+      ])
+      //右键菜单的隐藏与出现
+      popupMenu.isVisible = function (menuItem) {
+        if(network.getSelectionModel().getSelection().size() > 0){
+          selectData = network.getSelectionModel().getSelection().get(0);
+          if (!isEdit) return false
+          if (selectData.getClient('type') == menuItem.group) {
+            return true
+          }
+        }
+      };
+      popupMenu.onAction = function (menuItem) {
+        var data = selectData.getClient('data')
+        if (menuItem.group === 'link') {
+          if (menuItem.label === '添加拐点') {
+            selectData.addPoint({x: rightX, y: rightY})
+            if (window.parent.getObj('setDrawId') == selectData.getClient('data').id) {
+              window.parent.setObj('setLinePointArr', getLinePoint(selectData))
+            }
+          }
+          if (menuItem.label === '编辑拐点') {
+            window.parent.setLinePoint(selectData.getClient('data').id, getLinePoint(selectData))
+          }
+        } else if (menuItem.group === 'fiber') {
+          if (menuItem.label === '添加拐点') {
+            selectData.addPoint({x: rightX, y: rightY})
+            if (window.parent.getObj('setDrawId') == selectData.getClient('data').id) {
+              window.parent.setObj('setLinePointArr', getLinePoint(selectData))
+            }
+          }
+          if (menuItem.label === '编辑光缆') {
+            let data = {
+              name: selectData.getClient('data').name,
+              level: selectData.getClient('data').level,
+            }
+            window.parent.setFiberPoint(selectData.getClient('data').id, getLinePoint(selectData), data)
+          }
+          if (menuItem.label == '删除光缆') {
+            if (selectData.getClient('data').id == window.parent.getObj('setDrawId')) {
+              window.parent.setObj('setDrawShow', false)
+            }
+            box.remove(selectData)
+          }
+        }else if (menuItem.group === 'area') {
+          if (menuItem.label == '编辑区域') {
+            window.parent.setAreaBox(selectData.getClient('data').id, getArea(selectData))
+          }
+          if (menuItem.label == '删除区域') {
+            if (selectData.getClient('data').id == window.parent.getObj('setDrawId')) {
+              window.parent.setObj('setDrawShow', false)
+            }
+            box.remove(selectData)
+          }
+        } else if (menuItem.group === 'node') {
+          if (menuItem.label == '删除元素') {
+            box.remove(selectData)
+          }
+        }
+      }
+    }
+    // 传输拓扑图注册图片
+    function registerImage() {
+      registerNormalImage('../img/transparency.png', 'nodeAz', 40, 40)
+      registerNormalImage('../img/sj.png', 'sj', 20, 20)
+      registerNormalImage('../img/glyxxjth.png', 'glyxxjth', 20, 20)
+    }
+    //注册图片对象
+    function registerNormalImage( url,name, width, height) {
+      var image = new Image();
+      image.src = url;
+      image.onload = function () {
+        twaver.Util.registerImage(name, image, width, height, true);
+        image.onload = null;
+        network.invalidateElementUIs();
+      };
+    }
+    // 设置工具栏
+    function setToolebar () {
+      toolbar = document.createElement('div')
+      toolbar.style.borderBottom = '2px solid #eeeeee'
+      // addButton(toolbar, '选择模式', '../img/toolsImg/select.png', function () {
+      //   if (twaver.Util.isTouchable) {
+      //     network.setTouchInteractions();
+      //   } else {
+      //     network.setDefaultInteractions();
+      //   }
+      // });
+      // addButton(toolbar, '修改模式', '../img/toolsImg/editIcon.png', function () {
+      //   network.setEditInteractions()
+      // });
+      addButton(toolbar, '放大', '../img/toolsImg/zoomIn.png', function () {
+        network.zoomIn();
+      });
+      addButton(toolbar, '缩小', '../img/toolsImg/zoomOut.png', function () {
+        network.zoomOut();
+      });
+      addButton(toolbar, '缩放复位', '../img/toolsImg/zoomReset.png', function () {
+        network.zoomReset();
+      });
+      addButton(toolbar, '自适应屏幕', '../img/toolsImg/zoomOverview.png', function () {
+        network.zoomOverview();
+      });
+      // addButton(toolbar, '全屏展示', '../img/toolsImg/fullscreen.png', function () {
+      //   demo.Util.toggleFullscreen();
+      // });
+      addDraggableButton(toolbar, '添加区域', '../img/area.png', 'addArea', true)
+      addDraggableButton(toolbar, '添加深井', '../img/sj.png', 'sj', true)
+      addDraggableButton(toolbar, '添加光缆引下线接头盒', '../img/glyxxjth.png', 'glyxxjth', true)
+      addDraggableButton(toolbar, '添加光缆段', '../img/toolsImg/link.png', 'fiber')
+    }
+    // 增加工具栏 点击
+    function addButton (div, name, src, callback) {
+      var button = document.createElement('input');
+      button.setAttribute('type', src ? 'image' : 'button');
+      button.setAttribute('title', name);
+      button.style.verticalAlign = 'top';
+      if (src) {
+        button.style.padding = '0px';
+        button.style.margin = '5px 10px';
+        button.style.width = '29px';
+        button.style.height = '29px';
+        button.setAttribute('src', src);
+      } else {
+        button.value = name;
+      }
+      button.addEventListener('click', callback, false);
+      div.appendChild(button);
+      return button;
+    }
+    // 增加工具栏 拖动
+    function addDraggableButton (div, name, src, functionName, setWH) {
+      var image = new Image();
+      image.setAttribute('title', name);
+      image.setAttribute('draggable', 'true');
+      image.style.cursor = 'move';
+      image.style.verticalAlign = 'top';
+      image.style.padding = '0px';
+      if (setWH) {
+        image.style.margin = '10px';
+        image.style.width = '20px';
+        image.style.height = '20px';
+      } else {
+        image.style.margin = '5px 10px';
+      }
+      image.setAttribute('src', src);
+      image.addEventListener('dragend', function (e) {
+        /* e.preventDefault && e.preventDefault(); */
+        if (!isEdit) return
+        let x = network.getLogicalPoint(e).x + 220
+        let y = network.getLogicalPoint(e).y - 36
+        if (functionName == 'addArea') {
+          let i = 0
+          box.getDatas()._as.forEach(function (item, arr, index) {
+            if (item.getClient('type') == 'area') {
+              i++
+            }
+          })
+          let item = {
+            id: 'area' + i,
+            addresX: x,
+            addresY: y,
+            name: '区域' + i,
+            width: '100',
+            height: '100'
+          }
+          addArea(item)
+        } else if (functionName == 'sj' || functionName == 'glyxxjth') {
+          let i = 0
+          box.getDatas()._as.forEach(function (item, arr, index) {
+            if (item.getClient('type') == 'node') {
+              i++
+            }
+          })
+          let item = {
+            id: 'node' + i,
+            addresX: x,
+            addresY: y,
+            nodetype: functionName,
+          }
+          addNode(item, 'node')
+        } else if (functionName == 'fiber') {
+          let i = 0
+          box.getDatas()._as.forEach(function (item, arr, index) {
+            if (item.getClient('type') == 'fiber') {
+              i++
+            }
+          })
+          let item = {
+            id: "fiber" + i,
+            name: '光缆' + i,
+            aAddresX: x,
+            aAddresY: y,
+            zAddresX: x + 100,
+            zAddresY: y,
+            pointArray: [],
+            level: "110kV"
+          }
+          addLink(item, 'fiber')
+        }
+      }, false);
+      div.appendChild(image);
+      return image;
+    }
+  </script>
+</head>
+<body>
+  <div id="drawingBoard"></div>
+</body>
+</html>

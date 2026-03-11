@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mshz.cloud.tms.business.mapper.TMetaSourceUidMapper">
+
+    <resultMap type="TMetaSourceUid" id="TMetaSourceUidResult">
+        <result property="id"    column="id"    />
+        <result property="metaModelId"    column="meta_model_id"    />
+        <result property="dbId"    column="db_id"    />
+        <result property="tableId"    column="table_id"    />
+        <result property="columnId"    column="column_id"    />
+        <result property="columnName"    column="column_name"    />
+        <result property="columnNameCn"    column="column_name_cn"    />
+        <result property="columnOrder"    column="column_order"    />
+        <result property="createDate"    column="create_date"    />
+        <result property="updateDate"    column="update_date"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectTMetaSourceUidVo">
+        select id, meta_model_id, db_id, table_id, column_id, column_name, column_name_cn, column_order, create_date, update_date, remark from t_meta_source_uid
+    </sql>
+
+    <select id="selectTMetaSourceUidList" parameterType="TMetaSourceUid" resultMap="TMetaSourceUidResult">
+        <include refid="selectTMetaSourceUidVo"/>
+        <where>
+            <if test="metaModelId != null "> and meta_model_id = #{metaModelId}</if>
+            <if test="dbId != null "> and db_id = #{dbId}</if>
+            <if test="tableId != null "> and table_id = #{tableId}</if>
+            <if test="columnId != null "> and column_id = #{columnId}</if>
+            <if test="columnName != null  and columnName != ''"> and column_name like concat('%', #{columnName}, '%')</if>
+            <if test="columnNameCn != null  and columnNameCn != ''"> and column_name_cn = #{columnNameCn}</if>
+            <if test="columnOrder != null  and columnOrder != ''"> and column_order = #{columnOrder}</if>
+            <if test="createDate != null  and createDate != ''"> and create_date = #{createDate}</if>
+            <if test="updateDate != null  and updateDate != ''"> and update_date = #{updateDate}</if>
+        </where>
+    </select>
+
+    <select id="selectTMetaSourceUidById" parameterType="Long" resultMap="TMetaSourceUidResult">
+        <include refid="selectTMetaSourceUidVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertTMetaSourceUid" parameterType="TMetaSourceUid">
+        insert into t_meta_source_uid
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="metaModelId != null">meta_model_id,</if>
+            <if test="dbId != null">db_id,</if>
+            <if test="tableId != null">table_id,</if>
+            <if test="columnId != null">column_id,</if>
+            <if test="columnName != null">column_name,</if>
+            <if test="columnNameCn != null">column_name_cn,</if>
+            <if test="columnOrder != null">column_order,</if>
+            <if test="remark != null">remark,</if>
+            create_date
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="metaModelId != null">#{metaModelId},</if>
+            <if test="dbId != null">#{dbId},</if>
+            <if test="tableId != null">#{tableId},</if>
+            <if test="columnId != null">#{columnId},</if>
+            <if test="columnName != null">#{columnName},</if>
+            <if test="columnNameCn != null">#{columnNameCn},</if>
+            <if test="columnOrder != null">#{columnOrder},</if>
+            <if test="remark != null">#{remark},</if>
+            DATE_FORMAT(now(), '%Y-%m-%d %H:%i:%s')
+         </trim>
+    </insert>
+
+    <update id="updateTMetaSourceUid" parameterType="TMetaSourceUid">
+        update t_meta_source_uid
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="metaModelId != null">meta_model_id = #{metaModelId},</if>
+            <if test="dbId != null">db_id = #{dbId},</if>
+            <if test="tableId != null">table_id = #{tableId},</if>
+            <if test="columnId != null">column_id = #{columnId},</if>
+            <if test="columnName != null">column_name = #{columnName},</if>
+            <if test="columnNameCn != null">column_name_cn = #{columnNameCn},</if>
+            <if test="columnOrder != null">column_order = #{columnOrder},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            update_date = DATE_FORMAT(now(), '%Y-%m-%d %H:%i:%s')
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTMetaSourceUidById" parameterType="Long">
+        delete from t_meta_source_uid where id = #{id}
+    </delete>
+
+    <delete id="deleteTMetaSourceUidByIds" parameterType="String">
+        delete from t_meta_source_uid where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectTMetaSourceUidListByMetaId" parameterType="Long" resultMap="TMetaSourceUidResult">
+        <include refid="selectTMetaSourceUidVo"/>
+        where meta_model_id = #{metaModelId}
+        order by db_id, table_id, column_order
+    </select>
+
+    <select id="selectSourceTableInfo" parameterType="Long" resultType="java.util.Map">
+        select t.table_name as tableName, t.table_name_cn as tableNameCn,
+               c.db_name as dbName, c.db_name_cn as dbNameCn
+        from t_db_table t
+        join t_db_config c on c.id = t.db_id
+        where t.id = #{tableId}
+    </select>
+
+    <select id="selectSourceTableInfoByRelation" parameterType="Long" resultType="java.util.Map">
+        select distinct r.relation_db_id as dbId, c.db_name_cn as dbName,
+               r.relation_table_id as tableId, t.table_name as tableName, t.table_name_cn as tableNameCn
+        from t_meta_model_relation r
+        join t_db_config c ON r.relation_db_id = c.id
+        join t_db_table t ON r.relation_table_id = t.id
+        where r.model_id = #{modelId}
+    </select>
+
+    <select id="selectMetaSourceUidListByMetaId" parameterType="Long" resultType="java.util.Map">
+        select u.id as id, u.meta_model_id as metaModelId, u.db_id as dbId, c.db_name_cn as dbName,
+               u.table_id as tableId,
+               u.column_id as columnId, u.column_name as columnName, u.column_name_cn as columnNameCn, u.column_order as columnOrder,
+               t.table_name as tableName, t.table_name_cn as tableNameCn,
+               case c.db_type
+                   when 'ORACLE' then c.db_username
+                   else c.db_name
+               end as sourceDbName
+        from t_meta_source_uid u
+        join t_db_config c on u.db_id = c.id
+        join t_db_table t on u.table_id = t.id
+        where u.meta_model_id = #{metaModelId}
+        order by u.db_id, u.table_id, u.column_order
+
+    </select>
+
+    <select id="selectSourceColumnInfoByTableId" parameterType="Long" resultType="java.util.Map">
+        select t.id as id, t.column_name as columnName, t.column_name_cn as columnNameCn, t.column_type as columnType, t.column_length as columnLength,
+               IFNULL(u.column_order, 'not_uid') as columnOrder
+        from t_db_table_column t
+        left join t_meta_source_uid u on t.id = u.column_id
+        where t.table_id = #{tableId}
+        order by t.id
+    </select>
+</mapper>

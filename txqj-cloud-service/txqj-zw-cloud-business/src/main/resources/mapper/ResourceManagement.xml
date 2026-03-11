@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mshz.cloud.tms.business.mapper.ResourceManagementMapper">
+
+    <resultMap type="com.mshz.cloud.tms.business.vo.MetaModelShowVo" id="MetaModelShowVoResult">
+        <result property="id" column="id"/>
+        <result property="columnName" column="column_name"/>
+        <result property="columnNameCn" column="column_name_cn"/>
+        <result property="columnType" column="column_type"/>
+        <result property="columnLength" column="column_length"/>
+        <result property="isNotNull" column="is_not_null"/>
+        <result property="sid" column="sid"/>
+        <result property="isPrimaryKey" column="is_primary_key"/>
+        <result property="modelId" column="model_id"/>
+        <result property="columnId" column="column_id"/>
+        <result property="isQuery" column="is_query"/>
+        <result property="isVisible" column="is_visible"/>
+        <result property="sortNum" column="sort_num"/>
+        <result property="modelVersion" column="model_version"/>
+        <result property="createDate" column="create_date"/>
+        <result property="updateDate" column="update_date"/>
+        <result property="isAdvancedQueryIndex" column="is_advanced_query_index"/>
+        <result property="isCustomQuery" column="is_custom_query"/>
+        <result property="advancedQueryOrder" column="advanced_query_order"/>
+        <result property="isAdvancedQuery" column="is_advanced_query"/>
+        <result property="sortable"    column="sortable"    />
+        <result property="isJumpLink"    column="is_jump_link"    />
+        <result property="menuId"    column="menu_id"    />
+        <result property="menuPath"    column="menu_path"    />
+        <result property="linkReMetaModelId"    column="link_re_meta_model_id"    />
+        <result property="linkReMetaModel"    column="link_re_meta_model"    />
+        <result property="linkReMetaModelCn"    column="link_re_meta_model_cn"    />
+        <result property="linkReColumnId"    column="link_re_column_id"    />
+        <result property="linkReColumnName"    column="link_re_column_name"    />
+        <result property="linkReColumnNameCn"    column="link_re_column_name_cn"    />
+        <result property="isMergeRows"    column="is_merge_rows"    />
+        <result property="relateSearchCondition"    column="relate_search_condition"    />
+        <result property="relateSearchAttributeId"    column="relate_search_attribute_id"    />
+        <result property="relateSearchAttribute"    column="relate_search_attribute"    />
+        <result property="relateSearchName"    column="relate_search_name"    />
+        <result property="relMetaMode" column="rel_meta_mode_id"/>
+        <result property="customizedSql" column="customized_sql"/>
+        <result property="relIdMetaModelColumn" column="rel_id_meta_model_column_id"/>
+        <result property="relNameMetaModelColumn" column="rel_name_meta_model_column_id"/>
+        <result property="isStyle"    column="is_style"    />
+        <result property="icon"    column="icon"    />
+        <collection  property="styleList"   javaType="java.util.List"           resultMap="styleResult" />
+    </resultMap>
+    <resultMap id="styleResult" type="com.mshz.cloud.tms.business.entity.TMetaModelShowStyle">
+        <id     property="id"       column="style_id"        />
+        <result property="value"     column="value"      />
+        <result property="style"     column="style"      />
+    </resultMap>
+
+    <sql id="selectMetaModelShowVo">
+      SELECT
+      t.id,
+	t.column_name,
+	t.column_name_cn,
+	t.is_not_null,
+	t.column_type,
+	t.column_length,
+	s.id sid,
+    t.is_primary_key,
+    t.model_id, t.id as column_id, s.is_query, s.is_visible, s.sort_num, t.model_version, s.create_date,
+    s.update_date, s.is_advanced_query_index, s.is_custom_query, s.advanced_query_order, s.is_advanced_query,
+    s.sortable,s.is_jump_link, s.menu_id, s.menu_path, s.link_re_meta_model_id, s.link_re_meta_model,
+    s.link_re_meta_model_cn, s.link_re_column_id, s.link_re_column_name, s.link_re_column_name_cn,
+    s.is_merge_rows, s.relate_search_condition, s.relate_search_attribute_id, s.relate_search_attribute, s.relate_search_name,
+    rule.customized_sql,s.icon,s.is_style,ss.id AS style_id,ss.value,ss.style,
+	( SELECT table_name FROM t_meta_model WHERE CONCAT( id ) = rule.rel_meta_mode_id ) rel_meta_mode_id,
+	( SELECT column_name FROM t_meta_model_tech WHERE CONCAT( id ) = rule.rel_id_meta_model_column_id ) rel_id_meta_model_column_id,
+	( SELECT column_name FROM t_meta_model_tech WHERE CONCAT( id ) = rule.rel_name_meta_model_column_id ) rel_name_meta_model_column_id
+FROM
+	t_meta_model_tech t
+	LEFT JOIN t_meta_model_show s ON (s.model_id = t.model_id AND s.model_version = t.model_version AND s.column_id = t.id)
+	LEFT JOIN t_quality_verification_rules rule ON (rule.meta_model_column_id = CONCAT( t.id ) AND rule.rel_meta_mode_id IS NOT NULL AND rule.rel_meta_mode_id != '')
+    LEFT JOIN t_meta_model_show_style ss ON s.model_id = s.model_id AND ss.model_version = ss.model_version AND s.column_id = ss.column_id
+    </sql>
+
+    <select id="selectGuideVoListByModel" resultType="com.mshz.cloud.tms.business.vo.GuideVo">
+        select t.column_name columnName ,t.column_name_cn columnNameCn,t.is_not_null isNotNull
+        from t_meta_model_tech t where t.model_id = #{modelId} and t.column_name != 'id' and t.model_version = 'edit'
+    </select>
+
+
+    <select id="selectMetaModelShowVoList" parameterType="com.mshz.cloud.tms.business.vo.MetaModelShowVo"
+            resultMap="MetaModelShowVoResult">
+        <include refid="selectMetaModelShowVo"/>
+        <where>
+            <if test="columnName != null and columnName != ''">and t.column_name like concat('%', #{columnName}, '%')
+            </if>
+            <if test="columnNameCn != null and columnNameCn != ''">and t.column_name_cn like concat('%',
+                #{columnNameCn},
+                '%')
+            </if>
+            <if test="columnType != null  and columnType != ''">and t.column_type like concat('%', #{columnType}, '%')
+            </if>
+            <if test="columnLength != null  ">and t.column_length = #{columnLength}</if>
+            <if test="modelId != null ">and t.model_id = #{modelId}</if>
+            <if test="columnId != null ">and t.id = #{columnId}</if>
+            <if test="isQuery != null  and isQuery != ''">and s.is_query = #{isQuery}</if>
+            <if test="isVisible != null  and isVisible != ''">and s.is_visible = #{isVisible}</if>
+            <if test="sortNum != null ">and s.sort_num = #{sortNum}</if>
+            <if test="sortable != null ">and s.sortable = #{sortable}</if>
+            <if test="modelVersion != null  and modelVersion != ''">and t.model_version = #{modelVersion}</if>
+            <if test="createDate != null  and createDate != ''">and s.create_date = #{createDate}</if>
+            <if test="updateDate != null  and updateDate != ''">and s.update_date = #{updateDate}</if>
+            <if test="isAdvancedQueryIndex != null  and isAdvancedQueryIndex != ''">and s.is_advanced_query_index =
+                #{isAdvancedQueryIndex}
+            </if>
+            <if test="isCustomQuery != null  and isCustomQuery != ''">and s.is_custom_query = #{isCustomQuery}</if>
+            <if test="advancedQueryOrder != null  and advancedQueryOrder != ''">and s.advanced_query_order =
+                #{advancedQueryOrder}
+            </if>
+            <if test="isAdvancedQuery != null  and isAdvancedQuery != ''">and s.is_advanced_query = #{isAdvancedQuery}
+            </if>
+            <if test="sortable != null  and sortable != ''"> and s.sortable = #{sortable}</if>
+            <if test="isJumpLink != null  and isJumpLink != ''"> and s.is_jump_link = #{isJumpLink}</if>
+            <if test="menuId != null "> and s.menu_id = #{menuId}</if>
+            <if test="menuPath != null  and menuPath != ''"> and s.menu_path = #{menuPath}</if>
+            <if test="linkReMetaModelId != null "> and s.link_re_meta_model_id = #{linkReMetaModelId}</if>
+            <if test="linkReMetaModel != null  and linkReMetaModel != ''"> and s.link_re_meta_model = #{linkReMetaModel}</if>
+            <if test="linkReMetaModelCn != null  and linkReMetaModelCn != ''"> and s.link_re_meta_model_cn = #{linkReMetaModelCn}</if>
+            <if test="linkReColumnId != null "> and s.link_re_column_id = #{linkReColumnId}</if>
+            <if test="linkReColumnName != null  and linkReColumnName != ''"> and s.link_re_column_name like concat('%', #{linkReColumnName}, '%')</if>
+            <if test="linkReColumnNameCn != null  and linkReColumnNameCn != ''"> and s.link_re_column_name_cn = #{linkReColumnNameCn}</if>
+            <if test="isMergeRows != null  and isMergeRows != ''"> and s.is_merge_rows = #{isMergeRows}</if>
+            <if test="relateSearchCondition != null  and relateSearchCondition != ''"> and s.relate_search_condition = #{relateSearchCondition}</if>
+            <if test="relateSearchAttributeId != null "> and s.relate_search_attribute_id = #{relateSearchAttributeId}</if>
+            <if test="relateSearchAttribute != null  and relateSearchAttribute != ''"> and s.relate_search_attribute = #{relateSearchAttribute}</if>
+            <if test="relateSearchName != null  and relateSearchName != ''"> and s.relate_search_name like concat('%', #{relateSearchName}, '%')</if>
+        </where>
+        order by s.sort_num asc
+    </select>
+
+    <select id="selectTableNameByModelId" resultType="string">
+        select table_name from t_meta_model where id = #{modelId}
+    </select>
+
+    <select id="selectDbNameByModelId" resultType="string">
+        select table_name from t_meta_model where id = #{modelId}
+    </select>
+
+    <select id="selectTableNameCnByModelId" resultType="string">
+        select table_name_cn from t_meta_model where id = #{modelId}
+    </select>
+
+    <select id="selectAll" parameterType="com.mshz.cloud.tms.business.vo.CommonVo" resultType="java.util.LinkedHashMap">
+        ${sql}
+    </select>
+
+    <select id="selectAllMiddle" parameterType="com.mshz.cloud.tms.business.vo.CommonVo" resultType="java.util.LinkedHashMap">
+        ${sql}
+    </select>
+    <select id="selectOne" parameterType="com.mshz.cloud.tms.business.vo.CommonVo" resultType="java.util.LinkedHashMap">
+        ${sql}
+    </select>
+
+
+    <update id="updateSql" parameterType="com.mshz.cloud.tms.business.vo.CommonVo">
+        <!-- ALTER TABLE `${tableName}` MODIFY COLUMN `${tableName}` VARCHAR (100) NULL DEFAULT NULL COMMENT '修改字段'; -->
+        ${sql}
+    </update>
+
+    <insert id="insertSql" parameterType="com.mshz.cloud.tms.business.vo.CommonVo">
+     	${sql}
+    </insert >
+
+    <delete id="deleteSql" parameterType="com.mshz.cloud.tms.business.vo.CommonVo">
+     	${sql}
+    </delete  >
+
+    <update id="updateSqlMiddle" parameterType="com.mshz.cloud.tms.business.vo.CommonVo">
+        <!-- ALTER TABLE `${tableName}` MODIFY COLUMN `${tableName}` VARCHAR (100) NULL DEFAULT NULL COMMENT '修改字段'; -->
+        ${sql}
+    </update>
+
+    <delete id="deleteSqlMiddle" parameterType="com.mshz.cloud.tms.business.vo.CommonVo">
+     	${sql}
+    </delete  >
+
+    <select id="selectOneMiddle" parameterType="com.mshz.cloud.tms.business.vo.CommonVo" resultType="java.util.LinkedHashMap">
+        ${sql}
+    </select>
+    <select id="selectOneline" resultType="java.util.Map">
+        select id as id, name as name from dw_tcdev_oneline
+    </select>
+    <select id="selectFiberParLineByIds" resultType="java.util.Map">
+        select id as id,PAR_LINE as parLine from SG_TCDEV_FIBER_B_TY where id in
+        <foreach item="id" collection="list" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <select id="selectTableProperties" resultType="java.lang.String">
+        select column_name
+        from information_schema.columns
+        where TABLE_SCHEMA = #{dbName} and table_name = #{tableName}
+    </select>
+
+    <select id="selectMaxId" resultType="java.lang.Long">
+        select MAX(ID) from ${modelName} where ID &lt; #{maxIdRange}
+    </select>
+    <select id="selectPortGuid" resultType="java.lang.String">
+        SELECT
+            CONCAT( 'RG=330000,EQP=',CAST(RIGHT(eqp.ID, 8) AS DECIMAL(8, 0)),',SHELF=', shelf.SN, ',SLOT=', slot.SN, ',CARD=', card.SN )
+        FROM
+            `tms`.sg_tcdev_tccard_b card
+                JOIN `tms`.sg_tcdev_tcslot_b slot ON card.PAR_SLOT = slot.ID
+                JOIN `tms`.sg_tcdev_tcshelf_b shelf ON slot.PAR_SHELF = shelf.ID
+                Join `tms`.nr_res_ne_b eqp on shelf.PAR_NE = eqp.ID
+        WHERE
+            card.ID = #{parSlot}
+    </select>
+    <select id="selectCardGuid" resultType="java.lang.String">
+        SELECT
+            CONCAT( 'RG=330000,EQP=',CAST(RIGHT(eqp.ID, 8) AS DECIMAL(8, 0)),',SHELF=', shelf.SN, ',SLOT=', slot.SN)
+        FROM
+            `tms`.sg_tcdev_tcslot_b slot
+                JOIN `tms`.sg_tcdev_tcshelf_b shelf ON slot.PAR_SHELF = shelf.ID
+                Join `tms`.nr_res_ne_b eqp on shelf.PAR_NE = eqp.ID
+        WHERE
+            slot.ID = #{parSlot}
+    </select>
+    <select id="selectSlotGuid" resultType="java.lang.String">
+        SELECT
+            CONCAT( 'RG=330000,EQP=',CAST(RIGHT(eqp.ID, 8) AS DECIMAL(8, 0)),',SHELF=', shelf.SN)
+        FROM
+            `tms`.sg_tcdev_tcshelf_b shelf
+                Join `tms`.nr_res_ne_b eqp on shelf.PAR_NE = eqp.ID
+        WHERE
+            shelf.ID = #{parSlot}
+    </select>
+    <select id="selectShelfGuid" resultType="java.lang.String">
+        SELECT
+            CONCAT( 'RG=330000,EQP=',CAST(RIGHT(eqp.ID, 8) AS DECIMAL(8, 0)))
+        FROM
+            `tms`.nr_res_ne_b eqp
+        WHERE
+            eqp.ID = #{parNe}
+    </select>
+    <select id="selectIsTy" resultType="java.lang.String">
+        select is_ty from ${tableName} where id = #{id}
+    </select>
+    <select id="selectCount" resultType="java.lang.Long">
+        SELECT COUNT(1) from ${tableName} where ${columnName} = #{columnValue}
+    </select>
+    <select id="selectAttribute" resultType="java.lang.String">
+        SELECT ${attribute} from ${tableName} where ID = #{id}
+    </select>
+    <select id="selectTMetaModelIdRuleByPrefixEncodingDefault" resultType="java.util.Map">
+        select model_name as modelName,model_name_cn as modelNameCn from t_meta_model_id_rule where prefix_encoding_default like concat('%', #{prefixEncodingDefault}, '%')
+    </select>
+
+    <select id="doesTheColumnNameExist" resultType="int">
+        select count(*) from information_schema.columns
+        where TABLE_SCHEMA = ''
+          and table_name = #{tableName}
+          and column_name = #{columnName}
+    </select>
+
+
+    <select id="selectTableMessage" resultType="map">
+        SELECT
+            tech.column_name cloumnName,
+            md.table_name tableName,
+            md.model_version modelVersion
+        FROM
+            t_meta_model md
+                LEFT JOIN t_meta_model_tech tech ON tech.model_id = md.id
+        WHERE
+            md.id = #{modelId}
+          AND tech.is_primary_key = '1'
+    </select>
+
+
+    <select id="selectPrimaryKeyByModelId" parameterType="String" resultType="com.mshz.cloud.tms.business.vo.MetaModelShowVo">
+        SELECT
+            t.column_name,
+            t.column_name_cn,
+            t.column_type
+        FROM
+            t_meta_model_tech t
+        WHERE
+            t.model_id = #{modelId}
+          AND t.is_primary_key = '1'
+          AND t.model_version = 'edit'
+    </select>
+</mapper>

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mshz.cloud.tms.business.mapper.TMetaModelReLabelMapper">
+
+    <resultMap type="TMetaModelReLabel" id="TMetaModelReLabelResult">
+        <result property="id"    column="id"    />
+        <result property="modelId"    column="model_id"    />
+        <result property="labelId"    column="label_id"    />
+        <result property="modelVersion"    column="model_version"    />
+        <result property="createDate"    column="create_date"    />
+        <result property="updateDate"    column="update_date"    />
+    </resultMap>
+
+    <sql id="selectTMetaModelReLabelVo">
+        select id, model_id, label_id, model_version, create_date, update_date from t_meta_model_re_label
+    </sql>
+
+    <select id="selectTMetaModelReLabelList" parameterType="TMetaModelReLabel" resultMap="TMetaModelReLabelResult">
+        <include refid="selectTMetaModelReLabelVo"/>
+        <where>
+            <if test="modelId != null "> and model_id = #{modelId}</if>
+            <if test="labelId != null "> and label_id = #{labelId}</if>
+            <if test="modelVersion != null  and modelVersion != ''"> and model_version = #{modelVersion}</if>
+            <if test="createDate != null  and createDate != ''"> and create_date = #{createDate}</if>
+            <if test="updateDate != null  and updateDate != ''"> and update_date = #{updateDate}</if>
+        </where>
+    </select>
+
+    <select id="selectTMetaModelReLabelById" parameterType="Long" resultMap="TMetaModelReLabelResult">
+        <include refid="selectTMetaModelReLabelVo"/>
+        where id = #{id}
+    </select>
+    <!--元模型关联标签表复制，根据modelId和版本号-->
+    <select id="selectTMetaModelReLabelListCopy" resultType="TMetaModelReLabel">
+        select  model_id, label_id from t_meta_model_re_label
+        <where>
+            <if test="modelId != null "> and model_id = #{modelId}</if>
+            <if test="modelVersion != null  and modelVersion != ''"> and model_version = #{modelVersion}</if>
+        </where>
+    </select>
+    <!--查询已经删除的标签-->
+    <select id="selectIsDeleteLabelList" resultType="com.mshz.cloud.tms.business.entity.TLabel">
+        select label_id id ,label_name ,is_delete remark
+        FROM  t_meta_model_re_label
+        where is_delete = 1
+    </select>
+    <!--根据id查询业务元数据标签列表-->
+    <select id="selectModelLabelById"   resultType="long" >
+        SELECT label_id
+        FROM t_meta_model_re_label
+        WHERE model_id = #{modelId} and model_version = #{modelVersion}
+    </select>
+    <insert id="insertTMetaModelReLabel" parameterType="TMetaModelReLabel">
+        insert into t_meta_model_re_label
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="modelId != null">model_id,</if>
+            <if test="labelId != null">label_id,</if>
+            <if test="modelVersion != null">model_version,</if>
+            <if test="labelName != null">label_name,</if>
+            <if test="createDate != null">create_date,</if>
+            <if test="updateDate != null">update_date,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="modelId != null">#{modelId},</if>
+            <if test="labelId != null">#{labelId},</if>
+            <if test="modelVersion != null">#{modelVersion},</if>
+            <if test="labelName != null">#{labelName},</if>
+            <if test="createDate != null">#{createDate},</if>
+            <if test="updateDate != null">#{updateDate},</if>
+         </trim>
+    </insert>
+
+    <!--元模型关联标签表复制-新增元模型关联标签表集合-->
+    <insert id="insertTMetaModelReLabelList" parameterType="list">
+        <foreach collection="list" item="item" index="index" separator=";">
+            insert into t_meta_model_re_label
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="item.id != null">id,</if>
+                <if test="item.modelId != null">model_id,</if>
+                <if test="item.labelId != null">label_id,</if>
+                <if test="item.modelVersion != null">model_version,</if>
+                <if test="item.createDate != null">create_date,</if>
+                <if test="item.updateDate != null">update_date,</if>
+            </trim>
+            <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="item.id != null">#{item.id},</if>
+                <if test="item.modelId != null">#{item.modelId},</if>
+                <if test="item.labelId != null">#{item.labelId},</if>
+                <if test="item.modelVersion != null">#{item.modelVersion},</if>
+                <if test="item.createDate != null">#{item.createDate},</if>
+                <if test="item.updateDate != null">#{item.updateDate},</if>
+            </trim>
+        </foreach>
+    </insert>
+
+    <update id="updateTMetaModelReLabel" parameterType="TMetaModelReLabel">
+        update t_meta_model_re_label
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="modelId != null">model_id = #{modelId},</if>
+            <if test="labelId != null">label_id = #{labelId},</if>
+            <if test="modelVersion != null">model_version = #{modelVersion},</if>
+            <if test="createDate != null">create_date = #{createDate},</if>
+            <if test="updateDate != null">update_date = #{updateDate},</if>
+        </trim>
+        where id = #{id}
+    </update>
+    <!--根据便签id填入标签名称到标签关联表-->
+    <update id="updateLabelNameByLabelId">
+        update t_meta_model_re_label
+        set label_name = #{labelName}
+        where label_id = #{labelId}
+    </update>
+
+    <delete id="deleteTMetaModelReLabelById" parameterType="Long">
+        delete from t_meta_model_re_label where id = #{id}
+    </delete>
+
+    <delete id="deleteTMetaModelReLabelByIds" parameterType="String">
+        delete from t_meta_model_re_label where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!--清空以前标签关联表记录-->
+    <delete id="deleteReLabel" parameterType="long">
+        delete from t_meta_model_re_label where model_id = #{modelId} and (model_version ='edit')
+    </delete>
+
+</mapper>

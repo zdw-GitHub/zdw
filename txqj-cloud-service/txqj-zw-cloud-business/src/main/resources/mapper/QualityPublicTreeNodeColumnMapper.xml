@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mshz.cloud.tms.business.mapper.QualityPublicTreeNodeColumnMapper">
+
+    <resultMap type="QualityPublicTreeNodeColumn" id="QualityPublicTreeNodeColumnResult">
+        <result property="id"    column="id"    />
+        <result property="treeId"    column="tree_id"    />
+        <result property="nodeId"    column="node_id"    />
+        <result property="nodeQueryColumn"    column="node_query_column"    />
+        <result property="nodeQueryColumnAlias"    column="node_query_column_alias"    />
+        <result property="metaDataColumnId"    column="meta_data_column_id"    />
+        <result property="metaDataColumnName"    column="meta_data_column_name"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectQualityPublicTreeNodeColumnVo">
+        select id, tree_id, node_id, node_query_column, node_query_column_alias, meta_data_column_id, meta_data_column_name, create_time, update_time, remark from t_quality_public_tree_node_column
+    </sql>
+
+    <select id="selectQualityPublicTreeNodeColumnList" parameterType="QualityPublicTreeNodeColumn" resultMap="QualityPublicTreeNodeColumnResult">
+        <include refid="selectQualityPublicTreeNodeColumnVo"/>
+        <where>
+            <if test="treeId != null "> and tree_id = #{treeId}</if>
+            <if test="nodeId != null "> and node_id = #{nodeId}</if>
+            <if test="nodeQueryColumn != null  and nodeQueryColumn != ''"> and node_query_column = #{nodeQueryColumn}</if>
+            <if test="nodeQueryColumnAlias != null  and nodeQueryColumnAlias != ''"> and node_query_column_alias = #{nodeQueryColumnAlias}</if>
+            <if test="metaDataColumnId != null "> and meta_data_column_id = #{metaDataColumnId}</if>
+            <if test="metaDataColumnName != null  and metaDataColumnName != ''"> and meta_data_column_name like concat('%', #{metaDataColumnName}, '%')</if>
+        </where>
+    </select>
+
+    <select id="selectQualityPublicTreeNodeColumnById" parameterType="Long" resultMap="QualityPublicTreeNodeColumnResult">
+        <include refid="selectQualityPublicTreeNodeColumnVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertQualityPublicTreeNodeColumn" parameterType="QualityPublicTreeNodeColumn" useGeneratedKeys="true" keyProperty="id">
+        insert into t_quality_public_tree_node_column
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="treeId != null">tree_id,</if>
+            <if test="nodeId != null">node_id,</if>
+            <if test="nodeQueryColumn != null">node_query_column,</if>
+            <if test="nodeQueryColumnAlias != null">node_query_column_alias,</if>
+            <if test="metaDataColumnId != null">meta_data_column_id,</if>
+            <if test="metaDataColumnName != null">meta_data_column_name,</if>
+            <if test="remark != null">remark,</if>
+            create_time
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="treeId != null">#{treeId},</if>
+            <if test="nodeId != null">#{nodeId},</if>
+            <if test="nodeQueryColumn != null">#{nodeQueryColumn},</if>
+            <if test="nodeQueryColumnAlias != null">#{nodeQueryColumnAlias},</if>
+            <if test="metaDataColumnId != null">#{metaDataColumnId},</if>
+            <if test="metaDataColumnName != null">#{metaDataColumnName},</if>
+            <if test="remark != null">#{remark},</if>
+            sysdate()
+        </trim>
+    </insert>
+
+    <update id="updateQualityPublicTreeNodeColumn" parameterType="QualityPublicTreeNodeColumn">
+        update t_quality_public_tree_node_column
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="treeId != null">tree_id = #{treeId},</if>
+            <if test="nodeId != null">node_id = #{nodeId},</if>
+            <if test="nodeQueryColumn != null">node_query_column = #{nodeQueryColumn},</if>
+            <if test="nodeQueryColumnAlias != null">node_query_column_alias = #{nodeQueryColumnAlias},</if>
+            <if test="metaDataColumnId != null">meta_data_column_id = #{metaDataColumnId},</if>
+            <if test="metaDataColumnName != null">meta_data_column_name = #{metaDataColumnName},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            update_time = sysdate()
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteQualityPublicTreeNodeColumnById" parameterType="Long">
+        delete from t_quality_public_tree_node_column where id = #{id}
+    </delete>
+
+    <delete id="deleteQualityPublicTreeNodeColumnByIds" parameterType="String">
+        delete from t_quality_public_tree_node_column where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

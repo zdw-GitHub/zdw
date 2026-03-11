@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mshz.cloud.tms.business.mapper.TLabelMetaMapper">
+
+    <resultMap type="com.mshz.cloud.tms.business.entity.TLabel" id="TLabelResult">
+        <result property="id"    column="id"    />
+        <result property="labelCode"    column="label_code"    />
+        <result property="labelName"    column="label_name"    />
+        <result property="remark"    column="remark"    />
+        <result property="createDate"    column="create_date"    />
+        <result property="updateDate"    column="update_date"    />
+    </resultMap>
+
+    <sql id="selectTLabelVo">
+        select id, label_code, label_name, remark, create_date, update_date from t_label
+    </sql>
+
+    <select id="selectTLabelList" parameterType="com.mshz.cloud.tms.business.entity.TLabel" resultMap="TLabelResult">
+        <include refid="selectTLabelVo"/>
+        <where>
+            <if test="labelName != null  and labelName != ''"> and label_name like concat('%', #{labelName}, '%')</if>
+        </where>
+    </select>
+
+    <select id="selectTLabelById" parameterType="Long" resultMap="TLabelResult">
+        <include refid="selectTLabelVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertTLabel" parameterType="com.mshz.cloud.tms.business.entity.TLabel">
+        insert into t_label
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="labelCode != null">label_code,</if>
+            <if test="labelName != null">label_name,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createDate != null">create_date,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="labelCode != null">#{labelCode},</if>
+            <if test="labelName != null">#{labelName},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createDate != null">#{createDate},</if>
+        </trim>
+    </insert>
+
+    <update id="updateTLabel" parameterType="com.mshz.cloud.tms.business.entity.TLabel">
+        update t_label
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="labelCode != null">label_code = #{labelCode},</if>
+            <if test="labelName != null">label_name = #{labelName},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="updateDate != null">update_date = #{updateDate},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTLabelById" parameterType="Long">
+        delete from t_label where id = #{id};
+        update t_meta_model_re_label set is_delete = 1 where label_id =  #{id};
+    </delete>
+
+    <delete id="deleteTLabelByIds" parameterType="String">
+        delete from t_label where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="checkTLabelCodeUnique" parameterType="String" resultType="String">
+        select  label_code  from t_label where label_code=#{labelCode}
+    </select>
+
+    <select id="checkTLabelNameUnique" parameterType="String" resultType="String">
+        select   label_name  from t_label where  label_name=#{labelName}
+    </select>
+    <!--查询标签名称及其id-->
+    <select id="selectNameId" resultType="com.mshz.cloud.tms.business.entity.TLabel">
+        select id, label_name labelName  from t_label
+    </select>
+</mapper>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="86px" height="30px" viewBox="0 0 86 30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>退出框</title>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#708FAE" stop-opacity="0.4" offset="0%"></stop>
+            <stop stop-color="#7B95AF" stop-opacity="0" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-2" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="1" transform="translate(-1815.000000, -22.000000)">
+            <g id="header" transform="translate(-8.880650, -8.167931)">
+                <g id="退出" transform="translate(1825.327120, 31.111452)">
+                    <g id="退出框" transform="translate(0.000000, 0.000000)">
+                        <g id="编组-2" transform="translate(0.000000, 8.207520)" stroke="#99B0C7">
+                            <path d="M80.2278341,0 L83.5959742,6.15563976 L80.2278341,12.3112795 M3.36814012,12.3112795 L0,6.15563976 L3.36716808,0" id="形状"></path>
+                        </g>
+                        <path d="M41.7750218,-26.384357 L55.6381812,-18.5828295 L55.6381812,47.3091484 L41.7750218,55.1106759 L27.9118623,47.3091484 L27.9118623,-18.5828295 L41.7750218,-26.384357 Z" id="多边形备份-2" stroke="#6E84A0" opacity="0.5" transform="translate(41.775022, 14.363159) rotate(-270.000000) translate(-41.775022, -14.363159) "></path>
+                        <polygon id="多边形备份" fill="url(#linearGradient-1)" transform="translate(41.775022, 14.363159) rotate(-270.000000) translate(-41.775022, -14.363159) " points="41.7750218 -24.9373667 54.3427863 -17.8648259 54.3427863 46.5911448 41.7750218 53.6636856 29.2072573 46.5911448 29.2072573 -17.8648259"></polygon>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

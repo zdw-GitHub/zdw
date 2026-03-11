@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+    body{
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</head>
+<script src="../js/jquery-2.1.4.min.js"></script>
+<script src="../js/twaver.js"></script>
+<script src="../js/license.js"></script>
+<script src="../js/demo.js"></script>
+<script type="text/javascript">
+  var network
+  var box
+  var networkDom
+  var layer
+
+  function init() {
+    network = new twaver.network.Network();
+    box = network.getElementBox();
+    networkDom = network.getView();
+    networkDom.style.width = "100%";
+    networkDom.style.height = "100%";
+    document.body.appendChild(networkDom);
+
+
+    var layerBox = box.getLayerBox();
+    layer = new twaver.Layer("unvisible", "unvisible layer");
+    layer.setVisible(false);;
+    layerBox.add(layer);
+
+    registerImage('../img/duanZiAZ.png', 'duanZiAZ')
+    registerImage('../img/channelNode.svg', 'duanZiAZ2')
+  }
+  function reSetTopo (groups, nodes, lines,data) {
+    var oldArr = box.getDatas()._as
+    for (let i = 0; oldArr.length > 0; i) {
+      box.remove(oldArr[i])
+    }
+    for (let i = 0; i < groups.length; i++) {
+      addGroup(groups[i])
+    }
+    for (let i = 0; i < nodes.length; i++) {
+      addNode(nodes[i])
+    }
+    for (let i = 0; i < lines.length; i++) {
+      addLink(lines[i])
+    }
+    addNodeAZ(data)
+  }
+  function addGroup (item) {
+    if (
+      item.id && box.getDataById(item.id) == undefined
+    ) {
+
+      if (box.getDataById(item.id) !== undefined) return
+      var parGroup = new twaver.Group('parGroupId' + item.id)
+      parGroup.setStyle("group.fill.color","#CCE2F7")
+      parGroup.setStyle("group.padding","0")
+      parGroup.setStyle('group.outline.color', '#d6d6d6')
+      parGroup.setStyle('group.outline.width', 3)
+      parGroup.setStyle('select.style', 'none');
+      // parGroup.setStyle('group.shape', 'roundrect')
+      parGroup.setExpanded(true)
+
+
+      var group = new twaver.Group(item.id)
+      group.setStyle("group.fill.color","#fff")
+      group.setStyle('select.style', 'none');
+      let str = item.name + ''
+      let br = str.indexOf(' ')
+      if (br != -1) {
+        str = str.slice(0, br) + '\n' + str.slice(br)
+      }
+      group.setName(str)
+      group.setStyle('label.position','top.top')
+      group.setStyle('label.padding', 10)
+      group.setStyle('label.yoffset', -10)
+
+
+      group.setStyle('group.padding', 10)
+      group.setStyle('group.padding.left', 50)
+      group.setStyle('group.padding.right', 50)
+      group.setStyle('group.outline.color', '#d6d6d6')
+      group.setExpanded(true)
+      group.setClient('data', item)
+      group.setClient('type', 'group')
+
+      parGroup.addChild(group)
+      box.add(parGroup)
+      box.add(group)
+    }
+  }
+  function addNode (item) {
+    if (
+      item.id && box.getDataById(item.id) == undefined
+    ) {
+      let parentGroup = box.getDataById(item.parId)
+      let groupArr = []
+      for (let i = 0; i < box.getDatas()._as.length; i++) {
+        if (box.getDatas()._as[i].getClient('type') == 'group') groupArr.push(box.getDatas()._as[i])
+      }
+      let groupIndex = groupArr.findIndex(item => {
+        return item == parentGroup
+      })
+      let x
+      let y
+      let afterNode = 0
+      if (groupArr[groupIndex - 1]) {
+        if (groupArr[groupIndex - 1].getChildren()._as.length > 2) {
+          afterNode = 200 * (groupIndex-1)
+        }
+      }
+      if (parentGroup.getChildren()._as.length == 0) {
+        x = groupIndex * 200 + 300 + afterNode
+        y = 100
+      } else if (parentGroup.getChildren()._as.length == 1) {
+        x = groupIndex * 200 + 300 + afterNode
+        y = 250
+      } else if (parentGroup.getChildren()._as.length == 2) {
+        x = (groupIndex + 1) * 200 + 300 + afterNode
+        y = 100
+      } else if (parentGroup.getChildren()._as.length == 3) {
+        x = (groupIndex + 1) * 200 + 300 + afterNode
+        y = 250
+      }
+      var node = new twaver.Node(item.id)
+      if(item.id.indexOf('单芯:') != -1){
+        node.setLayerId(layer.getId());
+      }
+      node.setLocation(x, y)
+      node.setImage('duanZiAZ')
+      node.setClient('type', 'node')
+      box.add(node)
+      parentGroup.addChild(node)
+    }
+  }
+  function addNodeAZ (data) {
+    let aNodeName = data.aNodeName;
+    let aPortName = data.aPortName;
+    let aSite = data.aSite;
+    let zNodeName = data.zNodeName;
+    let zPortName = data.zPortName;
+    let zSite = data.zSite;
+
+    let groupArr = []
+    let nodeArr = []
+    for (let i = 0; i < box.getDatas()._as.length; i++) {
+      if (box.getDatas()._as[i].getClient('type') == 'group') groupArr.push(box.getDatas()._as[i])
+      if (box.getDatas()._as[i].getClient('type') == 'node') nodeArr.push(box.getDatas()._as[i])
+    }
+
+    let aParentGroup = box.getDataById(aSite)
+    let aGroup = new twaver.Group(aNodeName+aPortName)
+    aGroup.setStyle("group.padding","20")//设置内边距
+    aGroup.setStyle("group.fill.color","#CCE2F7")//背景颜色
+    aGroup.setStyle('group.outline.color', '#A9D2ED')//边框颜色
+    aGroup.setStyle('group.outline.width', 3)//边框大小
+    aGroup.setStyle('label.position','top.top')//组名显示到上面
+    aGroup.setExpanded(true)
+    aGroup.setName(aNodeName)
+    if(aParentGroup){
+      aParentGroup.addChild(aGroup)
+    }
+    box.add(aGroup)
+
+    let Anode = new twaver.Node('A')
+    Anode.setLocation(200, 175)
+    Anode.setImage('duanZiAZ2')
+    Anode.setName(aPortName)
+    aGroup.addChild(Anode)
+    box.add(Anode)
+
+
+    let zParentGroup = box.getDataById(zSite)
+    var zGroup = new twaver.Group(zNodeName+zPortName)
+    zGroup.setStyle("group.padding","20")//设置内边距
+    zGroup.setStyle('group.outline.color', '#A9D2ED')//边框颜色
+    zGroup.setStyle("group.fill.color","#A9D2ED")//背景颜色
+    zGroup.setStyle('group.outline.width', 3)//边框大小
+    zGroup.setStyle('label.position','top.top')//组名显示到上面
+    zGroup.setName(zNodeName)
+    zGroup.setExpanded(true)
+    if(zParentGroup){
+      zParentGroup.addChild(zGroup)
+    }
+    box.add(zGroup)
+
+    let Znode = new twaver.Node('Z')
+    let x = (parseInt(nodeArr.length / 2)) * 200 == 0 ? 200 : (parseInt(nodeArr.length / 2)) * 200
+    Znode.setLocation(x + 200, 175)
+    Znode.setImage('duanZiAZ2')
+    Znode.setName(zPortName)
+    zGroup.addChild(Znode)
+    box.add(Znode)
+
+
+    if (box.getDatas()._as.length > 4) {
+      addLinkAZ(groupArr[0].getChildren()._as, 'A')
+      addLinkAZ(groupArr[groupArr.length - 1].getChildren()._as, 'Z')
+    } else {
+      var from1 = box.getDataById('A')
+      var to1 = box.getDataById('Z')
+      var link1 = new twaver.Link('azLink1', from1, to1)
+      link1.setStyle('link.color', '#387EFD')
+      box.add(link1)
+
+      var from2 = box.getDataById('A')
+      var to2 = box.getDataById('Z')
+      var link2 = new twaver.Link('azLink2', from2, to2)
+      link2.setStyle('link.color', '#387EFD')
+      box.add(link2)
+    }
+  }
+  function addLink (item) {
+    var from = box.getDataById(item.id + 'A')
+    var to = box.getDataById(item.id + 'Z')
+    var link = new twaver.Link(item.id, from, to)
+    link.setStyle('link.color', '#387EFD')
+    link.setName(item.name)
+    link.setClient('type', 'link')
+    box.add(link)
+  }
+  function addLinkAZ (nodes, AZ) {
+    for (let i = 0; i < nodes.length; i++) {
+      var from = box.getDataById(AZ)
+      var to = nodes[i]
+      var link = new twaver.Link(AZ + 'Link' + i, from, to)
+      link.setStyle('link.color', '#387EFD')
+      box.add(link)
+    }
+  }
+  // 注册图片方法
+  function registerImage(url, name) {
+    var image = new Image()
+    image.src = url
+    image.onload = function() {
+      twaver.Util.registerImage(name, image, image.width, image.height)
+      image.onload = null
+      if (window.network) {
+        window.network.invalidateElementUIs()
+      }
+      if (window.tree) {
+        window.tree.invalidateDisplay()
+      }
+    }
+  }
+  //清除
+  function cleanUp () {
+    var oldArr = box.getDatas()._as
+    for (let i = 0; oldArr.length > 0; i) {
+      box.remove(oldArr[i])
+    }
+  }
+  function setJumpFiberTopo(aZD,aName,aPortName,zZD,zName,zPortName) {
+    var oldArr = box.getDatas()._as
+    for (let i = 0; oldArr.length > 0; i) {
+      box.remove(oldArr[i])
+    }
+    addJumpFiberGroup(aZD,aName)
+    addJumpFiberGroup(zZD,zName)
+    addJumpFiberNode(aZD,aPortName)
+    addJumpFiberNode(zZD,zPortName)
+    addJumpFiberLink(aZD,zZD)
+  }
+  function addJumpFiberLink(aId,zId){
+    var node1 = new twaver.Node()
+    node1.setLocation(500, 150)
+    node1.setImage('')
+    node1.setClient('type', 'node')
+    box.add(node1)
+    var node2 = new twaver.Node()
+    node2.setLocation(500, 250)
+    node2.setImage('')
+    node2.setClient('type', 'node')
+    box.add(node2)
+    var node3 = new twaver.Node()
+    node3.setLocation(800, 150)
+    node3.setImage('')
+    node3.setClient('type', 'node')
+    box.add(node3)
+    var node4 = new twaver.Node()
+    node4.setLocation(800, 250)
+    node4.setImage('')
+    node4.setClient('type', 'node')
+    box.add(node4)
+
+
+    var from = box.getDataById(aId+'Node')
+    var to = box.getDataById(zId+'Node')
+    var link = new twaver.Link( from, node1)
+    link.setStyle('link.color', '#387EFD')
+    link.setClient('type', 'link')
+    box.add(link)
+    link = new twaver.Link( from, node2)
+    link.setStyle('link.color', '#387EFD')
+    link.setClient('type', 'link')
+    box.add(link)
+    link = new twaver.Link( node1, node3)
+    link.setStyle('link.color', '#387EFD')
+    link.setClient('type', 'link')
+    box.add(link)
+    link = new twaver.Link( node2, node4)
+    link.setStyle('link.color', '#387EFD')
+    link.setClient('type', 'link')
+    box.add(link)
+    link = new twaver.Link( node3, to)
+    link.setStyle('link.color', '#387EFD')
+    link.setClient('type', 'link')
+    box.add(link)
+    link = new twaver.Link( node4, to)
+    link.setStyle('link.color', '#387EFD')
+    link.setClient('type', 'link')
+    box.add(link)
+
+  }
+  function addJumpFiberNode(id,name) {
+    let parentGroup = box.getDataById(id)
+    let groupArr = []
+    for (let i = 0; i < box.getDatas()._as.length; i++) {
+      if (box.getDatas()._as[i].getClient('type') == 'group') groupArr.push(box.getDatas()._as[i])
+    }
+    let groupIndex = groupArr.findIndex(item => {
+      return item == parentGroup
+    })
+    let x
+    if(groupIndex == 0){
+      x = 200
+    }else {
+      x = 1100
+    }
+    var node = new twaver.Node(id+'Node')
+    node.setLocation(x, 200)
+    node.setImage('duanZiAZ2')
+    node.setClient('type', 'node')
+    node.setName(name)
+    box.add(node)
+    parentGroup.addChild(node)
+  }
+  function addJumpFiberGroup (id,name) {
+    var parGroup = new twaver.Group('parGroupId' + id)
+    parGroup.setStyle("group.fill.color","#CCE2F7")
+    parGroup.setStyle("group.padding","0")
+    parGroup.setStyle('group.outline.color', '#d6d6d6')
+    parGroup.setStyle('group.outline.width', 3)
+    parGroup.setStyle('select.style', 'none');
+    parGroup.setExpanded(true)
+
+
+    var group = new twaver.Group(id)
+    group.setStyle("group.fill.color","#fff")
+    group.setStyle('select.style', 'none');
+    group.setName(name)
+    group.setStyle('label.position','top.top')
+    group.setStyle('label.padding', 10)
+    group.setStyle('label.yoffset', -10)
+
+
+    group.setStyle('group.padding.top', 80)
+    group.setStyle('group.padding.bottom', 80)
+    group.setStyle('group.padding.left', 40)
+    group.setStyle('group.padding.right', 40)
+    group.setStyle('group.outline.color', '#d6d6d6')
+    group.setExpanded(true)
+    group.setClient('type', 'group')
+
+    parGroup.addChild(group)
+    box.add(parGroup)
+    box.add(group)
+  }
+</script>
+<body onload="init()">
+</body>
+</html>

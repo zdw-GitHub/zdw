@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>拓扑</title>
+
+  <style type="text/css">
+    body, #fiberImaging {
+      margin: 0 auto;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      overflow: hidden;
+    }
+
+  </style>
+</head>
+<body>
+<div id="fiberImaging">
+  <div style="width: 100%;height: 100%;">
+    <div id="transtopofib" style="visibility: visible; background: #fff" ondragover="dragover(event)"/>
+  </div>
+</div>
+
+<!--<script src="../js/data.js"></script>-->
+<script src="../js/jquery-2.1.4.min.js"></script>
+<script src="../js/twaver.js"></script>
+<script src="../js/license.js"></script>
+<script src="../js/demo.js"></script>
+</body>
+<script>
+  var box
+  var network
+  var toolbar
+  var tree;
+  var nodes = []
+  var links = []
+  var fibers = []
+  var alarmBox
+  var isEdit
+  var islead
+  var isSee
+  var xBox
+  var yBox
+
+  var step
+  $(function () {
+    init()
+  });
+
+  function dragover(e) {
+    // dragover事件不能缺少
+    e.preventDefault();
+  }
+
+  function init() {
+    box = new twaver.ElementBox()
+    alarmBox = box.getAlarmBox()
+    // 光缆失去焦点时 关闭光缆详情
+
+    box.getSelectionModel().addSelectionChangeListener(function (e) {
+      var datas = e.datas._as
+      if (e.kind == 'clear') {
+        for (var i = 0; i < datas.length; i++) {
+          if (datas[i].getClient('data').id != undefined) {
+            window.parent['closeFiberBox'](datas[i].getClient('data').id)
+          }
+        }
+      }
+      var level = twaver.AlarmSeverity.MAJOR
+      if (e.kind === 'set' && datas.length == '1') {
+        level.nickName = '属性值异常'
+      } else {
+        level.nickName = ''
+      }
+    });
+    twaver.vector.Network.prototype.isMovable = function (a) {
+      return true;
+    }
+    network = new twaver.network.Network(box);
+    // network.setLimitViewInCanvas(true);//防止无限拖拽
+    network.setLinkFlowEnabled(true);
+    network.setKeyboardRemoveEnabled(false);//屏蔽键盘delete操作
+    network.adjustBounds({x: 0, y: 0})
+    // 拓扑图只显示hidden为false的节点
+    network.setVisibleFunction(function (element) {
+      if (element.getClient("show") === undefined) {
+        return true
+      }
+      if (element.getClient("show")) {
+        return true
+      }
+      return false
+    })
+    network.setTransparentSelectionEnable(true)/* 设置点击网元的透明部分网元是否能被选中，暂时没发现去掉有什么影响 */
+    setToolebar()
+    tree = new twaver.controls.Tree(box);
+    tree.setKeyboardRemoveEnabled(false);//屏蔽键盘delete操作
+    tree._expandMap = {
+      fibers: 1,
+      links: 1,
+    }
+    tree.setVisibleFunction(function (element) {
+      if (element.getClient("treeShow") === undefined) {
+        return true
+      }
+      if (element.getClient("treeShow")) {
+        return true
+      }
+      return false
+    })
+    var mainSplitPane = new twaver.controls.SplitPane(tree, network, 'horizontal', 0.2);
+    mainSplitPane.setDividerDraggable(true)
+    var mainPane = new BorderPane(mainSplitPane, this.toolbar)
+    mainPane.setTopHeight(36);
+    var networkDom = mainPane.getView();
+
+    networkDom.style.width = "100%"
+    networkDom.style.height = "100%"
+    $('#transtopofib').append(networkDom)
+    network.getView().style.backgroundColor = "#fff"
+    network.getView().style.cursor = "hand"
+    mainPane.getView()
+    network.addInteractionListener(function (e) {
+      if (e.kind == 'createElement') {
+        let newLink = e.element
+        var aNode = newLink.getFromNode().getClient('data')
+        var zNode = newLink.getToNode().getClient('data')
+        window.parent['addFiberBoxShow'](aNode, zNode)
+        box.remove(newLink)
+
+      }
+    })
+    registerImage()
+    setRightClick(network)
+    setRightClick(tree)
+    setTreeClick()
+  }
+
+  //注册图片对象
+  function registerNormalImage(url, name, width, height) {
+    var image = new Image();
+    image.src = url;
+    image.onload = function () {
+      twaver.Util.registerImage(name, image, width, height, true);
+      image.onload = null;
+      network.invalidateElementUIs();
+    };
+  }
+
+  // 传输拓扑图注册图片
+  function registerImage() {
+    registerNormalImage('../img/site.png', 'site')
+    registerNormalImage('../img/tbox.png', 'tbox')
+  }
+
+  // 设置树点击事件
+  function setTreeClick() {
+    tree.addInteractionListener(function (evt) {
+      if (evt.data.getClient('data').resType == 2) (
+        window.parent['getFiberData'](evt.data.getClient('data').resId)
+      )
+
+    })
+  }
+
+  // 设置鼠标右键
+  function setRightClick(box) {
+    var popupMenu = new twaver.controls.PopupMenu(box);
+    popupMenu.setMenuItems([
+      {label: '撤销', group: 'nodes', type: 'del', isSeeShow: false},
+
+      {label: '修改属性', group: 'links', type: 'edit', isSeeShow: false},
+      {label: '查看属性', group: 'links', isSeeShow: true},
+      {label: '删除', group: 'links', type: 'del', isSeeShow: false},
+      {label: '撤销', group: 'links', type: 'del', isSeeShow: false},
+
+      {label: '修改属性', group: 'jths', type: 'edit', isSeeShow: false},
+      {label: '查看属性', group: 'jths', isSeeShow: true},
+      {label: '纤芯接续', group: 'jths',  isSeeShow: true},
+      {label: '撤销', group: 'jths', type: 'del', isSeeShow: false},
+
+      {label: '查看光缆纤芯', group: 'fibers', type: 'see', isSeeShow: false},
+      {label: '查看属性', group: 'fibers', isSeeShow: true},
+      {label: '修改属性', group: 'fibers', type: 'edit', isSeeShow: false},
+      {label: '删除', group: 'fibers', type: 'del', isSeeShow: false},
+      {label: '撤销', group: 'fibers', type: 'del', isSeeShow: false},
+    ])
+    //右键菜单的隐藏与出现
+    popupMenu.isVisible = function (menuItem) {
+      if (network.getSelectionModel().getSelection().size() > 0) {
+        selectData = network.getSelectionModel().getSelection().get(0);
+        var type = selectData._clientMap.data.resType + ''
+        var operation = selectData._clientMap.data.editType + ''
+        if (type === '0' && menuItem.group === 'nodes') {
+          if (islead && isEdit) {
+            if (step == 0 && menuItem.type == 'del') {
+              return true;
+            }
+          } else if (isEdit) {
+            if (menuItem.isSeeShow == undefined || !menuItem.isSeeShow) {
+              return true
+            }
+          } else {
+            if (menuItem.isSeeShow == undefined || menuItem.isSeeShow) {
+              return true
+            }
+          }
+        }
+        if (type === '1' && menuItem.group === 'jths' && operation !== '2') {
+          if (islead && isEdit) {
+            if (step == 1 && menuItem.type == 'del') {
+              return true;
+            } else if (step == 1 && menuItem.type == 'edit') {
+              return true;
+            } else if (step == 3 && menuItem.type == 'xxjx') {
+              return true;
+            }
+          } else if (isEdit) {
+            if (menuItem.isSeeShow == undefined || !menuItem.isSeeShow) {
+              return true
+            }
+          } else {
+            if (menuItem.isSeeShow == undefined || menuItem.isSeeShow) {
+              return true
+            }
+          }
+        }
+        if (type === '2' && menuItem.group === 'fibers' && operation !== '2') {
+          if (islead && isEdit) {
+            if (step == 4 && (menuItem.type == 'edit' || menuItem.type == 'del')) {
+              return true;
+            } else if ((step == 5 || step == 6) && menuItem.type == 'see') {
+              return true;
+            }
+          } else if (isEdit) {
+            if ((menuItem.isSeeShow == undefined || !menuItem.isSeeShow) || menuItem.label == '查看光缆纤芯') {
+              return true
+            }
+          } else {
+            if (menuItem.isSeeShow == undefined || menuItem.isSeeShow) {
+              return true
+            }
+          }
+        }
+        if (type === '3' && menuItem.group === 'links' && operation !== '2') {
+          if (islead && isEdit) {
+            if (step == 2 && menuItem.type == 'del') {
+              return true;
+            } else if (step == 5 && menuItem.type == 'edit') {
+              return true;
+            }
+          } else if (isEdit) {
+            if (menuItem.isSeeShow == undefined || !menuItem.isSeeShow) {
+              return true
+            }
+          } else {
+            if (menuItem.isSeeShow == undefined || menuItem.isSeeShow) {
+              return true
+            }
+          }
+        }
+      }
+    };
+    //右键菜单点击事件
+    document.onmousedown = function (e) {
+      if (e.button == 2) {
+        xBox = e.x - 300
+        yBox = e.y - 50
+      }
+    }
+    popupMenu.onAction = function (menuItem) {
+      var data = selectData.getClient('data')
+
+      if (menuItem.group === 'nodes') {
+        if (menuItem.label === '撤销') {
+          window.parent['delTopoData']('nodes', data.taskShowId, data.resId)
+        }
+      } else if (menuItem.group === 'links') {
+        if (menuItem.label === '删除') {
+          if (data.editType == '1') { // 如果是新增数据 调用撤销delTopoData方法 如果是选择或者修改 调用删除delData方法
+            window.parent['delTopoData']('links', data.taskShowId, data.resId, data)
+          } else {
+            window.parent['delData']('links', data.taskShowId, data.resId, data)
+          }
+        } else if (menuItem.label === '撤销') {
+          window.parent['delTopoData']('links', data.taskShowId, data.resId, data)
+        } else if (menuItem.label === '修改属性' || menuItem.label === '查看属性') {
+          window.parent['editTopoData'](data)
+        }
+      } else if (menuItem.group === 'jths') {
+        if (menuItem.label === '撤销') {
+          window.parent['delTopoData']('jths', data.taskShowId, data.resId, data)
+        } else if (menuItem.label === '纤芯接续') {
+          window.parent['coreConnect'](data);
+        } else if (menuItem.label === '修改属性' || menuItem.label === '查看属性') {
+          window.parent['editTopoData'](data)
+        }
+      } else if (menuItem.group === 'fibers') {
+        if (menuItem.label === '删除') {
+          if (data.editType == '1') { // 如果是新增数据 调用撤销方法
+            window.parent['delTopoData']('fibers', data.taskShowId, data.resId, data)
+          } else {
+            window.parent['delData']('fibers', data.taskShowId, data.resId, data)
+          }
+        } else if (menuItem.label === '撤销') {
+          window.parent['delTopoData']('fibers', data.taskShowId, data.resId, data)
+        } else if (menuItem.label === '修改属性' || menuItem.label === '查看属性') {
+          window.parent['editTopoData'](data)
+        } else if (menuItem.label === '查看光缆纤芯') {
+          window.parent['openFiberCoreDetail'](data)
+        }
+      }
+    }
+  }
+
+  // 设置工具栏
+  function setToolebar() {
+    toolbar = document.createElement('div')
+    toolbar.style.borderBottom = '2px solid #eeeeee'
+    toolbar.style.paddingLeft = '15%'
+    addButton(toolbar, '选择模式', '../img/toolsImg/select.png', function () {
+      network.setDefaultInteractions()
+    });
+    addButton(toolbar, '放大', '../img/toolsImg/zoomIn.png', function () {
+      network.zoomIn();
+    });
+    addButton(toolbar, '缩小', '../img/toolsImg/zoomOut.png', function () {
+      network.zoomOut();
+    });
+    addButton(toolbar, '缩放复位', '../img/toolsImg/zoomReset.png', function () {
+      network.zoomReset();
+    });
+    addButton(toolbar, '自适应屏幕', '../img/toolsImg/zoomOverview.png', function () {
+      network.zoomOverview();
+    });
+    addDraggableButton(toolbar, '选择站点', '../img/toolsImg/site.png', 'addSiteBoxShow')
+    addDraggableButton(toolbar, '新增接头盒', '../img/toolsImg/tbox.png', 'addTconCommit')
+    addButton(toolbar, '新增光缆段', '../img/toolsImg/link.png', function () {
+      if (isEdit) {
+        network.setCreateLinkInteractions(twaver.Link)
+      }
+    })
+    addButton(toolbar, '选择光缆', '../img/toolsImg/fiber.png', function () {
+      if (isEdit) {
+        window.parent['addLinkShow']()
+      }
+    })
+  }
+
+  // 增加工具栏 点击
+  function addButton(div, name, src, callback) {
+    var button = document.createElement('input');
+    button.setAttribute('type', src ? 'image' : 'button');
+    button.setAttribute('title', name);
+    button.style.verticalAlign = 'top';
+    if (src) {
+      button.style.padding = '0px';
+      button.style.margin = '0px 10px 0px 10px';
+      button.setAttribute('src', src);
+    } else {
+      button.value = name;
+    }
+    button.addEventListener('click', callback, false);
+    div.appendChild(button);
+    return button;
+  }
+
+  // 增加工具栏 拖动
+  function addDraggableButton(div, name, src, functionName) {
+    var image = new Image();
+    image.setAttribute('title', name);
+    image.setAttribute('draggable', 'true');
+    image.style.cursor = 'move';
+    image.style.padding = '0px';
+    image.style.margin = '0px 10px 0px 10px';
+    image.setAttribute('src', src);
+    image.addEventListener('dragend', function (e) {
+      let x = e.x - (document.getElementById('transtopofib').getElementsByTagName('div')[0].getElementsByTagName('div')[0].getElementsByTagName('div')[0].offsetWidth)
+      let y = e.y - 36
+      if (isEdit) {
+        if (functionName == 'addTconCommit') {
+          let isLineP = false
+          box.getDatas()._as.forEach(function (item, index, array) {
+            let data = item.getClient('data')
+            if (
+              data &&
+              data.resType + '' === '3' &&
+              data.editType + '' !== '2') {
+              if (
+                getPointToLineDistance2(
+                  item.getFromNode().getLocation(),
+                  item.getToNode().getLocation(),
+                  {x: x + 20, y: y - 20}
+                ) < 15
+              ) {
+                window.parent['addBox'](data.name, 'links', data.taskShowId, data.resId, data, x, y)
+                isLineP = true
+              }
+            }
+          })
+          if (!isLineP) {
+            window.parent[functionName](x, y)
+          }
+        } else if (functionName == 'addSiteBoxShow') {
+          window.parent[functionName](x, y)
+        }
+      }
+    }, false);
+    div.appendChild(image);
+    return image;
+  }
+
+  // 刷新toop
+  function reSetTopo(nodesData, linksData, fibersData, isedit) {
+    if (
+      nodesData == undefined ||
+      linksData == undefined ||
+      fibersData == undefined ||
+      isedit == undefined
+    ) {
+      return
+    }
+    nodes = []
+    links = []
+    fibers = []
+    isEdit = isedit
+    var oldArr = box.getDatas()._as
+    for (let i = 0; oldArr.length > 0; i) {
+      box.remove(oldArr[i])
+    }
+    tree._expandMap = {
+      fibers: 1,
+      links: 1,
+    }
+    addGroup('fibers', '所有光缆', false)
+    addGroup('links', '所有光缆段', false)
+    fibersData.forEach((item, index, arr) => {
+      addFiber(item)
+    })
+    nodesData.forEach((item, index, arr) => {
+      addNode(item)
+    })
+    linksData.forEach((item, index, arr) => {
+      addLink(item)
+    })
+  }
+
+  // 获取图上内容
+  function getCanvasData() {
+    var data = box.getDatas()._as
+    var arr = []
+    var item
+    for (var i = 0; i < data.length; i++) {
+      item = data[i].getClient('data')
+      if (
+        item != undefined &&
+        item.resType != undefined &&
+        (item.resType == '0' || item.resType == '1')
+      ) {
+        item.addresX = data[i].getLocation().x
+        item.addresY = data[i].getLocation().y
+        arr.push(item)
+      }
+    }
+    return arr
+  }
+
+  // 新增分组
+  function addGroup(id, name, show) {
+    var group = new twaver.Group(id)
+    group.setStyle("group.fill.color", "Transparent")
+    group.setStyle('group.outline.color', 'Transparent')
+    group.setStyle('select.style', 'none')
+    group.setStyle('label.alpha', 0)
+    group.setStyle('group.deep', 0)
+    group.setName(name)
+    group.setExpanded(true)
+    group.expanded = true
+    group.setLayerId('unmovable')
+    group.setClient("show", show)
+    group.setIcon('')
+    box.add(group)
+  }
+
+  // 新增点
+  function addNode(item) {
+    if (
+      item.resId !== undefined &&
+      item.resId !== null &&
+      item.resId !== ''
+    ) {
+      if (box.getDataById(item.resId) === undefined) {
+        nodes.push(item)
+        let id = item.resId
+        var node = new twaver.Node(id)
+        node.setLocation(parseInt(item.addresX), parseInt(item.addresY))
+        node.setName(item.resName)
+        if (item.resType == 1) {
+          node.setImage('tbox')
+        } else {
+          node.setImage('site')
+        }
+        node.setWidth(30);
+        node.setHeight(30);
+        node.setStyle('alarm.color', '#fff')
+        node.setStyle('select.color', '#67C23A')
+        node.setStyle('select.style', 'border')
+        node.setClient('data', item)
+        node.setClient('treeShow', false)
+        box.add(node)
+        setAlarm(item)
+      }
+    }
+  }
+
+  // 新增线
+  function addLink(item) {
+    if (
+      item.aResobjid === undefined ||
+      item.aResobjid === null ||
+      item.aResobjid === '' ||
+      item.zResobjid === undefined ||
+      item.zResobjid === null ||
+      item.zResobjid === ''
+    ) return
+    if (
+      box.getDataById(item.resId) !== undefined
+    ) return
+    var link = new twaver.Link(item.resId)
+    links.push(item)
+    link.setStyle('link.bundle.gap', 30)
+    link.setStyle('alarm.color', '#fff')
+    link.setStyle('link.color', '#67C23A')
+    // 此注释禁止删除 因为没找到怎么设置告警线颜色 所以直接在twaver.js中(源码)中修改了 改为#0084FF
+    link.setStyle('select.color', '#67C23A')
+    link.setStyle('select.style', 'border')
+    link.setName(item.name)
+    link.setClient('data', item)
+    link.setIcon('../img/link.png')
+    if (
+      box.getDataById(item.aResobjid) !== undefined ||
+      box.getDataById(item.zResobjid) !== undefined
+    ) {
+      if (item.editType !== '2') {
+        // 数据删除后隐藏拓扑图 但显示资源树\
+        let arr = []
+
+        for (let i = 0; i < box.getDatas()._as.length; i++) {
+          if (
+            box.getDatas()._as[i].getClient('data') &&
+            (box.getDatas()._as[i].getClient('data').resType == '0' ||
+              box.getDatas()._as[i].getClient('data').resType == '1')
+          ) {
+            arr.push(box.getDatas()._as[i])
+          }
+        }
+        let a = arr.find(i => {
+          return i.getClient('data').odfid == item.aResobjid
+        })
+        let z = arr.find(i => {
+          return i.getClient('data').odfid == item.zResobjid
+        })
+        var from = a ? a : box.getDataById(item.aResobjid)
+        var to = z ? z : box.getDataById(item.zResobjid)
+        link.setFromNode(from)
+        link.setToNode(to)
+      }
+    }
+    box.getDataById('links').addChild(link)
+    box.add(link)
+    setAlarm(item)
+  }
+
+  // 新增光缆
+  function addFiber(item) {
+    if (
+      box.getDataById(item.resId) !== undefined
+    ) return
+    fibers.push(item)
+    var fiber = new twaver.Link(item.resId)
+    fiber.setIcon('../img/fiber.png')
+    fiber.setName(item.resName)
+    fiber.setClient('data', item)
+    box.getDataById('fibers').addChild(fiber)
+    box.add(fiber)
+    setAlarm(item)
+  }
+
+  // 删除元素
+  function delNode(dataType, taskShowId, id) {
+    switch (dataType) {
+      case 'nodes':
+      case 'jths':
+        var ind = nodes.findIndex((item) => {
+          return taskShowId == item.taskShowId
+        })
+        nodes.splice(ind, 1)
+        break
+      case 'links':
+        var ind = links.findIndex((item) => {
+          return taskShowId == item.taskShowId
+        })
+        links.splice(ind, 1)
+        break
+      case 'fibers':
+        var ind = fibers.findIndex((item) => {
+          return id == item.resId
+        })
+        fibers.splice(ind, 1)
+        break
+    }
+    box.remove(box.getDataById(id))
+  }
+
+  // 添加告警
+  function setAlarm(item) {
+    if (item.checkoutType != 0 && item.checkoutType != undefined) {
+      var level = twaver.AlarmSeverity.MAJOR
+      level.nickName = null
+      var alarm = new twaver.Alarm(item.resId, item.resId, level)
+      if (alarmBox.getDataById(item.resId)) {
+        alarmBox.remove(alarmBox.getDataById(item.resId))
+      }
+      alarmBox.add(alarm);
+    } else {
+      if (alarmBox.getDataById(item.resId)) {
+        alarmBox.remove(alarmBox.getDataById(item.resId))
+      }
+    }
+  }
+
+  // 更新topo图元素属性值
+  function editTopoNode(data) {
+    box.getDataById(data.resId).setClient('data', data)
+    // box.getDataById(data.resId).setName(data.resName)
+    box.getDataById(data.resId).setName(data.name)
+  }
+
+  // 高亮显示光缆
+  function topoShowFiber(data) {
+    for (var i = 0; i < data.length; i++) {
+      if (data[i].id != undefined && data[i].id != null) {
+        box.getSelectionModel().appendSelection(box.getDataById(data[i].id))
+      }
+    }
+  }
+
+  // 拖拽接头盒 判断是否破环加点 x1y1,x2y2 为线段的az点 xy 为拖拽点
+  function getPointToLineDistance2(A, Z, P) {
+    let b = Math.sqrt((P.x - A.x) * (P.x - A.x) + (P.y - A.y) * (P.y - A.y))
+    let c = Math.sqrt((P.x - Z.x) * (P.x - Z.x) + (P.y - Z.y) * (P.y - Z.y))
+    let a = Math.sqrt((A.x - Z.x) * (A.x - Z.x) + (A.y - Z.y) * (A.y - Z.y))
+    if (a === 0) return b
+    let p = (a + b + c) / 2
+    let areaSize = Math.abs(Math.sqrt(p * (p - a) * (p - b) * (p - c)))
+    return (2 * areaSize) / a
+  }
+
+  // 获取光缆数量
+  function getFibersCount() {
+    let arr = box.getDatas()._as
+    let count = 0
+    for (let i = 0; i < arr.length; i++) {
+      let data = arr[i].getClient('data')
+      if (data && data.resType == '2') {
+        count++
+      }
+    }
+    return count
+  }
+
+  function getContinuousList(type) {
+    let allArr = box.getDatas()._as
+    let arr = []
+    // 如果是纤芯接续状态 过滤接头盒 仅返回有两条或两条光缆以上的接头盒
+    if (type == '1') {
+      for (let i = 0; i < allArr.length; i++) {
+        let obj = allArr[i]
+        let data = allArr[i].getClient('data')
+        if (data && data.resType == type) {
+          if (obj.getLinks() && obj.getLinks()._as.length >= 2) {
+            arr.push(data)
+          }
+        }
+      }
+    } else {
+      for (let i = 0; i < allArr.length; i++) {
+        let data = allArr[i].getClient('data')
+        if (data && data.resType == type) {
+          arr.push(data)
+        }
+      }
+    }
+    return arr
+  }
+
+  function setRoul(islead1, isEdit1, isSee1) {
+    islead = islead1
+    isEdit = isEdit1
+    isSee = isSee1
+
+  }
+
+  // 引导模式步骤
+  function setStep(newStep) {
+    if (toolbar.childNodes) {
+      for (let i = 5; toolbar.childNodes.length > 5; i) {
+        toolbar.removeChild(toolbar.childNodes[i])
+      }
+    }
+    if (
+      (newStep == 7 && step == 6) ||
+      (newStep == 3 && step == 4)
+    ) {
+      tree.setVisibleFunction(function (element) {
+        if (element.getClient("treeShow") === undefined) {
+          return true
+        }
+        if (element.getClient("treeShow")) {
+          return true
+        }
+        return false
+      })
+    }
+    step = newStep
+    islead = true
+    if (step == 0) {
+      addDraggableButton(toolbar, '选择站点', '../img/toolsImg/site.png', 'addSiteBoxShow')
+    } else if (step == 1) {
+      network.setDefaultInteractions();
+      addDraggableButton(toolbar, '新增接头盒', '../img/toolsImg/tbox.png', 'addTconCommit')
+    } else if (step == 2) {
+      addButton(toolbar, '新增光缆段', '../img/toolsImg/link.png', function () {
+        if (isEdit) {
+          network.setCreateLinkInteractions(twaver.Link)
+        }
+      })
+      network.setCreateLinkInteractions(twaver.Link)
+    } else if (step == 3) {
+      network.setDefaultInteractions();
+    } else if (step == 4 || step == 6) {
+      tree.setVisibleFunction(function (element) {
+        if (element.getId() == 'fibers') {
+          return true
+        } else {
+          if (element.getClient("data")) {
+            let data = element.getClient("data")
+            if (data.resType == '2') {
+              return true
+            }
+          }
+        }
+        return false
+      })
+    } else if (step == 5) {
+      tree.setVisibleFunction(function (element) {
+        if (element.getId() == 'links') {
+          return true
+        } else {
+          if (element.getClient("data")) {
+            let data = element.getClient("data")
+            if (data.resType == '3') {
+              return true
+            }
+          }
+        }
+        return false
+      })
+    }
+  }
+</script>
+</html>

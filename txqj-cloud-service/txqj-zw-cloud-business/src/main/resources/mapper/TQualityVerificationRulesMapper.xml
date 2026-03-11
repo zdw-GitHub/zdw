@@ -1,0 +1,985 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mshz.cloud.tms.business.mapper.TQualityVerificationRulesMapper">
+
+
+    <resultMap type="TQualityVerificationRules" id="TQualityVerificationRulesResult">
+        <result property="id" column="id"/>
+        <result property="metaModeId" column="meta_mode_id"/>
+        <result property="metaModelColumnId" column="meta_model_column_id"/>
+        <result property="ruleId" column="rule_id"/>
+        <result property="alarmLevel" column="alarm_level"/>
+        <result property="ruleDescription" column="rule_description"/>
+        <result property="modificationSuggestions" column="modification_suggestions"/>
+        <result property="state" column="state"/>
+        <result property="superiorUnitId" column="superior_unit_id"/>
+        <result property="selectType" column="select_type"/>
+        <result property="symbol" column="symbol"/>
+        <result property="param" column="param"/>
+        <result property="relMetaModeId" column="rel_meta_mode_id"/>
+        <result property="relIdMetaModelColumnId" column="rel_id_meta_model_column_id"/>
+        <result property="relNameMetaModelColumnId" column="rel_name_meta_model_column_id"/>
+        <result property="customizedSql" column="customized_sql"/>
+        <result property="modelVersion" column="model_version"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="selectQualityVerificationRulesVo">
+        SELECT
+            v.id,
+            t.column_name columnName,
+            t.column_name_cn columnNameCn,
+            t.column_type columnType,
+            t.column_length columnLength,
+            v.meta_mode_id metaModeId,
+            v.meta_model_column_id metaModelColumnId,
+            v.rule_id ruleId,
+            b.rule_name ruleName,
+            v.alarm_level alarmLevel,
+            v.rule_description ruleDescription,
+            v.modification_suggestions modificationSuggestions,
+            v.state,
+            v.superior_unit_id superiorUnitId,
+            v.select_type selectType,
+            v.symbol,
+            v.param,
+            v.rel_meta_mode_id relMetaModeId,
+            v.rel_id_meta_model_column_id relIdMetaModelColumnId,
+            v.rel_name_meta_model_column_id relNameMetaModelColumnId,
+            v.customized_sql customizedSql,
+            v.model_version modelVersion,
+            v.create_time createTime,
+            v.update_time updateTime,
+            s.sort_num sortNum
+        FROM
+            t_quality_verification_rules v
+                LEFT JOIN t_quality_basic_rules b ON v.rule_id = b.id
+                LEFT JOIN t_meta_model_tech t ON t.id = v.meta_model_column_id
+                LEFT JOIN t_meta_model_show s ON CONCAT(s.column_id) = v.meta_model_column_id
+    </sql>
+
+
+    <sql id="selectTQualityVerificationRulesVo">
+        select id, meta_mode_id, meta_model_column_id, rule_id, alarm_level, rule_description, modification_suggestions, state, superior_unit_id, select_type, symbol, param, rel_meta_mode_id, rel_id_meta_model_column_id,rel_name_meta_model_column_id, customized_sql, model_version, create_time, update_time from t_quality_verification_rules
+    </sql>
+
+    <select id="selectTQualityVerificationRulesList" parameterType="TQualityVerificationRules"
+            resultMap="TQualityVerificationRulesResult">
+        <include refid="selectTQualityVerificationRulesVo"/>
+        <where>
+            <if test="metaModeId != null  and metaModeId != ''">and meta_mode_id = #{metaModeId}</if>
+            <if test="metaModelColumnId != null  and metaModelColumnId != ''">and meta_model_column_id =
+                #{metaModelColumnId}
+            </if>
+            <if test="ruleId != null  and ruleId != ''">and rule_id = #{ruleId}</if>
+            <if test="alarmLevel != null  and alarmLevel != ''">and alarm_level = #{alarmLevel}</if>
+            <if test="ruleDescription != null  and ruleDescription != ''">and rule_description = #{ruleDescription}</if>
+            <if test="modificationSuggestions != null  and modificationSuggestions != ''">and modification_suggestions =
+                #{modificationSuggestions}
+            </if>
+            <if test="state != null  and state != ''">and state = #{state}</if>
+            <if test="superiorUnitId != null  and superiorUnitId != ''">and superior_unit_id = #{superiorUnitId}</if>
+            <if test="selectType != null  and selectType != ''">and select_type = #{selectType}</if>
+            <if test="symbol != null  and symbol != ''">and symbol = #{symbol}</if>
+            <if test="param != null  and param != ''">and param = #{param}</if>
+            <if test="relMetaModeId != null  and relMetaModeId != ''">and rel_meta_mode_id = #{relMetaModeId}</if>
+            <if test="relIdMetaModelColumnId != null  and relIdMetaModelColumnId != ''">and rel_id_meta_model_column_id
+                = #{relIdMetaModelColumnId}
+            </if>
+            <if test="relNameMetaModelColumnId != null  and relNameMetaModelColumnId != ''">and
+                rel_name_meta_model_column_id = #{relNameMetaModelColumnId}
+            </if>
+            <if test="customizedSql != null  and customizedSql != ''">and customized_sql = #{customizedSql}</if>
+            <if test="modelVersion != null  and modelVersion != ''">and model_version = #{modelVersion}</if>
+        </where>
+    </select>
+
+    <select id="selectTQualityVerificationRulesById" parameterType="Long" resultMap="TQualityVerificationRulesResult">
+        <include refid="selectTQualityVerificationRulesVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertTQualityVerificationRules" parameterType="TQualityVerificationRules"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into t_quality_verification_rules
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="metaModeId != null">meta_mode_id,</if>
+            <if test="metaModelColumnId != null">meta_model_column_id,</if>
+            <if test="ruleId != null">rule_id,</if>
+            <if test="alarmLevel != null">alarm_level,</if>
+            <if test="ruleDescription != null">rule_description,</if>
+            <if test="modificationSuggestions != null">modification_suggestions,</if>
+            <if test="state != null">state,</if>
+            <if test="superiorUnitId != null">superior_unit_id,</if>
+            <if test="selectType != null">select_type,</if>
+            <if test="symbol != null">symbol,</if>
+            <if test="param != null">param,</if>
+            <if test="relMetaModeId != null">rel_meta_mode_id,</if>
+            <if test="relIdMetaModelColumnId != null">rel_id_meta_model_column_id,</if>
+            <if test="relNameMetaModelColumnId != null">rel_name_meta_model_column_id,</if>
+            <if test="customizedSql != null">customized_sql,</if>
+            <if test="modelVersion != null">model_version,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="metaModeId != null">#{metaModeId},</if>
+            <if test="metaModelColumnId != null">#{metaModelColumnId},</if>
+            <if test="ruleId != null">#{ruleId},</if>
+            <if test="alarmLevel != null">#{alarmLevel},</if>
+            <if test="ruleDescription != null">#{ruleDescription},</if>
+            <if test="modificationSuggestions != null">#{modificationSuggestions},</if>
+            <if test="state != null">#{state},</if>
+            <if test="superiorUnitId != null">#{superiorUnitId},</if>
+            <if test="selectType != null">#{selectType},</if>
+            <if test="symbol != null">#{symbol},</if>
+            <if test="param != null">#{param},</if>
+            <if test="relMetaModeId != null">#{relMetaModeId},</if>
+            <if test="relIdMetaModelColumnId != null">#{relIdMetaModelColumnId},</if>
+            <if test="relNameMetaModelColumnId != null">#{relNameMetaModelColumnId},</if>
+            <if test="customizedSql != null">#{customizedSql},</if>
+            <if test="modelVersion != null">#{modelVersion},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateTQualityVerificationRules" parameterType="TQualityVerificationRules">
+        update t_quality_verification_rules
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="metaModeId != null">meta_mode_id = #{metaModeId},</if>
+            <if test="metaModelColumnId != null">meta_model_column_id = #{metaModelColumnId},</if>
+            <if test="ruleId != null">rule_id = #{ruleId},</if>
+            <if test="alarmLevel != null">alarm_level = #{alarmLevel},</if>
+            <if test="ruleDescription != null">rule_description = #{ruleDescription},</if>
+            <if test="modificationSuggestions != null">modification_suggestions = #{modificationSuggestions},</if>
+            <if test="state != null">state = #{state},</if>
+            <if test="superiorUnitId != null">superior_unit_id = #{superiorUnitId},</if>
+            <if test="selectType != null">select_type = #{selectType},</if>
+            <if test="symbol != null">symbol = #{symbol},</if>
+            <if test="param != null">param = #{param},</if>
+            <if test="relMetaModeId != null">rel_meta_mode_id = #{relMetaModeId},</if>
+            <if test="relIdMetaModelColumnId != null">rel_id_meta_model_column_id = #{relIdMetaModelColumnId},</if>
+            <if test="relNameMetaModelColumnId != null">rel_name_meta_model_column_id = #{relNameMetaModelColumnId},
+            </if>
+            <if test="customizedSql != null">customized_sql = #{customizedSql},</if>
+            <if test="modelVersion != null">model_version = #{modelVersion},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTQualityVerificationRulesById" parameterType="Long">
+        delete from t_quality_verification_rules where id = #{id}
+    </delete>
+
+    <delete id="deleteTQualityVerificationRulesByIds" parameterType="String">
+        delete from t_quality_verification_rules where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="queryNullAttributeValue" parameterType="Parameter"
+            resultType="ResultIsMap">
+        select id ke, name value ,${attribute} att from ${surface}  where  ${attribute} is null
+    </select>
+
+    <select id="assConVerification" parameterType="Parameter"
+            resultType="ResultIsMap">
+    SELECT
+	    a.id ke, a.name value ,a.${comm} att
+    FROM
+	    ${surface} a
+	    LEFT JOIN ${rsurface} b ON b.${attribute} = a.${rattribute}
+    WHERE
+        b.id is not null and
+	    a.${comm} != b.${rcomm}
+    </select>
+
+    <select id="corrVerification" parameterType="Parameter"
+            resultType="ResultIsMap">
+    SELECT
+	    a.id ke, a.name value
+    FROM
+	    ${surface} a
+	    LEFT JOIN ${rsurface} b ON b.${attribute} = a.${rattribute}
+    WHERE
+	   b.id  is  null
+    </select>
+
+    <select id="consistencyCheck" parameterType="Parameter"
+            resultType="ResultIsMap">
+    SELECT
+	    a.id ke, a.name value ,${attribute} att
+    FROM
+	    ${surface}
+    WHERE
+	   ${attribute} != ${comm}
+    </select>
+
+    <select id="associationUnique" parameterType="Parameter"
+            resultType="ResultIsMap">
+    select c.ke,c.value from (
+    SELECT
+    a.id ke, a.name value ,count(1) num
+    FROM
+    ${surface} a
+    LEFT JOIN ${rsurface} b ON  b.${attribute} = a.${rattribute} where  b.id is not null group by a.id,a.name ) c where c.num>1
+    </select>
+
+    <select id="dicRangeVerification" parameterType="Parameter"
+            resultType="ResultIsMap">
+        SELECT
+        id ke, name value ,${attribute} att
+        FROM
+        ${surface}
+        WHERE
+        ${attribute} not in
+        <foreach collection="listParam" item="parama" open="(" separator="," close=")">
+            #{parama}
+        </foreach>
+        or (${attribute} is null or ${attribute} = '')
+    </select>
+
+    <select id="conditionNotEmpty" parameterType="Parameter"
+            resultType="ResultIsMap">
+        SELECT
+        a.id ke, a.name value ,${attribute} att
+        FROM
+        ${surface}
+        <where>
+            <choose>
+                <when test="symbolCategory = '0'.toString()">
+                    <choose>
+                        <when test="param = 'null'.toString() and symbol = '!='.toString()">
+                            and ${comm} is not null
+                        </when>
+                        <when test="param = 'null'.toString() and symbol = '='.toString()">
+                            and ${comm} is null
+                        </when>
+                        <when test="param !=null and param!=''.toString()">
+                            and ${comm} ${symbol} #{param}
+                        </when>
+
+                    </choose>
+                </when>
+                <when test="symbolCategory = '1'.toString()">
+                    and ${comm} between #{minParam} and #{maxParam}
+                </when>
+                <when test="symbolCategory = '2'.toString()">
+                    and ${comm} in
+                    <foreach collection="listParam" item="params" open="(" separator="," close=",">
+                        #{params}
+                    </foreach>
+                </when>
+            </choose>
+            and ${attribute} is null
+        </where>
+    </select>
+
+    <select id="verificationAssociationNotEmpty" parameterType="Parameter"
+            resultType="ResultIsMap">
+        SELECT
+        a.id ke, a.name value
+        FROM
+        ${surface} a
+        LEFT JOIN ${rsurface} b ON b.${attribute} = a.${rattribute}
+        <where>
+            and b.id is not null
+            <if test="comm!=null and comm!=''">
+                and a.${comm} is null
+            </if>
+            <if test="rcomm!=null and rcomm!=''">
+                and a.${rcomm} is null
+            </if>
+        </where>
+    </select>
+
+
+    <select id="rangeCheck" parameterType="Parameter"
+            resultType="ResultIsMap">
+    SELECT
+	    id ke, name value ,${attribute} att
+    FROM
+	    ${surface}
+    WHERE
+	   (${attribute} not between #{minParam} and #{maxParam})  or (${attribute} is null or ${attribute} = '')
+    </select>
+
+    <select id="comparisonAttributeVerification" parameterType="Parameter"
+            resultType="ResultIsMap">
+    SELECT
+	    a.id ke, a.name value ,${attribute} att
+    FROM
+	    ${surface}
+    WHERE
+	   ${attribute} ${symbol} ${comm}
+    </select>
+
+    <select id="keywordVerification" parameterType="Parameter"
+            resultType="ResultIsMap">
+        SELECT
+        id ke, name value ,${attribute} att
+        FROM
+        ${surface}
+        <where>
+            <choose>
+                <when test="symbol = '左包含'.toString()">
+                    and ${attribute} not like CONCAT('%',#{param},'%') or (${attribute} is null or ${attribute} = '')
+                </when>
+                <when test="symbol = '右包含'.toString()">
+                    and ${param} not like CONCAT('%',#{attribute},'%') or (${attribute} is null or ${attribute} = '')
+                </when>
+            </choose>
+        </where>
+    </select>
+
+    <select id="assComparAttVer" parameterType="Parameter"
+            resultType="ResultIsMap">
+    SELECT
+	    a.id ke, a.name value ,${comm} att
+    FROM
+	     ${surface} a
+	    LEFT JOIN ${rsurface} b ON b.${attribute} = a.${rattribute}
+    WHERE
+    b.id is not null and
+	   a.${comm} ${symbol} b.${rcomm}
+    </select>
+
+    <select id="comparisonCheck" parameterType="Parameter"
+            resultType="ResultIsMap">
+    SELECT
+	    id ke, name value ,${attribute} att
+    FROM
+	     ${surface}
+    WHERE
+	   ${attribute} ${symbol}  ${param}  or (${attribute} is null or ${attribute} = '')
+    </select>
+
+    <select id="condAssociation" parameterType="Parameter"
+            resultType="ResultIsMap">
+        SELECT
+        a.id ke, a.name value
+        FROM
+        ${surface} a
+        LEFT JOIN ${rsurface} b ON b.${attribute} = a.${rattribute}
+        <where>
+            and b.id is not null
+            <choose>
+                <when test="symbolCategory = '0'.toString()">
+                    <choose>
+                        <when test="param = 'null'.toString() and symbol = '!='.toString()">
+                            and a.${comm} is not null
+                        </when>
+                        <when test="param = 'null'.toString() and symbol = '='.toString()">
+                            and a.${comm} is null
+                        </when>
+                        <when test="param !=null and param!=''.toString()">
+                            and a.${comm} ${symbol} #{param}
+                        </when>
+                    </choose>
+                </when>
+                <when test="symbolCategory = '1'.toString()">
+                    and a.${comm } between #{minParam} and #{maxParam}
+                </when>
+                <when test="symbolCategory = '2'.toString()">
+                    and a.${comm} in
+                    <foreach collection="listParam" item="params" open="(" separator="," close=",">
+                        #{params}
+                    </foreach>
+                </when>
+            </choose>
+            and b.id is null
+        </where>
+    </select>
+
+    <select id="checkCommStationName" resultType="map">
+    select
+	tcs.id,
+	tcs.name
+    from
+	sg_tccon_tcsite_b tcs
+	left join sg_dic_tcstationtype tcst on tcst.code = tcs.tcsite_type
+	left join SG_DIC_VOLTAGETYPE vol on vol.code = tcs.voltage_class
+	left join sg_tccon_tcgrid_b tc on tc.id = tcs.par_grid
+	left join sg_dic_tcdispatchlevel level on level.code = tcs.dsp_level
+    where
+    case
+		when tcst.name = '变电站' then
+		tcs.name not like concat( '%', vol.name || tc.name || '变', '%' )
+		when tcst.name = '换流站' then
+		tcs.name not like concat( '%', vol.name || tc.name || '站', '%' )
+		when tcst.name = '营业网点' then
+		tcs.name not like concat( '%', tc.name || '营业厅', '%' )
+		and tcs.name not like concat( '%', tc.name || '营业网点', '%' )
+		and tcs.name not like concat( '%', tc.name || '服务站', '%' )
+		when tcst.name = '火电厂'
+		or tcst.name = '垃圾电厂'
+		or tcst.name = '热电厂' then
+			tcs.name not like concat( '%', tc.name || '电厂', '%' )
+			when tcst.name = '水电站' then
+			tcs.name not like concat( '%', tc.name || '水电站', '%' )
+			when tcst.name = '核电站' then
+			tcs.name not like concat( '%', tc.name || '核电站', '%' )
+			when tcst.name = '抽水蓄能电站' then
+			tcs.name not like concat( '%', tc.name || '抽水蓄能电站', '%' )
+			when tcst.name = '储能电站' then
+			tcs.name not like concat( '%', tc.name || '储能电站', '%' )
+			when tcst.name = '光伏电站' then
+			tcs.name not like concat( '%', tc.name || '光伏电站', '%' )
+			when tcst.name = '风电场' then
+			tcs.name not like concat( '%', tc.name || '风电场', '%' )
+			when tcst.name = '开闭所' then
+			tcs.name not like concat( '%', vol.name || tc.name || '开闭所', '%' )
+			when tcst.name = '环网柜' then
+			tcs.name not like concat( '%', vol.name || tc.name || '环网柜', '%' )
+			when tcst.name = '独立通信站' then
+			tcs.name not like concat( '%', tc.name, '%' )
+			when tcst.name = '中心站' then
+			(
+			case
+					when level.name = '总部' then
+					tcs.name not like concat( '%', tc.name || '国调', '%' )
+					when level.name = '分部' then
+					tcs.name not like concat( '%', tc.name || '网调', '%' )
+					when level.name = '省级' then
+					tcs.name not like concat( '%', tc.name || '省调', '%' )
+					when level.name = '地县' then
+					tcs.name not like concat( '%', tc.name || '地调', '%' )
+					or tcs.name not like concat( '%', tc.name || '县调', '%' )
+					when level.name = '备调' then
+					tcs.name not like concat( '%', tc.name || '备调', '%' )
+			end
+			)
+    end
+    </select>
+
+    <select id="selectVerificationRules" resultType="QualityVerificationRulesVo">
+    SELECT
+	rule.id ruleId,
+	vrule.id vruleId,
+	vrule.meta_mode_id modelId,
+	rule.rule_name ruleName,
+	rule.english_name englishName,
+	model.table_name tableName,
+	model1.table_name rtableName,
+	tech.column_name columnName,
+	tech.column_name_cn columnNameCn,
+	tech.column_type columnType,
+	tech1.column_name rcolumnName,
+	tech1.column_name_cn rcolumnNameCn,
+	tech1.column_type rcolumnType,
+	vrule.modification_suggestions modificationSuggestions,
+	vrule.rule_description ruleDescription,
+	vrule.select_type selectType,
+	vrule.symbol symbol,
+	vrule.param param,
+	vrule.customized_sql  customizedSql
+FROM
+	t_quality_verification_rules vrule
+	LEFT JOIN t_quality_basic_rules rule ON vrule.rule_id = CONCAT( rule.id )
+	LEFT JOIN t_meta_model model ON CONCAT( model.id ) = vrule.meta_mode_id
+	LEFT JOIN t_meta_model_tech tech ON CONCAT( tech.id ) = vrule.meta_model_column_id
+	LEFT JOIN t_meta_model model1 ON CONCAT( model1.id ) = vrule.rel_meta_mode_id
+	LEFT JOIN t_meta_model_tech tech1 ON CONCAT( tech1.id ) = vrule.rel_id_meta_model_column_id
+	where
+	   rule.id is not null and  vrule.id = #{ruleId}
+    </select>
+
+    <select id="selectAssRuleVer" resultType="QualityVerificationRulesVo">
+        SELECT
+	rule.id ruleId,
+	vrule.id vruleId,
+	rule.rule_name ruleName,
+	rule.english_name englishName,
+	model.table_name tableName,
+	vrule.modification_suggestions modificationSuggestions,
+	vrule.rule_description ruleDescription,
+	vrule.verification_rule_type selectType,
+	vrule.superior_unit_id  customizedSql
+    FROM
+    t_quality_ass_rule_verification vrule
+	LEFT JOIN t_quality_association_rules rule ON vrule.verification_rule_id = CONCAT( rule.id )
+	LEFT JOIN t_meta_model model ON CONCAT( model.id ) = vrule.meta_mode_id
+   where
+	   rule.id is not null and
+	    vrule.id = #{ruleId}
+    </select>
+
+    <select id="customizedSql" resultType="map">
+            ${sql}
+    </select>
+
+    <select id="useDefinedVerSql" resultType="map">
+        ${sql}
+    </select>
+
+    <!--获取属性的指定数量下拉框内容,且可条件查询-->
+    <select id="useDefinedVerSqlForLIMIT" resultType="map">
+        select tmptab.code,tmptab.name from ( ${sql} ) tmptab
+        where 1=1
+        <if test="code!=null and code !='' ">and tmptab.code = #{code}</if>
+        <if test="codename!=null and codename !='' ">and tmptab.name like concat('%', #{codename}, '%')</if>
+        order by ${orderBy} desc LIMIT ${pageNum},${pageSize}
+    </select>
+    <!--获取属性的指定数量下拉框内容,且可条件查询,查总数-->
+    <select id="useDefinedVerSqlForLIMITCount" resultType="java.lang.Integer">
+        select count(0) from ( ${sql} ) tmptab
+        where 1=1
+        <if test="code!=null and code !='' ">and tmptab.code = #{code}</if>
+        <if test="codename!=null and codename !='' ">and tmptab.name like concat('%', #{codename}, '%')</if>
+    </select>
+
+    <select id="selectParams" resultType="string">
+        select ${comm} from ${table}
+    </select>
+
+    <select id="dataDicVerification" resultType="int">
+        select count(1)
+        from ${table}
+        where ${comm} = #{param}
+    </select>
+
+    <select id="selectDictionaries" resultType="map">
+        select ${id} code,${name} name from ${table} where ${id} is not null and ${name} is not null
+    </select>
+
+    <!--获取属性的指定数量下拉框内容,且可条件查询-->
+    <select id="selectDictionariesForLIMIT" resultType="map">
+        select ${id} code,${name} name from ${table}
+        where ${id} is not null and ${name} is not null
+        <if test="code!=null and code !='' ">and ${id} = #{code}</if>
+        <if test="codename!=null and codename !='' ">and ${name} like concat('%', #{codename}, '%')</if>
+        <if test="constraint!=null and constraint !='' ">${constraint}</if>
+        order by ${orderBy} LIMIT ${pageNum},${pageSize}
+    </select>
+    <!--获取属性的指定数量下拉框内容,且可条件查询-->
+    <select id="selectDictionariesForLIMITCount" resultType="java.lang.Integer">
+        select count(0) from ${table}
+        where ${id} is not null and ${name} is not null
+        <if test="code!=null and code !='' ">and ${id} = #{code}</if>
+        <if test="codename!=null and codename !='' ">and ${name} like concat('%', #{codename}, '%')</if>
+        <if test="constraint!=null and constraint !='' ">${constraint}</if>
+    </select>
+
+    <select id="selectSomeOneById" resultType="object">
+        select * from #{table} where id = #{id}
+    </select>
+
+    <select id="accuracyVerification" parameterType="Parameter"
+            resultType="ResultIsMap">
+         SELECT
+	    id ke, name value ,${attribute} att
+    FROM
+	     ${surface}
+    WHERE
+	   ${attribute} != round(${attribute},${numParam}) or (${attribute} is null or ${attribute} = '')
+    </select>
+
+    <select id="verifyReturnTimeAss" resultType="map">
+    select
+	a.id,
+	a.name
+    from
+	sg_tccon_tcsite_b a
+	left join sg_tcsite_r_commonsubstation b on b.tcsite_id = a.id
+	left join sg_dic_tcstationtype c on c.code = a.tcsite_type
+where
+	c.name in ( '厂站', '电场', '用户站', '开关站', '开闭所' )
+	and b.id is null union
+select
+	c.id,
+	c.name
+from
+	(
+	select
+		a.id,
+		a.name,
+		count( 1 ) num
+	from
+		sg_tccon_tcsite_b a
+		left join sg_tcsite_r_commonsubstation b on b.tcsite_id = a.id
+	where
+		b.id is not null
+	group by
+		id
+	) c
+where
+	c.num > 1
+    </select>
+
+    <select id="selectByTableIdVersion" resultType="TableRuleVo">
+        SELECT
+        rule.modification_suggestions modificationSuggestions,
+        rule.alarm_level alarmLevel,
+        rule.select_type selectType,
+        model.table_name tableName,
+        tech.column_name columnIdName,
+        tech1.column_name columnName,
+        tech2.column_name ruleColumnName,
+        rule.customized_sql customizedSql,
+        rule.rule_id ruleId,
+        brule.rule_name ruleName,
+        brule.rule_description ruleDescription,
+        brule.english_name englishName
+        FROM
+        t_quality_verification_rules rule
+        LEFT JOIN t_quality_basic_rules brule ON CONCAT(brule.id) = rule.rule_id
+        LEFT JOIN t_meta_model model ON CONCAT(model.id) = rule.rel_meta_mode_id
+        LEFT JOIN t_meta_model_tech tech ON CONCAT(tech.id)= rule.rel_id_meta_model_column_id
+        LEFT JOIN t_meta_model_tech tech1 ON CONCAT(tech1.id) = rule.rel_name_meta_model_column_id
+        LEFT JOIN t_meta_model_tech tech2 ON CONCAT(tech2.id) = rule.meta_model_column_id
+        <where>
+            <if test="modeId!=null">
+                and rule.meta_mode_id = #{modeId}
+            </if>
+            <if test="modeVersion!=null">
+                AND rule.model_version = #{modeVersion}
+            </if>
+            <if test="vRuleId!=null">
+                AND rule.id = #{vRuleId}
+            </if>
+            <if test="attribute!=null">
+                AND tech2.column_name = #{attribute}
+            </if>
+        </where>
+
+
+    </select>
+
+    <select id="selectByTableIdVersion1" resultType="TQualityVerificationResult">
+        SELECT
+        distinct
+        res.rule_category ruleCategory,
+        res.verification_rule_id verificationRuleId,
+        res.error_column_name_cn errorColumnNameCn,
+        res.error_column_name errorColumnName,
+        res.resource_type resourceType,
+        res.problem_type problemType,
+        res.rule_description ruleDescription,
+        res.modification_suggestions probmodificationSuggestionslemType
+        FROM
+        t_quality_verification_result res
+        LEFT JOIN t_quality_verification_rules rule ON CONCAT(rule.id) = res.verification_rule_id
+        <where>
+            <if test="errorId!=null">
+                and res.error_id = #{errorId}
+            </if>
+            <if test="modeVersion!=null">
+                AND rule.model_version = #{modeVersion}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectByTableIdVersionForCreate" resultType="TQualityVerificationResult">
+        SELECT
+        distinct
+        rule.modification_suggestions modificationSuggestions,
+        tech.column_name errorColumnName,
+        tech.column_name_cn errorColumnNameCn,
+        rule.rule_id verificationRuleId,
+        brule.rule_name problemType,
+        rule.rule_description ruleDescription,
+        '0' ruleCategory,
+        '通信站' resourceType
+        FROM
+        t_quality_verification_rules rule
+        LEFT JOIN t_quality_basic_rules brule ON brule.id = rule.rule_id
+        LEFT JOIN t_meta_model_tech tech ON tech.id = rule.meta_model_column_id
+        <where>
+            and rule.state = '0'
+            <if test="modeId!=null">
+                and rule.meta_mode_id = #{modeId}
+            </if>
+            <if test="modeVersion!=null">
+                AND rule.model_version = #{modeVersion}
+            </if>
+        </where>
+
+    </select>
+
+    <select id="selectRules" resultType="SelectRulesVo">
+        SELECT
+        rule.id id ,
+        tech.column_name columnName,
+        tech.column_name_cn columnNameCn,
+        rule.rule_description ruleDescription,
+        ( CASE WHEN rule.alarm_level = '0' THEN '告警' WHEN rule.alarm_level = '1' THEN '提醒' WHEN rule.alarm_level = '2'
+        THEN '通用校验' END ) alarmLevel,
+        rule.modification_suggestions modificationSuggestions,
+        brule.rule_name ruleName,
+        rule.customized_sql customizedSql,
+        ( CASE WHEN rule.state = '0' THEN '启动' WHEN rule.state = '1' THEN '禁用' END ) state,
+        rule.superior_unit_id superiorUnitId,
+        '0' ruleCategory
+        FROM
+        t_quality_verification_rules rule
+        LEFT JOIN t_meta_model_tech tech ON tech.id = rule.meta_model_column_id
+        LEFT JOIN t_quality_basic_rules brule ON brule.id = rule.rule_id
+        <where>
+            <if test="modelId != null and modeId != ''">
+                and rule.meta_model_id = #{modeId}
+            </if>
+        </where>
+        UNION
+        SELECT
+        rule.id id,
+        model.table_name columnName,
+        model.table_name_cn columnNameCn,
+        rule.rule_description ruleDescription,
+        ( CASE WHEN rule.alarm_level = '0' THEN '告警' WHEN rule.alarm_level = '1' THEN '提醒' WHEN rule.alarm_level = '2'
+        THEN '通用校验' END ) alarmLevel,
+        rule.modification_suggestions modificationSuggestions,
+        brule.rule_name ruleName,
+        rule.use_defined_ver_sql customizedSql,
+        ( CASE WHEN rule.state = '0' THEN '启动' WHEN rule.state = '1' THEN '禁用' END ) state,
+        rule.superior_unit_id superiorUnitId,
+        '1' ruleCategory
+        FROM
+        t_quality_ass_rule_verification rule
+        LEFT JOIN t_meta_model model ON model.id = rule.meta_mode_id
+        LEFT JOIN t_quality_association_rules brule ON brule.id = rule.verification_rule_id
+        <where>
+            <if test="modelId != null and modeId != ''">
+                and rule.meta_model_id = #{modeId}
+            </if>
+        </where>
+    </select>
+
+
+    <!--    <select id="comparisonCheckOne" parameterType="Parameter" resultType="ResultIsMap">-->
+    <!--    SELECT-->
+    <!--	    #{param1} ${symbol} ${param2}-->
+    <!--    FROM-->
+    <!--	     dual-->
+    <!--    </select>-->
+    <select id="selectVerificationRuleOne" resultType="QualityVerificationRulesVo">
+        select
+        rule.id ruleId,
+        vrule.id vruleId,
+        vrule.meta_mode_id modelId,
+        rule.rule_name ruleName,
+        rule.english_name englishName,
+        model.table_name tableName,
+        model1.table_name rtableName,
+        tech.column_name columnName,
+        tech.column_name_cn columnNameCn,
+        tech.column_type columnType,
+        tech1.column_name rcolumnName,
+        tech1.column_name_cn rcolumnNameCn,
+        tech1.column_type rcolumnType,
+        tech2.column_name rcolumnName1,
+        tech2.column_name_cn rcolumnNameCn1,
+        tech2.column_type rcolumnType1,
+        vrule.modification_suggestions modificationSuggestions,
+        vrule.rule_description ruleDescription,
+        vrule.select_type selectType,
+        vrule.symbol symbol,
+        vrule.param param,
+        vrule.customized_sql customizedSql
+        FROM
+        t_quality_verification_rules vrule
+        LEFT JOIN t_quality_basic_rules rule ON vrule.rule_id = CONCAT( rule.id )
+        LEFT JOIN t_meta_model model ON CONCAT( model.id ) = vrule.meta_mode_id
+        LEFT JOIN t_meta_model_tech tech ON CONCAT( tech.id ) = vrule.meta_model_column_id
+        LEFT JOIN t_meta_model model1 ON CONCAT( model1.id ) = vrule.rel_meta_mode_id
+        LEFT JOIN t_meta_model_tech tech1 ON CONCAT( tech1.id ) = vrule.rel_id_meta_model_column_id
+        LEFT JOIN t_meta_model_tech tech2 ON CONCAT( tech2.id ) = vrule.rel_name_meta_model_column_id
+        <where>
+            and vrule.state = '0'
+            <if test="ruleId!=null">
+                and rule.id =#{ruleId}
+            </if>
+            <if test="modelId!=null">
+                and vrule.meta_mode_id =#{modelId}
+            </if>
+            <if test="commId!=null">
+                and vrule.meta_model_column_id =#{commId}
+            </if>
+        </where>
+
+    </select>
+
+
+    <select id="selectGuide" resultType="GuideVo">
+        SELECT
+	res.error_id id,
+	res.error_column_name name,
+	res.error_column_name_cn label,
+	GROUP_CONCAT(rule.rule_id Separator ':') ruleId,
+	GROUP_CONCAT(res.verification_rule_id Separator ':') vruleId,
+	GROUP_CONCAT(res.rule_description Separator ':') rules,
+		GROUP_CONCAT(brule.english_name Separator ':') englishName,
+	'input' type
+FROM
+	t_quality_verification_result res
+	LEFT JOIN t_quality_verification_rules rule ON rule.id = res.verification_rule_id
+	LEFT JOIN t_quality_basic_rules brule ON rule.rule_id = CONCAT(brule.id)
+	where res.error_id = #{siteId}
+ GROUP BY
+ res.error_id,
+	res.error_column_name,
+	res.error_column_name_cn
+    </select>
+    <select id="selectSiteMaintenanceUnit" resultType="java.util.Map">
+        select t.id as id,t2.name as name from SG_TCCON_TCSITE_B t
+        LEFT JOIN SG_ORG_COMPANY_B t2 ON t2.id = t.MAINTENANCE_DEPT
+        where t.id in
+        <foreach item="id" collection="list" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+    <select id="selectConnectParSite" resultType="java.util.Map">
+        select t.id as id,t2.name as name from SG_TCCON_FBRCONNECT_B t
+        LEFT JOIN SG_TCCON_TCSITE_B t2 ON t2.id = t.PAR_STATION
+        where t.id in
+        <foreach item="id" collection="list" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <insert id="insertTQualityVerificationRulesList">
+        <foreach collection="list" item="item" index="index" separator=";">
+            insert into t_quality_verification_rules
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="item.metaModeId != null">meta_mode_id,</if>
+                <if test="item.metaModelColumnId != null">meta_model_column_id,</if>
+                <if test="item.ruleId != null">rule_id,</if>
+                <if test="item.alarmLevel != null">alarm_level,</if>
+                <if test="item.ruleDescription != null">rule_description,</if>
+                <if test="item.modificationSuggestions != null">modification_suggestions,</if>
+                <if test="item.state != null">state,</if>
+                <if test="item.superiorUnitId != null">superior_unit_id,</if>
+                <if test="item.selectType != null">select_type,</if>
+                <if test="item.symbol != null">symbol,</if>
+                <if test="item.param != null">param,</if>
+                <if test="item.relMetaModeId != null">rel_meta_mode_id,</if>
+                <if test="item.relIdMetaModelColumnId != null">rel_meta_model_column_id,</if>
+                <if test="item.relNameMetaModelColumnId != null ">rel_name_meta_model_column_id ,</if>
+                <if test="item.customizedSql != null">customized_sql,</if>
+                <if test="item.modelVersion != null">model_version,</if>
+                <if test="item.createTime != null">create_time,</if>
+                <if test="item.updateTime != null">update_time,</if>
+            </trim>
+            <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="item.metaModeId != null">#{item.metaModeId},</if>
+                <if test="item.metaModelColumnId != null">#{item.metaModelColumnId},</if>
+                <if test="item.ruleId != null">#{item.ruleId},</if>
+                <if test="item.alarmLevel != null">#{item.alarmLevel},</if>
+                <if test="item.ruleDescription != null">#{item.ruleDescription},</if>
+                <if test="item.modificationSuggestions != null">#{item.modificationSuggestions},</if>
+                <if test="item.state != null">#{item.state},</if>
+                <if test="item.superiorUnitId != null">#{item.superiorUnitId},</if>
+                <if test="item.selectType != null">#{item.selectType},</if>
+                <if test="item.symbol != null">#{item.symbol},</if>
+                <if test="item.param != null">#{item.param},</if>
+                <if test="item.relMetaModeId != null">#{item.relMetaModeId},</if>
+                <if test="item.relIdMetaModelColumnId != null">#{item.relIdMetaModelColumnId},</if>
+                <if test="item.relNameMetaModelColumnId != null ">#{relNameMetaModelColumnId},</if>
+                <if test="item.customizedSql != null">#{item.customizedSql},</if>
+                <if test="item.modelVersion != null">#{item.modelVersion},</if>
+                <if test="item.createTime != null">#{item.createTime},</if>
+                <if test="item.updateTime != null">#{item.updateTime},</if>
+            </trim>
+        </foreach>
+    </insert>
+
+
+    <insert id="insertTQualityAssRuleVerificationList">
+        <foreach collection="list" item="item" index="index" separator=";">
+            insert into t_quality_ass_rule_verification
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="item.id != null">id,</if>
+                <if test="item.metaModeId != null">meta_mode_id,</if>
+                <if test="item.verificationRuleType != null">verification_rule_type,</if>
+                <if test="item.verificationRuleId != null">verification_rule_id,</if>
+                <if test="item.alarmLevel != null">alarm_level,</if>
+                <if test="item.ruleDescription != null">rule_description,</if>
+                <if test="item.modificationSuggestions != null">modification_suggestions,</if>
+                <if test="item.state != null">state,</if>
+                <if test="item.useDefinedVerSql != null">use_defined_ver_sql,</if>
+                <if test="item.superiorUnitId != null">superior_unit_id,</if>
+                <if test="item.modelVersion != null">model_version,</if>
+                <if test="item.createTime != null">create_time,</if>
+                <if test="item.updateTime != null">update_time,</if>
+            </trim>
+            <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="item.id != null">#{item.id},</if>
+                <if test="item.metaModeId != null">#{item.metaModeId},</if>
+                <if test="item.verificationRuleType != null">#{item.verificationRuleType},</if>
+                <if test="item.verificationRuleId != null">#{item.verificationRuleId},</if>
+                <if test="item.alarmLevel != null">#{item.alarmLevel},</if>
+                <if test="item.ruleDescription != null">#{item.ruleDescription},</if>
+                <if test="item.modificationSuggestions != null">#{item.modificationSuggestions},</if>
+                <if test="item.state != null">#{item.state},</if>
+                <if test="item.useDefinedVerSql != null">#{item.useDefinedVerSql},</if>
+                <if test="item.superiorUnitId != null">#{item.superiorUnitId},</if>
+                <if test="item.modelVersion != null">#{item.modelVersion},</if>
+                <if test="item.createTime != null">#{item.createTime},</if>
+                <if test="item.updateTime != null">#{item.updateTime},</if>
+            </trim>
+        </foreach>
+    </insert>
+
+
+    <delete id="deleteTQualityVerificationRulesByColumnId">
+        delete from t_quality_verification_rules  where    meta_model_column_id = #{id} and model_version ='edit';
+    </delete>
+
+    <delete id="deleteTQualityResultByColumnId">
+        DELETE result
+FROM
+	t_quality_verification_result result
+	LEFT JOIN t_quality_verification_rules rule ON CONCAT( rule.id ) = result.verification_rule_id
+WHERE
+	rule.meta_model_column_id = #{columnId} and model_version ='edit' and rule.meta_mode_id=#{modelId};
+
+    </delete>
+
+
+
+    <select id="selectQualityVerificationRulesListVo" parameterType="QualityVerificationRulesVo" resultType="QualityVerificationRulesVo">
+        <include refid="selectQualityVerificationRulesVo"/>
+        <where>
+            <if test="columnName != null and columnName != ''">and t.column_name like concat('%', #{columnName}, '%')
+            </if>
+            <if test="columnNameCn != null and columnNameCn != ''">and t.column_name_cn like concat('%',
+                #{columnNameCn},
+                '%')
+            </if>
+            <if test="columnType != null  and columnType != ''">and t.column_type like #concat('%', #{columnType}, '%')
+            </if>
+            <if test="columnLength != null  ">and t.column_length = #{columnLength}</if>
+            <if test="metaModeId != null  and metaModeId != ''"> and meta_mode_id = #{metaModeId}</if>
+            <if test="metaModelColumnId != null  and metaModelColumnId != ''"> and meta_model_column_id = #{metaModelColumnId}</if>
+            <if test="ruleId != null  and ruleId != ''"> and rule_id = #{ruleId}</if>
+            <if test="ruleName != null  and ruleName != ''"> and b.rule_name= #{ruleId}</if>
+            <if test="alarmLevel != null  and alarmLevel != ''"> and alarm_level = #{alarmLevel}</if>
+            <if test="ruleDescription != null  and ruleDescription != ''"> and rule_description = #{ruleDescription}</if>
+            <if test="modificationSuggestions != null  and modificationSuggestions != ''"> and modification_suggestions = #{modificationSuggestions}</if>
+            <if test="state != null  and state != ''"> and state = #{state}</if>
+            <if test="superiorUnitId != null  and superiorUnitId != ''"> and superior_unit_id = #{superiorUnitId}</if>
+            <if test="selectType != null  and selectType != ''"> and select_type = #{selectType}</if>
+            <if test="symbol != null  and symbol != ''"> and symbol = #{symbol}</if>
+            <if test="param != null  and param != ''"> and param = #{param}</if>
+            <if test="relMetaModeId != null  and relMetaModeId != ''"> and rel_meta_mode_id = #{relMetaModeId}</if>
+            <if test="relIdMetaModelColumnId != null  and relIdMetaModelColumnId != ''"> and rel_id_meta_model_column_id = #{relIdMetaModelColumnId}</if>
+            <if test="relNameMetaModelColumnId != null  and relIdMetaModelColumnId != ''"> and rel_name_meta_model_column_id = #{relNameMetaModelColumnId}</if>
+            <if test="customizedSql != null  and customizedSql != ''"> and customized_sql = #{customizedSql}</if>
+            <if test="modelVersion != null  and modelVersion != ''"> and v.model_version = #{modelVersion}</if>
+        </where>
+        ORDER BY sort_num asc,t.create_date asc
+    </select>
+
+
+    <select id="selectSymbolList" resultType="SelectVo">
+        select dict_label selectName FROM sys_dict_data
+        where dict_type = 'symbol'
+          and  css_class  = #{englishName}
+    </select>
+</mapper>

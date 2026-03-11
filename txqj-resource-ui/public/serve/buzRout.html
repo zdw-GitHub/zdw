@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>拓扑</title>
+  <style type="text/css">
+    body, #channel {
+      margin: 0 auto;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      overflow: hidden;
+    }
+  </style>
+  <script src="../js/jquery-2.1.4.min.js"></script>
+  <script src="../js/twaver.js"></script>
+  <script src="../js/license.js"></script>
+  <script src="../js/demo.js"></script>
+</head>
+<body>
+<div id="channel">
+
+</div>
+</body>
+
+<script>
+  var box
+  var network
+  var layer
+
+  $(function () {
+    init()
+  })
+
+  function init() {
+    network = new twaver.network.Network();
+
+    network.setLinkFlowEnabled(true);
+    network.setKeyboardRemoveEnabled(false);//屏蔽键盘delete操作
+    network.setTransparentSelectionEnable(true)/* 设置点击网元的透明部分网元是否能被选中，暂时没发现去掉有什么影响 */
+    network.setZoom(1);
+    document.onmousewheel = function (event) {
+      event = event || widow.event;
+      if (event.wheelDelta > 0 || event.detail < 0) {
+        network.setZoom(network.getZoom() + 0.1)
+      } else {
+        network.setZoom(network.getZoom() - 0.1)
+      }
+    }
+    box = network.getElementBox();
+    var networkDom = network.getView();
+    networkDom.style.width = "100%";
+    networkDom.style.height = "100%";
+    $('#channel').append(networkDom)
+    var layerBox = box.getLayerBox();
+    layer = new twaver.Layer('unmovable', 'unmovable layer'); // 创建一个不可移动的图层
+    layer.setMovable(false);
+    layerBox.add(layer);
+    registerImage()
+  }
+
+  //注册图片对象
+  function registerNormalImage(url, name, width, height) {
+    let image = new Image();
+    image.src = url;
+    image.onload = function () {
+      twaver.Util.registerImage(name, image, width, height, true);
+      image.onload = null;
+      network.invalidateElementUIs();
+    };
+  }
+
+  // 传输拓扑图注册图片
+  function registerImage() {
+    registerNormalImage('../img/duanZiAZ.png', 'gunagLan', 30, 30)
+    registerNormalImage('../img/duanKou.png', 'tongDaoDuan', 30, 30)
+    registerNormalImage('../img/channelNode.svg', 'guangLu', 30, 30)
+    registerNormalImage('../img/zhanDian.png', 'zhanDian', 200, 200)
+    registerNormalImage('../img/sheBei.png', 'sheBei', 70, 70)
+  }
+
+  // 刷新toop
+  function reSetTopo(group, childGroup, node, link) {
+    if (
+      group == undefined ||
+      childGroup == undefined ||
+      node == undefined ||
+      link == undefined
+    ) {
+      return
+    }
+    let oldArr = box.getDatas()._as
+    for (let i = 0; oldArr.length > 0; i) {
+      box.remove(oldArr[i])
+    }
+    group.forEach((item, index, arr) => {
+      addGroup(item)
+    })
+    childGroup.forEach((item, index, arr) => {
+      addChildGroup(item)
+    })
+    node.forEach((item, index, arr) => {
+      addNode(item, index)
+    })
+    link.forEach((item, index, arr) => {
+      addLink(item)
+    })
+  }
+
+  // 新增分组
+  function addGroup(item) {
+    if (
+      item.id !== undefined &&
+      item.id !== null &&
+      item.id !== ''
+    ) {
+      if (box.getDataById(item.id) !== undefined) {
+        return
+      }
+      let parGroup = new twaver.Group('parGroupId' + item.id)
+      parGroup.setStyle("group.fill.color", "#CCE2F7")
+      parGroup.setStyle("group.padding", "0")
+      parGroup.setStyle('group.outline.color', '#d6d6d6')
+      parGroup.setStyle('group.outline.width', 3)
+      parGroup.setStyle('select.style', 'none');
+      parGroup.setStyle('group.width', 10)
+      parGroup.setStyle('group.height', 20)
+      parGroup.setExpanded(true)
+
+      let group = new twaver.Group(item.id)
+      group.setStyle("group.fill.color", "#fff")
+      group.setStyle('select.style', 'none');
+      let str = item.name + ''
+      let br = str.indexOf(' ')
+      if (br != -1) {
+        str = str.slice(0, br) + '\n' + str.slice(br)
+      }
+      group.setName(str)
+      group.setStyle('label.position', 'top.top')
+      group.setStyle('label.padding', 10)
+      group.setStyle('label.yoffset', -10)
+      group.setStyle('group.padding', 10)
+      group.setStyle('group.padding.left', 20)
+      group.setStyle('group.padding.right', 20)
+      group.setStyle('group.outline.color', '#d6d6d6')
+      group.setExpanded(true)
+      group.setClient('data', item)
+      group.setClient('type', 'group')
+
+      parGroup.addChild(group)
+      box.add(parGroup)
+      box.add(group)
+    }
+  }
+
+  function addChildGroup(item) {
+    if (
+      item.id !== undefined &&
+      item.id !== null &&
+      item.id !== '' &&
+      item.parId !== undefined &&
+      item.parId !== null &&
+      item.parId !== ''
+    ) {
+      if (box.getDataById(item.id) !== undefined) {
+        return
+      }
+      let group = new twaver.Group(item.id)
+      group.setStyle("group.fill.color", "#F4F4F4")
+      group.setStyle('label.position', 'top.top')
+      group.setStyle('label.padding.bottom', 100)
+      group.setStyle('label.yoffset', -10)
+      group.setStyle('group.padding', 13)
+      group.setStyle('group.outline.color', '#d6d6d6')
+      group.setStyle('group.outline.width', 3)
+      group.setStyle('group.shape', 'roundrect')
+      group.setStyle('select.style', 'none');
+      group.setName(item.name)
+      group.setExpanded(true)
+      group.setClient('data', item)
+      group.setClient('type', 'group')
+      group.expanded = true
+      box.add(group)
+      box.getDataById(item.parId).addChild(group)
+    }
+  }
+
+  // 新增点
+  function addNode(item, index) {
+    if (
+      item.id !== undefined &&
+      item.id !== null &&
+      item.id !== '' &&
+      item.parId !== undefined &&
+      item.parId !== null &&
+      item.parId !== ''
+    ) {
+      if (box.getDataById(item.id) !== undefined) {
+        return
+      }
+      let node = new twaver.Node(item.id)
+      if (!item.positionX || !item.positionY) {
+        node.setLocation(100 + 300 * index, 100)
+      } else {
+        node.setLocation(parseInt(item.positionX), parseInt(item.positionY))
+      }
+      if (item.name) {
+        node.setName(item.name)
+      }
+
+      if (item.img == "zhanDian") {
+        node.setImage('zhanDian')
+      } else if (item.img == "sheBei") {
+        node.setImage('sheBei')
+      } else if (item.img == "tongDaoDuan") {
+        node.setImage('tongDaoDuan')
+      } else if (item.img == "guangLu") {
+        node.setImage('guangLu')
+      } else if (item.img == "gunagLan") {
+        node.setImage('gunagLan')
+      }
+      node.setLayerId(layer.getId());
+      node.setClient('data', item)
+      node.setClient('type', 'node')
+      box.add(node)
+      box.getDataById(item.parId).addChild(node)
+    }
+  }
+
+  // 新增线
+  function addLink(item) {
+    if (
+      item.id === undefined ||
+      item.id === null ||
+      item.id === '' ||
+      item.from === undefined ||
+      item.from === null ||
+      item.from === '' ||
+      item.to === undefined ||
+      item.to === null ||
+      item.to === '' ||
+      box.getDataById(item.from) == undefined ||
+      box.getDataById(item.to) == undefined
+    ) return
+    if (box.getDataById(item.id) !== undefined) {
+      return
+    }
+    let link = new twaver.Link(item.id)
+    link.setStyle('link.bundle.gap', 30)
+    link.setStyle('link.color', '#67C23A')
+    // 此注释禁止删除 因为没找到怎么设置告警线颜色 所以直接在twaver.js中(源码)中修改了 改为#0084FF
+    link.setStyle('select.color', '#67C23A')
+    link.setStyle('select.style', 'border')
+    if(item.name){
+      link.setName(item.name)
+    }
+    link.setClient('data', item)
+    link.setClient('type', 'link')
+
+    var from = box.getDataById(item.from)
+    var to = box.getDataById(item.to)
+    link.setFromNode(from)
+    link.setToNode(to)
+    box.add(link)
+  }
+
+</script>
+</html>

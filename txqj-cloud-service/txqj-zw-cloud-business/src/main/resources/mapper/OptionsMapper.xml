@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mshz.cloud.tms.business.mapper.OptionsMapper">
+
+    <select id="getGridOptions" resultType="com.mshz.cloud.tms.business.vo.OptionsVo">
+        SELECT
+            t.id id,
+            t.NAME_ABBREVIATION abbrName
+        FROM
+            sg_tccon_tcgrid_b t
+        where t.NAME_ABBREVIATION is not null
+          <if test="name!= null and name != '' ">
+              and  t.NAME_ABBREVIATION like concat('%', #{name}, '%')
+          </if>
+        ORDER BY
+            t.NAME_ABBREVIATION
+            LIMIT 0,10
+    </select>
+
+    <select id="devTypeOptions" resultType="com.mshz.cloud.tms.business.vo.OptionsVo">
+        SELECT
+        t.code id,
+        t.name abbrName
+        FROM
+        sg_dic_tcdispatchlevel t
+        where t.name is not null
+        <if test="name!= null and name != '' ">
+            and  t.name like concat('%', #{name}, '%')
+        </if>
+        ORDER BY
+        t.code
+        LIMIT 0,10
+    </select>
+
+    <select id="companyOptions" resultType="com.mshz.cloud.tms.business.vo.OptionsVo">
+        SELECT
+            t.tms_id id,
+            t.tms_name abbrName
+        FROM
+            sg_org_company_b t
+        where t.tms_name is not null
+        <if test="name!= null and name != '' ">
+           and  t.tms_name like concat('%', #{name}, '%')
+        </if>
+        ORDER BY
+            t.tms_name
+            LIMIT 0,10
+    </select>
+
+    <select id="getModelId" resultType="com.mshz.cloud.tms.business.vo.ModelVo">
+        select t.id as modelId, t.model_version modelVersion, t.table_name tableName, t.table_name_cn tableNameCn  from t_meta_model t where t.table_name = #{tableName}
+    </select>
+
+    <select id="getVoltageOptions"  resultType="com.mshz.cloud.tms.business.vo.OptionsVo">
+        SELECT
+            t.code id,
+            t.name abbrName
+        FROM
+        SG_DIC_VOLTAGETYPE t
+        where t.name is not null
+        <if test="name!= null and name != '' ">
+            and  t.name like concat('%', #{name}, '%')
+        </if>
+        ORDER BY
+            t.code
+    </select>
+
+    <select id="getColunmId" resultType="java.math.BigDecimal">
+        select t.id from t_meta_model_tech t where t.column_name = #{columnName} and t.model_id = #{modelId}
+    </select>
+
+
+    <select id="getSiteStatusOptions"  resultType="com.mshz.cloud.tms.business.vo.OptionsVo">
+        SELECT
+        t.code id,
+        t.name abbrName
+        FROM
+        sg_dic_tcstate t
+        where t.name is not null
+        <if test="name!= null and name != '' ">
+            and   t.name like concat('%', #{name}, '%')
+        </if>
+        ORDER BY
+        t.code
+    </select>
+
+    <select id="getSiteLevelOptions" resultType="com.mshz.cloud.tms.business.vo.OptionsVo">
+        SELECT
+        t.code id,
+        t.name abbrName
+        FROM
+        sg_dic_tcstationlevel t
+        where t.name is not null
+        <if test="name!= null and name != '' ">
+            and  t.name like concat('%', #{name}, '%')
+        </if>
+        ORDER BY
+        t.code
+    </select>
+
+
+    <select id="getSiteTypeOptions" resultType="com.mshz.cloud.tms.business.vo.OptionsVo">
+        SELECT
+        t.code id,
+        t.name abbrName
+        FROM
+        sg_dic_tcstationtype t
+        where t.name is not null
+        <if test="name!= null and name != '' ">
+            and  t.name like concat('%', #{name}, '%')
+        </if>
+        ORDER BY
+        t.code
+    </select>
+
+    <select id="getModelConditionDisplay" resultType="com.mshz.cloud.tms.business.vo.MapMessage">
+    SELECT
+	tech.column_name_cn label,
+	tech.column_name name,
+	tech.model_id modelId,
+	tech.model_version modelVersion,
+	tech.id id,
+	IFNULL(sw.is_advanced_query_index,'0') ifQuery,
+	0 ifOpen,
+	0 ifMoreChoose,
+	sw.advanced_query_order sort
+FROM
+	t_meta_model_tech tech
+	LEFT JOIN t_meta_model_show sw ON ( tech.id = sw.column_id AND tech.model_version = sw.model_version )
+WHERE
+	tech.model_id = #{modelId}
+	AND tech.model_version = #{modelVersion}
+	AND sw.is_advanced_query = '1'
+	ORDER BY sw.advanced_query_order
+    </select>
+
+    <select id="getDictionaryInformation" resultType="com.mshz.cloud.tms.business.vo.DictionaryInfoVo">
+        SELECT
+	rule.select_type type,
+	model.table_name tableName,
+	tech.column_name id,
+	tech1.column_name NAME,
+	rule.customized_sql cuzSql
+FROM
+	t_quality_verification_rules rule
+	LEFT JOIN t_quality_basic_rules brule ON CONCAT( brule.id ) = rule.rule_id
+	LEFT JOIN t_meta_model model ON CONCAT( model.id ) = rule.rel_meta_mode_id
+	LEFT JOIN t_meta_model_tech tech ON CONCAT( tech.id )= rule.rel_id_meta_model_column_id
+	LEFT JOIN t_meta_model_tech tech1 ON CONCAT( tech1.id ) = rule.rel_name_meta_model_column_id
+WHERE
+	rule.meta_mode_id = #{modelId}
+	AND rule.meta_model_column_id = #{columnId}
+	AND rule.model_version = #{modelVersion}
+	AND rule.state = '0'
+	AND brule.english_name = 'DicRangeVerification'
+    </select>
+
+    <select id="useDefinedVerSql" resultType="java.util.Map">
+        ${sql}
+    </select>
+
+    <select id="selectDictionaries" resultType="java.util.Map">
+        select ${id} code,${name} name from ${table} where ${id} is not null  order by  ${name} asc
+    </select>
+
+</mapper>

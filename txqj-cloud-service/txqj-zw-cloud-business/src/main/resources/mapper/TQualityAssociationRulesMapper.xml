@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mshz.cloud.tms.business.mapper.TQualityAssociationRulesMapper">
+
+    <resultMap type="TQualityAssociationRules" id="TQualityAssociationRulesResult">
+        <result property="id"    column="id"    />
+        <result property="ruleName"    column="rule_name"    />
+        <result property="englishName"    column="english_name"    />
+        <result property="ruleDescription"    column="rule_description"    />
+        <result property="ruleType"    column="rule_type"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectTQualityAssociationRulesVo">
+        select id, rule_name, english_name, rule_description, rule_type, create_time, update_time from t_quality_association_rules
+    </sql>
+
+    <select id="selectTQualityAssociationRulesList" parameterType="TQualityAssociationRules" resultMap="TQualityAssociationRulesResult">
+        <include refid="selectTQualityAssociationRulesVo"/>
+        <where>
+            <if test="ruleName != null  and ruleName != ''"> and rule_name like concat('%', #{ruleName}, '%')</if>
+            <if test="englishName != null  and englishName != ''"> and english_name like concat('%', #{englishName}, '%')</if>
+            <if test="ruleDescription != null  and ruleDescription != ''"> and rule_description = #{ruleDescription}</if>
+            <if test="ruleType != null  and ruleType != ''"> and rule_type = #{ruleType}</if>
+        </where>
+    </select>
+
+    <select id="selectTQualityAssociationRulesById" parameterType="Long" resultMap="TQualityAssociationRulesResult">
+        <include refid="selectTQualityAssociationRulesVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertTQualityAssociationRules" parameterType="TQualityAssociationRules" useGeneratedKeys="true" keyProperty="id">
+        insert into t_quality_association_rules
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ruleName != null">rule_name,</if>
+            <if test="englishName != null">english_name,</if>
+            <if test="ruleDescription != null">rule_description,</if>
+            <if test="ruleType != null">rule_type,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="ruleName != null">#{ruleName},</if>
+            <if test="englishName != null">#{englishName},</if>
+            <if test="ruleDescription != null">#{ruleDescription},</if>
+            <if test="ruleType != null">#{ruleType},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTQualityAssociationRules" parameterType="TQualityAssociationRules">
+        update t_quality_association_rules
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="ruleName != null">rule_name = #{ruleName},</if>
+            <if test="englishName != null">english_name = #{englishName},</if>
+            <if test="ruleDescription != null">rule_description = #{ruleDescription},</if>
+            <if test="ruleType != null">rule_type = #{ruleType},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTQualityAssociationRulesById" parameterType="Long">
+        delete from t_quality_association_rules where id = #{id}
+    </delete>
+
+    <delete id="deleteTQualityAssociationRulesByIds" parameterType="String">
+        delete from t_quality_association_rules where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

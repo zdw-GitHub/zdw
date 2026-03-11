@@ -1,0 +1,1072 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="a7f6dcc8-03b0-4c8e-87b9-22921dcd8567" name="默认更改列表" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/api/zdwh" afterDir="true" />
+      <change afterPath="$PROJECT_DIR$/src/api/zdwh/errData.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/api/zdwh/zdzywh.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/commonPage" afterDir="true" />
+      <change afterPath="$PROJECT_DIR$/src/views/commonPage/errData" afterDir="true" />
+      <change afterPath="$PROJECT_DIR$/src/views/commonPage/errData/index.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/commonPage/zdzywh" afterDir="true" />
+      <change afterPath="$PROJECT_DIR$/src/views/commonPage/zdzywh/index.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/zdwh/zdzywh" afterDir="true" />
+      <change afterPath="$PROJECT_DIR$/src/views/zlgl/errData" afterDir="true" />
+      <change afterPath="$PROJECT_DIR$/src/views/zlgl/errData/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.env.development" beforeDir="false" afterPath="$PROJECT_DIR$/.env.development" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist" beforeDir="true" />
+      <change beforePath="$PROJECT_DIR$/dist/bg.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/favicon.ico" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/html" beforeDir="true" />
+      <change beforePath="$PROJECT_DIR$/dist/html/ie.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/html/ie.html.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/index.html.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/robots.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static" beforeDir="true" />
+      <change beforePath="$PROJECT_DIR$/dist/static/css" beforeDir="true" />
+      <change beforePath="$PROJECT_DIR$/dist/static/css/app.6d807345.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/css/app.6d807345.css.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/css/chunk-041be50e.47bb0baf.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/css/chunk-041be50e.47bb0baf.css.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/css/chunk-14846017.153a2af7.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/css/chunk-1537fc93.bbc9fa95.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/css/chunk-1537fc93.bbc9fa95.css.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/css/chunk-25feb0b2.4e8637e7.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/css/chunk-25feb0b2.4e8637e7.css.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/css/chunk-2c868a0a.1091bad6.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/css/chunk-33cab47d.74496202.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/css/chunk-33cab47d.74496202.css.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/css/chunk-37bcc6d7.cd89b875.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/css/chunk-37bcc6d7.cd89b875.css.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/css/chunk-4a1d4e21.600bfe72.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/css/chunk-4a1d4e21.600bfe72.css.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/css/chunk-4e25fe60.600bfe72.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/css/chunk-4e25fe60.600bfe72.css.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/css/chunk-50b36ae7.e0d249a8.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/css/chunk-52a86bff.4b262291.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/css/chunk-52a86bff.4b262291.css.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/css/chunk-56e8e43e.3e10cd59.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/css/chunk-56e8e43e.3e10cd59.css.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/css/chunk-57c86fa8.a00b75fd.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/css/chunk-57c86fa8.a00b75fd.css.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/css/chunk-5a2f9c7b.84f98409.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/css/chunk-5a2f9c7b.84f98409.css.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/css/chunk-5b444c20.153a2af7.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/css/chunk-5b83c289.ce2a2394.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/css/chunk-5b83c289.ce2a2394.css.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/css/chunk-66ce468d.793cbdf1.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/css/chunk-66ce468d.793cbdf1.css.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/css/chunk-81a2a40e.17fbdb6b.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/css/chunk-81a2a40e.17fbdb6b.css.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/css/chunk-9e67c4ce.db631dbc.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/css/chunk-9e67c4ce.db631dbc.css.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/css/chunk-c4581f5c.e0d249a8.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/css/chunk-d6ec12d8.5a402cd2.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/css/chunk-d6ec12d8.5a402cd2.css.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/css/chunk-f28c6c76.b626919b.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/css/chunk-f28c6c76.b626919b.css.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/css/chunk-fbdc3a00.4dedd7cb.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/css/chunk-libs.7e8aa67a.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/css/chunk-libs.7e8aa67a.css.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/fonts" beforeDir="true" />
+      <change beforePath="$PROJECT_DIR$/dist/static/fonts/element-icons.535877f5.woff" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/fonts/element-icons.732389de.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/img" beforeDir="true" />
+      <change beforePath="$PROJECT_DIR$/dist/static/img/401.089007e7.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/img/404.a57b6f31.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/img/404_cloud.0f4bc32b.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/img/bg.7aa8cf59.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/img/bg3.09362f04.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/img/dark.412ca67e.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/img/light.4183aad0.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/img/login-background.f9f49138.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/img/logo.eeed0dd2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/img/logobg.068b4699.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/img/profile.473f5971.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js" beforeDir="true" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/app.9ed3bf18.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/app.9ed3bf18.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-005cb0c7.bcc41045.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-005cb0c7.bcc41045.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-00a9991e.48da290f.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-00a9991e.48da290f.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-041be50e.dc07c6ee.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-041be50e.dc07c6ee.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-0a18a949.9c905623.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-0a18a949.9c905623.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-0d5b0085.3cb1231e.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-0d5b0085.3cb1231e.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-14846017.66b32cc3.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-14846017.66b32cc3.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-1537fc93.7e67f7e0.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-1537fc93.7e67f7e0.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-171d7f10.4773a618.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-171d7f10.4773a618.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-1b192f48.aa487bba.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-1b192f48.aa487bba.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-25feb0b2.c27ae60c.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-25feb0b2.c27ae60c.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-2727631f.928894d8.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-2727631f.928894d8.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-2c868a0a.c7d3c467.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-2c868a0a.c7d3c467.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-2d0b1626.23dc91e9.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-2d0b1626.23dc91e9.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-2d0b2b28.9e271da6.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-2d0b2b28.9e271da6.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-2d0c8e18.9b68ab5e.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-2d0c8e18.9b68ab5e.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-2d0d38ff.c37a5a72.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-2d0d38ff.c37a5a72.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-2d0da2ea.a563db49.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-2d0da2ea.a563db49.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-2d0de3b1.88c14bd5.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-2d0de3b1.88c14bd5.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-2d0e2366.00afd6b9.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-2d0e2366.00afd6b9.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-2d0e5830.48473c38.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-2d0e5830.48473c38.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-2d0f012d.43988c3d.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-2d0f012d.43988c3d.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-2d20955d.32ccc242.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-2d20955d.32ccc242.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-2d212b99.eadf8bea.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-2d212b99.eadf8bea.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-2d21a3bb.b78e776d.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-2d21a3bb.b78e776d.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-2d22252c.f531b766.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-2d22252c.f531b766.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-2d230898.4301de6e.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-2d230898.4301de6e.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-31eae13f.19303952.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-31eae13f.19303952.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-33cab47d.6e6d8798.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-33cab47d.6e6d8798.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-3625660e.b939fb18.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-3625660e.b939fb18.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-37bcc6d7.b950a38a.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-37bcc6d7.b950a38a.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-39413ce8.5eb7e7b5.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-39413ce8.5eb7e7b5.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-3a08d90c.45a8b92f.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-3a08d90c.45a8b92f.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-3b69bc00.f48716cd.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-3b69bc00.f48716cd.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-46ecac3a.df5ad783.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-46ecac3a.df5ad783.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-4a1d4e21.5a1447b8.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-4a1d4e21.5a1447b8.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-4aebf114.8aa4a9f2.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-4aebf114.8aa4a9f2.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-4e25fe60.24d4fd22.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-4e25fe60.24d4fd22.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-4f3d4abe.a109290d.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-4f3d4abe.a109290d.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-50b36ae7.a41aa6a0.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-50b36ae7.a41aa6a0.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-52a86bff.fded1450.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-52a86bff.fded1450.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-548b6580.f6658489.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-548b6580.f6658489.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-56e8e43e.d82be688.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-56e8e43e.d82be688.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-57c86fa8.2e08cd86.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-57c86fa8.2e08cd86.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-582b2a7a.0a2f2b14.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-582b2a7a.0a2f2b14.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-5a2f9c7b.dff94589.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-5a2f9c7b.dff94589.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-5b444c20.2ccf641f.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-5b444c20.2ccf641f.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-5b83c289.a3b3750b.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-5b83c289.a3b3750b.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-66ce468d.9c656d39.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-66ce468d.9c656d39.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-67031d46.3cba42ca.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-67031d46.3cba42ca.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-68702101.9c0e3915.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-68702101.9c0e3915.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-7fa21b9b.d4d40635.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-7fa21b9b.d4d40635.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-81a2a40e.8739e3d1.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-81a2a40e.8739e3d1.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-8579d4da.c9a477e2.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-8579d4da.c9a477e2.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-8ee3fc10.19bb6ffb.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-8ee3fc10.19bb6ffb.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-9e67c4ce.c70c4ad7.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-9e67c4ce.c70c4ad7.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-b06fd398.21740617.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-b06fd398.21740617.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-c4581f5c.8dcb0f88.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-c4581f5c.8dcb0f88.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-d19c1a98.71cfa6ef.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-d19c1a98.71cfa6ef.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-d6ec12d8.876d5619.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-d6ec12d8.876d5619.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-d8b320e8.fc4ef559.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-d8b320e8.fc4ef559.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-d9bbfe38.29232074.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-d9bbfe38.29232074.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-e946381e.41785ae4.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-e946381e.41785ae4.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-elementUI.9c56cf31.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-elementUI.9c56cf31.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-f28c6c76.e5a61496.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-f28c6c76.e5a61496.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-fbdc3a00.6721e281.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-fbdc3a00.6721e281.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-libs.705511e2.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/static/js/chunk-libs.705511e2.js.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/sjjr/errData.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/sjjr/errData.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/sjjr/zdzywh.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/sjjr/zdzywh.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/sjygl" beforeDir="true" />
+      <change beforePath="$PROJECT_DIR$/src/api/sjygl/cjsjygl.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/sjygl/cjymxgl.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/sjygl/cjysjgl.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/store/modules/permission.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/modules/permission.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/request1.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/request2.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/request2.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/request3.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/request4.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/sjygl" beforeDir="true" />
+      <change beforePath="$PROJECT_DIR$/src/views/sjygl.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/sjygl/cjsjygl" beforeDir="true" />
+      <change beforePath="$PROJECT_DIR$/src/views/sjygl/cjsjygl/index.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/sjygl/cjymxgl" beforeDir="true" />
+      <change beforePath="$PROJECT_DIR$/src/views/sjygl/cjymxgl/index.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/stationWh" beforeDir="true" />
+      <change beforePath="$PROJECT_DIR$/src/views/stationWh/txsjzl" beforeDir="true" />
+      <change beforePath="$PROJECT_DIR$/src/views/stationWh/txsjzl/wtsjzs" beforeDir="true" />
+      <change beforePath="$PROJECT_DIR$/src/views/stationWh/txsjzl/wtsjzs/index.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/stationWh/txzyzs" beforeDir="true" />
+      <change beforePath="$PROJECT_DIR$/src/views/stationWh/txzyzs/zdzywh" beforeDir="true" />
+      <change beforePath="$PROJECT_DIR$/src/views/stationWh/txzyzs/zdzywh/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/zdwh/zdzywh/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/zdwh" beforeDir="true" afterPath="$PROJECT_DIR$/src/views/zdwh" afterDir="true" />
+      <change beforePath="$PROJECT_DIR$/src/views/zlgl" beforeDir="true" afterPath="$PROJECT_DIR$/src/views/zlgl" afterDir="true" />
+      <change beforePath="$PROJECT_DIR$/vue.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/vue.config.js" afterDir="false" />
+    </list>
+    <ignored path="$PROJECT_DIR$/.tmp/" />
+    <ignored path="$PROJECT_DIR$/temp/" />
+    <ignored path="$PROJECT_DIR$/tmp/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FUSProjectUsageTrigger">
+    <session id="633922080">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.open.time.0" value="1" />
+          <entry key="project.opened" value="1" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.open">
+        <counts>
+          <entry key="scss" value="6" />
+          <entry key="vue" value="14" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.open">
+        <counts>
+          <entry key="SCSS" value="6" />
+          <entry key="Vue.js" value="14" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.edit">
+        <counts>
+          <entry key="scss" value="241" />
+          <entry key="vue" value="646" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.edit">
+        <counts>
+          <entry key="SCSS" value="241" />
+          <entry key="Vue.js" value="646" />
+        </counts>
+      </usages-collector>
+    </session>
+    <session id="984405127">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.closed" value="1" />
+          <entry key="project.open.time.1" value="1" />
+          <entry key="project.opened" value="1" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.open">
+        <counts>
+          <entry key="js" value="16" />
+          <entry key="production" value="1" />
+          <entry key="vue" value="1" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.open">
+        <counts>
+          <entry key="JavaScript" value="16" />
+          <entry key="PLAIN_TEXT" value="1" />
+          <entry key="Vue.js" value="1" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.edit">
+        <counts>
+          <entry key="js" value="3" />
+          <entry key="production" value="5" />
+          <entry key="vue" value="11" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.edit">
+        <counts>
+          <entry key="JavaScript" value="3" />
+          <entry key="PLAIN_TEXT" value="5" />
+          <entry key="Vue.js" value="11" />
+        </counts>
+      </usages-collector>
+    </session>
+    <session id="-1929642276">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.closed" value="6" />
+          <entry key="project.open.time.1" value="1" />
+          <entry key="project.open.time.16" value="2" />
+          <entry key="project.open.time.19" value="1" />
+          <entry key="project.open.time.21" value="1" />
+          <entry key="project.open.time.24" value="1" />
+          <entry key="project.opened" value="6" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.js.language.service.starts">
+        <counts>
+          <entry key="ESLintLanguageService" value="6" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.open">
+        <counts>
+          <entry key="js" value="8" />
+          <entry key="vue" value="40" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.open">
+        <counts>
+          <entry key="JavaScript" value="8" />
+          <entry key="Vue.js" value="40" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.edit">
+        <counts>
+          <entry key="js" value="5" />
+          <entry key="vue" value="934" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.edit">
+        <counts>
+          <entry key="JavaScript" value="5" />
+          <entry key="Vue.js" value="934" />
+        </counts>
+      </usages-collector>
+    </session>
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/views/gltxh/gltxhwh/index.vue">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="28">
+              <caret line="1" column="25" selection-start-line="1" selection-start-column="25" selection-end-line="1" selection-end-column="25" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/views/components/gltxh/toolBar.vue">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="784">
+              <caret line="28" column="11" selection-start-line="28" selection-start-column="11" selection-end-line="28" selection-end-column="11" />
+              <folding>
+                <element signature="n#style#0;n#el-card#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#el-card#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#0;n#el-card#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#el-button#0;n#div#0;n#div#0;n#div#0;n#el-card#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#el-button#1;n#div#0;n#div#0;n#div#0;n#el-card#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#el-button#0;n#div#2;n#div#0;n#div#0;n#el-card#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/views/commonPage/gltxhwh/index.vue">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1860">
+              <caret line="110" column="10" selection-start-line="110" selection-start-column="10" selection-end-line="110" selection-end-column="10" />
+              <folding>
+                <element signature="n#style#0;n#span#0;n#div#0;n#el-card#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#el-form-item#0;n#el-form#0;n#div#1;n#el-card#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#el-form-item#1;n#el-form#0;n#div#1;n#el-card#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#el-form-item#2;n#el-form#0;n#div#1;n#el-card#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#el-button#0;n#el-form-item#2;n#el-form#0;n#div#1;n#el-card#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#el-form-item#3;n#el-form#0;n#div#1;n#el-card#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#el-table#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/views/components/gltxh/zyzs.vue">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="280">
+              <caret line="10" column="16" lean-forward="true" selection-start-line="10" selection-start-column="16" selection-end-line="10" selection-end-column="16" />
+              <folding>
+                <element signature="n#style#0;n#span#0;n#el-menu#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#span#0;n#div#0;n#el-card#0;n#div#0;n#el-menu#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#el-form-item#0;n#el-form#0;n#div#1;n#el-card#0;n#div#0;n#el-menu#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#span#0;n#div#0;n#el-card#1;n#div#0;n#el-menu#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#el-form-item#0;n#el-form#0;n#div#1;n#el-card#1;n#div#0;n#el-menu#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/views/commonPage/zdzywh/index.vue">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="600">
+              <caret line="431" column="48" selection-start-line="431" selection-start-column="48" selection-end-line="431" selection-end-column="48" />
+              <folding>
+                <element signature="n#style#0;n#el-form-item#0;n#el-form#0;n#el-card#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#el-form-item#1;n#el-form#0;n#el-card#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#el-card#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#el-table#0;n#el-card#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#el-card#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#el-form-item#0;n#div#0;n#el-form#0;n#div#0;n#el-dialog#2;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#1;n#div#0;n#el-dialog#2;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="e#17979#18036#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/views/gltxh/gltxhbj/index.vue">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="308">
+              <caret line="11" column="28" selection-start-line="11" selection-start-column="6" selection-end-line="11" selection-end-column="28" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Vue Single File Component" />
+      </list>
+    </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>下一步</find>
+      <find>ownerList</find>
+      <find>guideForm</find>
+      <find>console</find>
+      <find>selectRule</find>
+      <find>手动校验</find>
+      <find>站点</find>
+      <find>编辑</find>
+      <find>selectCompany</find>
+      <find>checkAdd</find>
+      <find>window</find>
+      <find>getData</find>
+      <find>searchStation</find>
+      <find>editForm</find>
+      <find>此</find>
+      <find>submit</find>
+      <find>errorStation</find>
+      <find>saveErrorStation</find>
+      <find>attType</find>
+      <find>deletGui</find>
+      <find>deleteSta</find>
+      <find>deleteStation</find>
+      <find>getForm</find>
+      <find>resourceList</find>
+      <find>saveGuide</find>
+      <find>saveSta</find>
+      <find>whereAttributes</find>
+      <find>submitEdit</find>
+      <find>guide</find>
+      <find>multipleSelection</find>
+    </findStrings>
+    <replaceStrings>
+      <replace>getSjyTree</replace>
+      <replace>pageIndex</replace>
+      <replace>disabled</replace>
+      <replace>request</replace>
+      <replace>seeErr</replace>
+      <replace>this.modelId</replace>
+    </replaceStrings>
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/src/views/index.vue" />
+        <option value="$PROJECT_DIR$/src/views/register.vue" />
+        <option value="$PROJECT_DIR$/src/layout/components/Sidebar/Logo.vue" />
+        <option value="$PROJECT_DIR$/.env.staging" />
+        <option value="$PROJECT_DIR$/src/store/modules/permission.js" />
+        <option value="$PROJECT_DIR$/src/api/sjygl/cjsjygl.js" />
+        <option value="$PROJECT_DIR$/src/api/sjygl/cjymxgl.js" />
+        <option value="$PROJECT_DIR$/src/api/sjygl/cjysjgl.js" />
+        <option value="$PROJECT_DIR$/src/views/sjygl/cjymxgl/index.vue" />
+        <option value="$PROJECT_DIR$/src/views/sjygl/cjysjgl/index.vue" />
+        <option value="$PROJECT_DIR$/src/views/sjygl/cjsjygl/index.vue" />
+        <option value="$PROJECT_DIR$/src/components/TopNav/index.vue" />
+        <option value="$PROJECT_DIR$/src/layout/components/Sidebar/SidebarItem.vue" />
+        <option value="$PROJECT_DIR$/src/layout/index.vue" />
+        <option value="$PROJECT_DIR$/src/assets/styles/sidebar.scss" />
+        <option value="$PROJECT_DIR$/src/layout/components/Sidebar/index.vue" />
+        <option value="$PROJECT_DIR$/src/views/login.vue" />
+        <option value="$PROJECT_DIR$/src/assets/styles/variables.scss" />
+        <option value="$PROJECT_DIR$/src/assets/styles/element-variables.scss" />
+        <option value="$PROJECT_DIR$/src/layout/components/TagsView/index.vue" />
+        <option value="$PROJECT_DIR$/.env.production" />
+        <option value="$PROJECT_DIR$/src/layout/components/Navbar.vue" />
+        <option value="$PROJECT_DIR$/.env.development" />
+        <option value="$PROJECT_DIR$/src/views/stationWh/txzyzs/zdzywh/index_bak.vue" />
+        <option value="$PROJECT_DIR$/src/views/stationWh/txzyzs/zdzywh/index.vue" />
+        <option value="$PROJECT_DIR$/src/api/sjjr/zdzywh.js" />
+        <option value="$PROJECT_DIR$/src/utils/request2.js" />
+        <option value="$PROJECT_DIR$/src/api/sjjr/errData.js" />
+        <option value="$PROJECT_DIR$/src/views/zlgl/errData/index.vue" />
+        <option value="$PROJECT_DIR$/src/api/zdwh/zdzywh.js" />
+        <option value="$PROJECT_DIR$/src/views/commonPage/zdzywh/index.vue" />
+        <option value="$PROJECT_DIR$/src/api/zdwh/errData.js" />
+        <option value="$PROJECT_DIR$/src/views/commonPage/errData/index.vue" />
+        <option value="$PROJECT_DIR$/src/views/zdwh/zdzywh/index.vue" />
+        <option value="$PROJECT_DIR$/src/views/components/gltxh/toolbar.vue" />
+        <option value="$PROJECT_DIR$/src/permission.js" />
+        <option value="$PROJECT_DIR$/vue.config.js" />
+        <option value="$PROJECT_DIR$/src/views/gltxh/gltxhbj/index.vue" />
+        <option value="$PROJECT_DIR$/src/views/gltxh/gltxhwh/index.vue" />
+        <option value="$PROJECT_DIR$/src/views/commonPage/gltxhwh/index.vue" />
+        <option value="$PROJECT_DIR$/src/views/components/gltxh/toolBar.vue" />
+        <option value="$PROJECT_DIR$/src/views/components/gltxh/zyzs.vue" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER">
+    <package-json value="$PROJECT_DIR$/package.json" />
+  </component>
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="NodeModulesDirectoryManager">
+    <handled-path value="$PROJECT_DIR$/node_modules" />
+  </component>
+  <component name="NodePackageJsonFileManager">
+    <packageJsonPaths>
+      <path value="$PROJECT_DIR$/package.json" />
+    </packageJsonPaths>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="-10" />
+    <option name="y" value="-10" />
+    <option name="width" value="1385" />
+    <option name="height" value="745" />
+  </component>
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="autoStation" type="b2602c69:ProjectViewProjectNode" />
+              <item name="autoStation" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="autoStation" type="b2602c69:ProjectViewProjectNode" />
+              <item name="autoStation" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="autoStation" type="b2602c69:ProjectViewProjectNode" />
+              <item name="autoStation" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="autoStation" type="b2602c69:ProjectViewProjectNode" />
+              <item name="autoStation" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+              <item name="commonPage" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="autoStation" type="b2602c69:ProjectViewProjectNode" />
+              <item name="autoStation" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+              <item name="commonPage" type="462c0819:PsiDirectoryNode" />
+              <item name="zdzywh" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="autoStation" type="b2602c69:ProjectViewProjectNode" />
+              <item name="autoStation" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+              <item name="components" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="autoStation" type="b2602c69:ProjectViewProjectNode" />
+              <item name="autoStation" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+              <item name="components" type="462c0819:PsiDirectoryNode" />
+              <item name="gltxh" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="autoStation" type="b2602c69:ProjectViewProjectNode" />
+              <item name="autoStation" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+              <item name="gltxh" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="autoStation" type="b2602c69:ProjectViewProjectNode" />
+              <item name="autoStation" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+              <item name="zdwh" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="autoStation" type="b2602c69:ProjectViewProjectNode" />
+              <item name="autoStation" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+              <item name="zdwh" type="462c0819:PsiDirectoryNode" />
+              <item name="zdzywh" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="E:/山东通信大屏/ui/twenty" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.prettier" value="true" />
+    <property name="node.js.detected.package.standard" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.prettier" value="project" />
+    <property name="node.js.path.for.package.standard" value="project" />
+    <property name="node.js.selected.package.eslint" value="E:\HY\guanglan\autoStation\node_modules\eslint" />
+    <property name="node.js.selected.package.prettier" value="F:\inspur\yuanshuju\ui\ruoyi-ui\node_modules\prettier" />
+    <property name="node.js.selected.package.standard" value="E:\HY\guanglan\autoStation\node_modules\eslint" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Background" />
+    <property name="dynamic.classpath" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="F:\inspur\yuanshuju\ui\stationWh - 副本\src\views\commonPage" />
+      <recent name="F:\inspur\yuanshuju\ui\stationWh - 副本\src\api\zdwh" />
+      <recent name="F:\inspur\yuanshuju\ui\stationWh - 副本\src\views\zlgl" />
+      <recent name="F:\inspur\yuanshuju\ui\stationWh - 副本\src\views\system\zlgl" />
+      <recent name="F:\inspur\yuanshuju\ui\stationWh - 副本\src\views\zlbz\errData" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="F:\inspur\yuanshuju\ui\stationWh - 副本\src\views" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration" cleanupOnStartRun="true">
+    <configuration>C:\Users\dell\AppData\Roaming\Subversion</configuration>
+    <supportedVersion>125</supportedVersion>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a7f6dcc8-03b0-4c8e-87b9-22921dcd8567" name="默认更改列表" comment="" />
+      <created>1665367534542</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1665367534542</updated>
+      <workItem from="1665367536478" duration="4632000" />
+      <workItem from="1665384657731" duration="50354000" />
+      <workItem from="1667373723716" duration="10016000" />
+      <workItem from="1668045462398" duration="2805000" />
+      <workItem from="1668396121398" duration="78655000" />
+      <workItem from="1670385299134" duration="1349000" />
+      <workItem from="1670576173017" duration="707000" />
+      <workItem from="1670916499386" duration="3430000" />
+      <workItem from="1670980467441" duration="14703000" />
+      <workItem from="1671067438676" duration="9430000" />
+      <workItem from="1671154583341" duration="98000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="176179000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <editor active="true" />
+    <layout>
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.167107" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="npm" order="2" side_tool="true" />
+      <window_info id="Favorites" order="3" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Terminal" order="8" weight="0.32152975" />
+      <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
+      <window_info anchor="bottom" id="Version Control" order="10" />
+      <window_info anchor="bottom" id="调试" order="11" />
+      <window_info anchor="bottom" id="Messages" order="12" weight="0.32838285" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/.env.development">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="175">
+          <caret line="7" column="29" selection-start-line="7" selection-start-column="29" selection-end-line="7" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/stationWh/txsjzl/wtsjzs/index_bak.vue" />
+    <entry file="file://$PROJECT_DIR$/src/views/stationWh/txzyzs/zdzywh/index_bak.vue" />
+    <entry file="file://$PROJECT_DIR$/src/views/stationWh/txzyzs/zdzywh/index.vue" />
+    <entry file="file://$PROJECT_DIR$/src/api/sjjr/zdzywh.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="166">
+          <caret line="19" selection-start-line="19" selection-end-line="25" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/system/notice/index.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="21">
+          <caret line="2" column="19" lean-forward="true" selection-start-line="2" selection-start-column="19" selection-end-line="2" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/system/role/authUser.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="146">
+          <caret line="7" column="19" lean-forward="true" selection-start-line="7" selection-start-column="19" selection-end-line="7" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/system/role/index.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="266">
+          <caret line="602" column="45" lean-forward="true" selection-start-line="600" selection-start-column="6" selection-end-line="602" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/utils/request2.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="475">
+          <caret line="53" column="40" selection-start-line="53" selection-start-column="40" selection-end-line="53" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/system/zlgl/errData/index.vue" />
+    <entry file="file://$PROJECT_DIR$/src/views/zlbz/errData/index.vue" />
+    <entry file="file://$PROJECT_DIR$/src/api/sjjr/errData.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="141">
+          <caret line="25" selection-start-line="25" selection-end-line="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-575">
+          <caret line="25" column="10" lean-forward="true" selection-start-line="25" selection-start-column="10" selection-end-line="25" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/api/zdwh/zdzywh.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="266">
+          <caret line="94" column="4" selection-start-line="94" selection-start-column="4" selection-end-line="94" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/api/zdwh/errData.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="124">
+          <caret line="67" column="17" lean-forward="true" selection-start-line="67" selection-start-column="17" selection-end-line="67" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/commonPage/errData/index.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="566">
+          <caret line="422" column="30" lean-forward="true" selection-start-line="422" selection-start-column="30" selection-end-line="422" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/components/icons/index.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="168">
+          <caret line="6" column="32" lean-forward="true" selection-start-line="6" selection-start-column="32" selection-end-line="6" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/dashboard/PanelGroup.vue">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/dashboard/BarChart.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2436" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/index.vue">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/index_v1.vue">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/tool/gen/genInfoForm.vue">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/tool/gen/importTable.vue">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/tool/gen/index.vue">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/tool/build/IconsDialog.vue">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/tool/build/DraggableItem.vue">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/tool/build/RightPanel.vue">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/tool/build/index.vue">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/tool/build/CodeTypeDialog.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-756" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/tool/gen/basicInfoForm.vue">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/tool/gen/editTable.vue">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/system/menu/index.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3528" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/layout/components/AppMain.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-336" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/iFrame/index.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-483">
+          <caret line="6" column="22" lean-forward="true" selection-start-line="6" selection-start-column="22" selection-end-line="6" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/zlgl/errData/index.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="308">
+          <caret line="11" column="17" lean-forward="true" selection-start-line="11" selection-start-column="17" selection-end-line="11" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/permission.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1092">
+          <caret line="48" column="22" lean-forward="true" selection-start-line="48" selection-start-column="22" selection-end-line="48" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1575" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/settings.js">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vue.config.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="185">
+          <caret line="38" column="36" lean-forward="true" selection-start-line="38" selection-start-column="36" selection-end-line="38" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/ThemePicker/index.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="252">
+          <caret line="9" column="8" lean-forward="true" selection-start-line="9" selection-start-column="8" selection-end-line="9" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/TopNav/index.vue">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/zdwh/glzywh/glzywh.vue">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/zdwh/zdzywh/index.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="392">
+          <caret line="14" column="14" selection-start-line="14" selection-start-column="14" selection-end-line="14" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/DictTag/index.vue">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/Editor/index.vue">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/gltxh/gltxhwh/index.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="28">
+          <caret line="1" column="25" selection-start-line="1" selection-start-column="25" selection-end-line="1" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/gltxh/gltxhbj/index.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="308">
+          <caret line="11" column="28" selection-start-line="11" selection-start-column="6" selection-end-line="11" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/commonPage/zdzywh/index.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="600">
+          <caret line="431" column="48" selection-start-line="431" selection-start-column="48" selection-end-line="431" selection-end-column="48" />
+          <folding>
+            <element signature="n#style#0;n#el-form-item#0;n#el-form#0;n#el-card#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#el-form-item#1;n#el-form#0;n#el-card#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#el-card#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#el-table#0;n#el-card#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#el-card#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#el-form-item#0;n#div#0;n#el-form#0;n#div#0;n#el-dialog#2;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#1;n#div#0;n#el-dialog#2;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="e#17979#18036#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/components/gltxh/toolBar.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="784">
+          <caret line="28" column="11" selection-start-line="28" selection-start-column="11" selection-end-line="28" selection-end-column="11" />
+          <folding>
+            <element signature="n#style#0;n#el-card#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#el-card#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#el-card#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#el-button#0;n#div#0;n#div#0;n#div#0;n#el-card#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#el-button#1;n#div#0;n#div#0;n#div#0;n#el-card#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#el-button#0;n#div#2;n#div#0;n#div#0;n#el-card#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/commonPage/gltxhwh/index.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1860">
+          <caret line="110" column="10" selection-start-line="110" selection-start-column="10" selection-end-line="110" selection-end-column="10" />
+          <folding>
+            <element signature="n#style#0;n#span#0;n#div#0;n#el-card#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#el-form-item#0;n#el-form#0;n#div#1;n#el-card#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#el-form-item#1;n#el-form#0;n#div#1;n#el-card#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#el-form-item#2;n#el-form#0;n#div#1;n#el-card#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#el-button#0;n#el-form-item#2;n#el-form#0;n#div#1;n#el-card#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#el-form-item#3;n#el-form#0;n#div#1;n#el-card#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#el-table#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/components/gltxh/zyzs.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="280">
+          <caret line="10" column="16" lean-forward="true" selection-start-line="10" selection-start-column="16" selection-end-line="10" selection-end-column="16" />
+          <folding>
+            <element signature="n#style#0;n#span#0;n#el-menu#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#span#0;n#div#0;n#el-card#0;n#div#0;n#el-menu#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#el-form-item#0;n#el-form#0;n#div#1;n#el-card#0;n#div#0;n#el-menu#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#span#0;n#div#0;n#el-card#1;n#div#0;n#el-menu#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#el-form-item#0;n#el-form#0;n#div#1;n#el-card#1;n#div#0;n#el-menu#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ScopeChooserConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>

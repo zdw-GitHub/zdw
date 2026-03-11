@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="15px" height="13px" viewBox="0 0 15 13" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>退出编辑</title>
+    <g id="页面-2" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="1" transform="translate(-1834.000000, -31.000000)" fill="#333333" fill-rule="nonzero">
+            <g id="header" transform="translate(-8.880650, -8.167931)">
+                <g id="退出" transform="translate(1825.327120, 31.111452)">
+                    <g transform="translate(0.453770, 0.000000)" id="退出编辑">
+                        <g transform="translate(17.321252, 8.207520)">
+                            <path d="M14,6.15559834 L10.6363608,9.23347206 L10.6363608,6.92503777 L5.29305658,6.92503777 L5.29305658,5.38622517 L10.6363608,5.38622517 L10.6363608,3.07787372 L14,6.15559834 Z M1.45454118,1.53897828 L1.45454118,10.7723012 L8,10.7723012 L8,8.46394978 L9.45454118,8.46394978 L9.45454118,12.3112795 L8,12.3112795 L1.45454118,12.3112795 L0,12.3112795 L0,10.7723012 L0,1.53897828 L0,0 L1.45454118,0 L8,0 L9.45454118,0 L9.45454118,3.84732973 L8,3.84732973 L8,1.53897828 L1.45454118,1.53897828 Z" id="形状"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

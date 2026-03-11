@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>拓扑</title>
+  <style type="text/css">
+    body, #channel {
+      margin: 0 auto;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      overflow: hidden;
+    }
+  </style>
+  <script src="../js/jquery-2.1.4.min.js"></script>
+  <script src="../js/twaver.js"></script>
+  <script src="../js/license.js"></script>
+  <script src="../js/demo.js"></script>
+</head>
+<body>
+  <div id="channel">
+
+  </div>
+</body>
+
+<script>
+  var box
+  var network
+
+  $(function () {
+    init()
+  })
+  function init () {
+    network = new twaver.network.Network();
+
+    network.setLinkFlowEnabled(true);
+    network.setKeyboardRemoveEnabled(false);//屏蔽键盘delete操作
+    network.setTransparentSelectionEnable(true)/* 设置点击网元的透明部分网元是否能被选中，暂时没发现去掉有什么影响 */
+    network.setZoom(1);
+    document.onmousewheel=function(event){
+      event=event||widow.event;
+      if(event.wheelDelta>0 || event.detail<0){
+        network.setZoom(network.getZoom() + 0.1)
+      }else{
+        network.setZoom(network.getZoom() - 0.1)
+      }
+    }
+    box = network.getElementBox();
+    var networkDom = network.getView();
+    networkDom.style.width = "100%";
+    networkDom.style.height = "100%";
+    $('#channel').append(networkDom)
+
+    registerImage()
+    setRightClick()
+  }
+  //注册图片对象
+  function registerNormalImage( url,name, width, height) {
+    var image = new Image();
+    image.src = url;
+    image.onload = function () {
+      twaver.Util.registerImage(name, image, width, height, true);
+      image.onload = null;
+      network.invalidateElementUIs();
+    };
+  }
+  // 传输拓扑图注册图片
+  function registerImage() {
+    registerNormalImage('../img/channelNode.svg', 'node')
+    registerNormalImage('../img/duanKou.png', 'node2')
+  }
+  // 设置鼠标右键
+  function setRightClick () {
+    var popupMenu = new twaver.controls.PopupMenu(network);
+    popupMenu.setMenuItems([
+      {label: '添加光路', group: 'group'},
+      {label: '删除', group: 'group'},
+      {label: '删除', group: 'link'},
+      {label: '删除', group: 'node'},
+    ])
+    //右键菜单的隐藏与出现
+    popupMenu.isVisible = function (menuItem) {
+      if(network.getSelectionModel().getSelection().size() > 0){
+        selectData = network.getSelectionModel().getSelection().get(0);
+        let data = selectData.getClient('data')
+        let type = selectData.getClient('type')
+        if (type == 'group' && menuItem.group === 'group') {
+          if (menuItem.label === '删除') {
+            if (data.groupFlag !== 'A' && data.groupFlag !== 'Z') {
+              return true
+            } else {
+              return false
+            }
+          }
+          return true
+        }
+        if (type == 'link' && menuItem.group === 'link') {
+          return true
+        }
+        if (type == 'node' && menuItem.group === 'node') {
+          return true
+        }
+      }
+    };
+    popupMenu.onAction = function (menuItem) {
+      let data = selectData.getClient('data')
+      if (menuItem.group === 'group') {
+        if (menuItem.label === '添加光路') {
+          window.parent['getLightPath'](data)
+        }
+        if (menuItem.label === '删除') {
+          window.parent['delTopoData']('removeGroup', selectData)
+        }
+      } else if (menuItem.group === 'link') {
+        window.parent['delTopoData']('removeLink', selectData)
+      }
+      else if (menuItem.group === 'node') {
+        box.remove(selectData)
+      }
+    }
+  }
+  // 刷新toop
+  function reSetTopo (group, node, link,A,Z) {
+    if (
+      group == undefined ||
+      node == undefined ||
+      link == undefined
+    ) {
+      return
+    }
+    var oldArr = box.getDatas()._as
+    for (let i = 0; oldArr.length > 0; i) {
+      box.remove(oldArr[i])
+    }
+    group.forEach((item, index, arr) => {
+      addGroup(item)
+    })
+    node.forEach((item, index, arr) => {
+      addNode(item, index,A,Z)
+    })
+    link.forEach((item, index, arr) => {
+      addLink(item)
+    })
+  }
+  // 新增分组
+  function addGroup (item) {
+    if (
+      item.groupId !== undefined &&
+      item.groupId !== null &&
+      item.groupId !== ''
+    ) {
+      if (box.getDataById(item.groupId) !== undefined) return
+      var parGroup = new twaver.Group('parGroupId' + item.groupId)
+      parGroup.setStyle("group.fill.color","#CCE2F7")
+      parGroup.setStyle("group.padding","0")
+      parGroup.setStyle('group.outline.color', '#d6d6d6')
+      parGroup.setStyle('group.outline.width', 3)
+      parGroup.setStyle('select.style', 'none');
+      // parGroup.setStyle('group.shape', 'roundrect')
+      parGroup.setExpanded(true)
+
+
+      var group = new twaver.Group(item.groupId)
+      group.setStyle("group.fill.color","#fff")
+      group.setStyle('select.style', 'none');
+      let str = item.groupName + ''
+      let br = str.indexOf(' ')
+      if (br != -1) {
+        str = str.slice(0, br) + '\n' + str.slice(br)
+      }else {
+        str+= '\n'
+      }
+      group.setName(str)
+      group.setStyle('label.position','top.top')
+      group.setStyle('label.padding', 10)
+      group.setStyle('label.yoffset', -10)
+
+
+      group.setStyle('group.padding', 10)
+      group.setStyle('group.padding.left', 30)
+      group.setStyle('group.padding.right', 30)
+      group.setStyle('group.outline.color', '#d6d6d6')
+      group.setExpanded(true)
+      group.setClient('data', item)
+      group.setClient('type', 'group')
+
+      parGroup.addChild(group)
+      box.add(parGroup)
+      box.add(group)
+    }
+  }
+  // 新增点
+  function addNode(item, index,A,Z) {
+    if (
+      item.nodeId !== undefined &&
+      item.nodeId !== null &&
+      item.nodeId !== '' &&
+      item.groupId !== undefined &&
+      item.groupId !== null &&
+      item.groupId !== ''
+    ) {
+      if (box.getDataById(item.nodeId) !== undefined) {
+        return
+      }
+      var node = new twaver.Node(item.nodeId)
+      if (!item.positionX || !item.positionY) {
+        node.setLocation(100 + 300 * index, 100)
+      } else {
+        node.setLocation(parseFloat(item.positionX), parseFloat(item.positionY))
+      }
+      node.setName(item.nodeName)
+      if(item.nodeId == A || item.nodeId == Z){
+        node.setImage('node2')
+      }else {
+        node.setImage('node')
+      }
+
+      node.setWidth(30);
+      node.setHeight(30);
+      node.setClient('data', item)
+      node.setClient('type', 'node')
+      box.add(node)
+      box.getDataById(item.groupId).addChild(node)
+    }
+  }
+  // 新增线
+  function addLink (item) {
+    if (
+      item.id === undefined ||
+      item.id === null ||
+      item.id === '' ||
+      item.aPortId === undefined ||
+      item.aPortId === null ||
+      item.aPortId === '' ||
+      item.zPortId === undefined ||
+      item.zPortId === null ||
+      item.zPortId === '' ||
+      box.getDataById(item.aPortId) == undefined ||
+      box.getDataById(item.zPortId) == undefined
+    ) return
+    if (box.getDataById(item.id) !== undefined) {
+      return
+    }
+    var link = new twaver.Link(item.id)
+    link.setStyle('link.bundle.gap', 30)
+    link.setStyle('link.color', '#67C23A')
+    // 此注释禁止删除 因为没找到怎么设置告警线颜色 所以直接在twaver.js中(源码)中修改了 改为#0084FF
+    link.setStyle('select.color', '#67C23A')
+    link.setStyle('select.style', 'border')
+    link.setStyle('label.position', 'top.top')
+    link.setName(item.name)
+    link.setClient('data', item)
+    link.setClient('type', 'link')
+
+    var from = box.getDataById(item.aPortId)
+    var to = box.getDataById(item.zPortId)
+    link.setFromNode(from)
+    link.setToNode(to)
+    box.add(link)
+  }
+
+  function addLightPath(data) {
+    let aGroup = {
+      groupId: data.aId,
+      groupName: data.aResId
+    }
+    let zGroup = {
+      groupId: data.zId,
+      groupName: data.zResId
+    }
+
+    let node = []
+    box.getDatas()._as.forEach(function (item, index, arr) {
+      let type = item.getClient('type')
+      let data = item.getClient('data')
+      if (type == 'node') {
+        node.push(data)
+      }
+    })
+    let x = 200 * (node.length+1)
+    let aNode = {
+      nodeId: data.aPortId,
+      groupId: data.aId,
+      groupName: data.aResId,
+      positionX: x,
+      positionY: '100',
+      nodeName: data.aPort,
+    }
+    let zNode = {
+      nodeId: data.zPortId,
+      groupId: data.zId,
+      groupName: data.zResId,
+      positionX: x+200,
+      positionY: '100',
+      nodeName: data.zPort,
+    }
+    let link = {
+      id: data.id,
+      name: data.name,
+      aId: data.aId,
+      aResId: data.aResId,
+      zId: data.zId,
+      zResId: data.zResId,
+      aPortId: data.aPortId,
+      aPort: data.aPort,
+      zPortId: data.zPortId,
+      zPort: data.zPort,
+    }
+    addGroup(aGroup)
+    addGroup(zGroup)
+    addNode(aNode)
+    addNode(zNode)
+    addLink(link)
+    let selLightPath = []
+    box.getDatas()._as.forEach(function (item, index, arr) {
+      let type = item.getClient('type')
+      let data = item.getClient('data')
+      if (type == 'link') {
+        if(data.deleteFlag != 1){
+          selLightPath.push(data)
+        }
+      }
+    })
+    window.parent['getSelLightPathTable'](selLightPath)
+  }
+
+  function removeLink (link) {
+    let aNode = link.getFromNode()
+    let zNode = link.getToNode()
+    let aGroup = aNode.getParent()
+    let zGroup = zNode.getParent()
+    box.remove(link)
+    box.remove(aNode)
+    box.remove(zNode)
+    let aGroupNum = aGroup.getChildren()._as.length
+    let zGroupNum = zGroup.getChildren()._as.length
+    if (aGroupNum == 0) {
+      box.remove(aGroup)
+    }
+    if (zGroupNum == 0) {
+      box.remove(zGroup)
+    }
+
+    let selLightPath = []
+    box.getDatas()._as.forEach(function (item, index, arr) {
+      let type = item.getClient('type')
+      let data = item.getClient('data')
+      if (type == 'link') {
+        if(data.deleteFlag != 1){
+          selLightPath.push(data)
+        }
+      }
+    })
+    window.parent['getSelLightPathTable'](selLightPath)
+  }
+  function removeLinkById (id) {
+    removeLink(box.getDataById(id))
+  }
+  function removeGroup (group) {
+    let flag = false
+    let nodes = group.getChildren()._as
+    for (let i = 0; nodes.length > 0; i) {
+      if (nodes[i].getLinks()){
+        let links = nodes[i].getLinks()._as
+        for (let k = 0; k < links.length; k++) {
+          removeLink(links[k])
+        }
+      }else {
+        flag = true
+        box.remove(nodes[i])
+      }
+    }
+    if(flag){
+      box.remove(group)
+    }
+  }
+  // 获取图上内容
+  function returnTopoData () {
+    let node = []
+    let link = []
+    let group = []
+    box.getDatas()._as.forEach(function (item, index, arr) {
+      let type = item.getClient('type')
+      let data = item.getClient('data')
+      if (type == 'node') {
+        data.positionX = item.getLocation().x
+        data.positionY = item.getLocation().y
+        node.push(data)
+      } else if (type == 'link') {
+        link.push(data)
+      }else if(type == 'group'){
+        group.push(data)
+      }
+    })
+    return {
+      nodesData: node,
+      optRoadData: link,
+      groupData: group,
+    }
+  }
+
+  // function compareAZ (aResId,zResId) {
+  //   if(aResId==this.)
+  // }
+</script>
+</html>

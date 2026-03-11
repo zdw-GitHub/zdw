@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mshz.cloud.tms.business.mapper.TMetaModelUidMapper">
+
+    <resultMap type="TMetaModelUid" id="TMetaModelUidResult">
+        <result property="id"    column="id"    />
+        <result property="modelId"    column="model_id"    />
+        <result property="columnId"    column="column_id"    />
+        <result property="columnName"    column="column_name"    />
+        <result property="columnNameCn"    column="column_name_cn"    />
+        <result property="columnOrder"    column="column_order"    />
+        <result property="modelVersion"    column="model_version"    />
+        <result property="createDate"    column="create_date"    />
+        <result property="updateDate"    column="update_date"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectTMetaModelUidVo">
+        select id, model_id, column_id, column_name, column_name_cn, column_order, model_version, create_date, update_date, remark from t_meta_model_uid
+    </sql>
+
+    <select id="selectTMetaModelUidList" parameterType="TMetaModelUid" resultMap="TMetaModelUidResult">
+        <include refid="selectTMetaModelUidVo"/>
+        <where>
+            <if test="modelId != null "> and model_id = #{modelId}</if>
+            <if test="columnId != null "> and column_id = #{columnId}</if>
+            <if test="columnName != null  and columnName != ''"> and column_name like concat('%', #{columnName}, '%')</if>
+            <if test="columnNameCn != null  and columnNameCn != ''"> and column_name_cn = #{columnNameCn}</if>
+            <if test="columnOrder != null  and columnOrder != ''"> and column_order = #{columnOrder}</if>
+            <if test="modelVersion != null  and modelVersion != ''"> and model_version = #{modelVersion}</if>
+            <if test="createDate != null  and createDate != ''"> and create_date = #{createDate}</if>
+            <if test="updateDate != null  and updateDate != ''"> and update_date = #{updateDate}</if>
+        </where>
+    </select>
+
+    <select id="selectTMetaModelUidById" parameterType="Long" resultMap="TMetaModelUidResult">
+        <include refid="selectTMetaModelUidVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertTMetaModelUid" parameterType="TMetaModelUid">
+        insert into t_meta_model_uid
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="modelId != null">model_id,</if>
+            <if test="columnId != null">column_id,</if>
+            <if test="columnName != null">column_name,</if>
+            <if test="columnNameCn != null">column_name_cn,</if>
+            <if test="columnOrder != null">column_order,</if>
+            <if test="modelVersion != null">model_version,</if>
+            <if test="remark != null">remark,</if>
+            create_date
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="modelId != null">#{modelId},</if>
+            <if test="columnId != null">#{columnId},</if>
+            <if test="columnName != null">#{columnName},</if>
+            <if test="columnNameCn != null">#{columnNameCn},</if>
+            <if test="columnOrder != null">#{columnOrder},</if>
+            <if test="modelVersion != null">#{modelVersion},</if>
+            <if test="remark != null">#{remark},</if>
+            DATE_FORMAT(now(), '%Y-%m-%d %H:%i:%s')
+         </trim>
+    </insert>
+
+    <update id="updateTMetaModelUid" parameterType="TMetaModelUid">
+        update t_meta_model_uid
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="modelId != null">model_id = #{modelId},</if>
+            <if test="columnId != null">column_id = #{columnId},</if>
+            <if test="columnName != null">column_name = #{columnName},</if>
+            <if test="columnNameCn != null">column_name_cn = #{columnNameCn},</if>
+            <if test="columnOrder != null">column_order = #{columnOrder},</if>
+            <if test="modelVersion != null">model_version = #{modelVersion},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            update_date = DATE_FORMAT(now(), '%Y-%m-%d %H:%i:%s')
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTMetaModelUidById" parameterType="Long">
+        delete from t_meta_model_uid where id = #{id}
+    </delete>
+
+    <delete id="deleteTMetaModelUidByIds" parameterType="String">
+        delete from t_meta_model_uid where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectTMetaModelUidListByMetaId" parameterType="Long" resultMap="TMetaModelUidResult">
+        <include refid="selectTMetaModelUidVo"/>
+        where model_id = #{modelId}
+        order by column_order
+    </select>
+
+    <select id="selectModelInfoByModelId" parameterType="Long" resultType="java.util.Map">
+        select m.id as modelId, m.table_name as tableName, m.table_name_cn as tableNameCn,
+               c.id as categoryId, c.category_name as categoryName, c.category_name_cn as categoryNameCn
+        from t_meta_model m
+        join t_meta_model_category c on m.category_name_id = c.id
+        where m.id = #{modelId}
+    </select>
+
+    <select id="selectMetaModelUidListByMetaId" parameterType="Long" resultType="java.util.Map">
+        select u.id as id, u.model_id as modelId, u.column_id as columnId,
+               u.column_name as columnName, u.column_name_cn as columnNameCn, u.column_order as columnOrder, u.model_version as modelVersion,
+               m.table_name as tableName, m.table_name_cn as tableNameCn,
+               c.id as dbId, c.category_name as dbName, c.category_name_cn as dbNameCn,
+               '' as metaDataDbName
+        from t_meta_model_uid u
+        join t_meta_model m on u.model_id = m.id
+        join t_meta_model_category c on m.category_name_id = c.id
+        where u.model_id = #{modelId}
+        order by column_order
+    </select>
+
+    <select id="selectModelColumnInfoByModelId" parameterType="Long" resultType="java.util.Map">
+        select t.id, t.column_name  as columnName, t.column_name_cn as columnNameCn, t.column_type as columnType, t.column_length as columnLength,
+               t.is_primary_key as isPrimaryKey, t.is_not_null as isNotNull, IFNULL(u.column_order, 'not_uid') as columnOrder
+        from t_meta_model_tech t
+        left join t_meta_model_uid u on t.id = u.column_id
+        where t.model_id = #{modelId}
+        order by t.id
+    </select>
+
+    <select id="getMaxIdSerial" parameterType="String" statementType="CALLABLE" useCache="false" resultType="String">
+        CALL  get_max_id_serial(#{tableName})
+    </select>
+    <select id="getIdGenerationRule" resultType="java.lang.String">
+        SELECT CONCAT(prefix_encoding_attribute_name,data_management_org_code_default) FROM `t_meta_model_id_rule` where model_name  = #{tableName}
+    </select>
+
+
+</mapper>

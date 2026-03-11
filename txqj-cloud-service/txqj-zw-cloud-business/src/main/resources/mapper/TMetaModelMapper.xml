@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mshz.cloud.tms.business.mapper.TMetaModelMapper">
+    <resultMap type="TMetaModel" id="TMetaModelResult">
+        <result property="id" column="id"/>
+        <result property="categoryNameId" column="category_name_id"/>
+        <result property="modelVersion" column="model_version"/>
+        <result property="modelStatus" column="model_status"/>
+        <result property="dbId" column="db_id"/>
+        <result property="tableName" column="table_name"/>
+        <result property="tableNameCn" column="table_name_cn"/>
+        <result property="safetyLevel" column="safety_level"/>
+        <result property="updateLog" column="update_log"/>
+        <result property="isDelete" column="is_delete"/>
+        <result property="createDate" column="create_date"/>
+        <result property="updateDate" column="update_date"/>
+        <result property="remark" column="remark"/>
+        <result property="relationMainDbId" column="relation_main_db_id"/>
+        <result property="relationMainTableId" column="relation_main_table_id"/>
+        <result property="relationMainTableAlias" column="relation_main_table_alias"/>
+        <result property="auditMode" column="audit_mode"/>
+        <result property="accessMode" column="access_mode"/>
+        <result property="dataStorageMode" column="data_storage_mode"/>
+        <result property="dataRelationType" column="data_relation_type"/>
+    </resultMap>
+
+    <resultMap type="com.mshz.cloud.tms.business.vo.MetaModelDetailVo" id="TMetaModelDetailResult">
+        <result property="id" column="id"/>
+        <result property="categoryNameId" column="category_name_id"/>
+        <result property="modelVersion" column="model_version"/>
+        <result property="modelStatus" column="model_status"/>
+        <result property="dbId" column="db_id"/>
+        <result property="tableName" column="table_name"/>
+        <result property="tableNameCn" column="table_name_cn"/>
+        <result property="safetyLevel" column="safety_level"/>
+        <result property="updateLog" column="update_log"/>
+        <result property="isDelete" column="is_delete"/>
+        <result property="createDate" column="create_date"/>
+        <result property="updateDate" column="update_date"/>
+        <result property="remark" column="remark"/>
+        <result property="relationMainDbId" column="relation_main_db_id"/>
+        <result property="relationMainDbId" column="relation_main_db_id"/>
+        <result property="relationMainTableId" column="relation_main_table_id"/>
+        <result property="relationMainTableAlias" column="relation_main_table_alias"/>
+        <result property="relationMainDbUserName" column="relation_main_db_username"/>
+        <result property="relationMainDbName" column="relation_main_db_name"/>
+        <result property="relationMainDbNameCn" column="relation_main_db_name_cn"/>
+        <result property="relationMainTableName" column="relation_main_table_name"/>
+        <result property="relationMainTableNameCn" column="relation_main_table_name_cn"/>
+
+    </resultMap>
+
+
+    <select id="selectTMetaModelDetail" parameterType="long" resultMap="TMetaModelDetailResult">
+SELECT
+	m.id,
+	m.category_name_id,
+	m.model_version,
+	m.model_status,
+	m.db_id,
+	m.table_name,
+	m.table_name_cn,
+	m.safety_level,
+	m.update_log,
+	m.is_delete,
+	m.create_date,
+	m.update_date,
+	m.remark,
+	m.relation_main_db_id,
+	m.relation_main_table_id,
+	m.relation_main_table_alias,
+	m.audit_mode,
+	m.access_mode,
+  d.db_username as relation_main_db_username,
+  d.db_name as relation_main_db_name ,
+  d.db_name_cn as relation_main_db_name_cn ,
+  t.table_name  as relation_main_table_name,
+  t.table_name_cn as relation_main_table_name_cn
+FROM
+	t_meta_model m
+left join t_db_config d on m.relation_main_db_id=d.id
+left join t_db_table  t on m.relation_main_table_id = t.id
+where m.id = #{id}
+    </select>
+
+    <sql id="selectTMetaModelVo">
+        select id, category_name_id, model_version, model_status, db_id, table_name, table_name_cn, safety_level, update_log, is_delete, create_date, update_date,
+               remark, relation_main_db_id, relation_main_table_id, relation_main_table_alias , audit_mode, access_mode, data_storage_mode, data_relation_type
+        from t_meta_model
+    </sql>
+
+    <update id="setModelVersion">
+        UPDATE t_meta_model_re_label      SET model_version = #{modelVersion} where  (model_version ='edit') and model_id = #{modelId};
+        UPDATE t_meta_model_tech          SET model_version = #{modelVersion} where  (model_version ='edit') and model_id = #{modelId};
+        UPDATE t_meta_model_relation      SET model_version = #{modelVersion} where  (model_version ='edit') and model_id = #{modelId};
+        UPDATE t_meta_model_operator_log  SET model_version = #{modelVersion} where  (model_version ='edit') and model_id = #{modelId};
+        UPDATE t_meta_model_safe          SET model_version = #{modelVersion} where  (model_version ='edit') and model_id = #{modelId};
+        UPDATE t_meta_model_show          SET model_version = #{modelVersion} where  (model_version ='edit') and model_id = #{modelId};
+        UPDATE t_quality_verification_rules       SET model_version = #{modelVersion} where  (model_version ='edit') and meta_mode_id = #{modelId};
+        UPDATE t_quality_ass_rule_verification       SET model_version = #{modelVersion} where  (model_version ='edit') and meta_mode_id = #{modelId};
+    </update>
+
+    <!--根据id逻辑删除元模型表-->
+    <update id="setMetaModelDeleteById" parameterType="long">
+            delete from t_meta_model where id = #{modelId}
+    </update>
+    <!--&lt;!&ndash;根据id逻辑删除元模型表&ndash;&gt;-->
+    <!--<update id="setMetaModelDeleteById" parameterType="long">-->
+    <!--update t_meta_model-->
+    <!--set   is_delete = 1-->
+    <!--where id = #{modelId}-->
+    <!--</update>-->
+
+    <!--删除编辑元模型相关数据-->
+    <delete id="deleteMetaMode">
+        delete from t_meta_model_re_label       where (model_version ='edit') and  model_id = #{modelId};
+        delete from t_meta_model_tech           where (model_version ='edit') and  model_id = #{modelId};
+        delete from t_meta_model_relation       where (model_version ='edit') and  model_id = #{modelId};
+        delete from t_meta_model_operator_log   where (model_version ='edit') and model_id = #{modelId};
+        delete from t_meta_model_safe           where (model_version ='edit') and model_id = #{modelId};
+        delete from t_meta_model_show           where  (model_version ='edit') and model_id = #{modelId};
+        delete from t_quality_verification_rules         where  (model_version ='edit') and meta_mode_id = #{modelId};
+        delete from t_quality_ass_rule_verification         where  (model_version ='edit') and meta_mode_id = #{modelId};
+    </delete>
+    <!--根据id查询业务元数据信息-->
+
+    <select id="selectTMetaModelBuzById" parameterType="long" resultType="com.mshz.cloud.tms.business.vo.MetadataBuzInfoVo">
+        SELECT table_name tableName, table_name_cn tableNameCn,
+               model_version modelVersion, model_status modelStatus,update_log updateLog,category_name_id cateGoryNameId, audit_mode auditMode, access_mode accessMode,
+               data_relation_type dataRelationType, data_storage_mode dataStorageMode
+        FROM t_meta_model
+        WHERE id = #{modelId}
+    </select>
+
+    <!--查询所有类目及包括的元模型-->
+    <select id="selectMetaModelTree" resultType="TMetaModel">
+        select c.category_name remark, m.id id, m.table_name tableName, m.category_name_id as categoryNameId,m.table_name_cn as tableNameCn
+        FROM t_meta_model m
+                 left JOIN t_meta_model_category c on m.category_name_id=c.id
+        where m.is_delete=0
+    </select>
+
+    <!--查询所有类目-->
+    <select id="selectCategoryNames" resultType="java.lang.String">
+        SELECT DISTINCT category_name_cn
+        FROM t_meta_model_category
+    </select>
+
+    <!--查询元模型表拷贝到元模型发布表的数据-->
+    <select id="selectMetaModelCopy" resultType="TMetaModel">
+        select category_name_id,db_id,table_name,table_name_cn,safety_level from  t_meta_model
+        where id = #{modelId}
+    </select>
+
+    <!--查询该元模型的历史版本号-->
+    <select id="selectMetaModelVersionList" resultType="java.lang.String">
+        select  model_version as modelVersion FROM t_meta_model_version
+        where model_id = #{modelId}
+        ORDER BY model_version
+    </select>
+
+    <!--校检元模型名字是否重复-->
+    <select id="selectMetaModelName" resultType="java.lang.String">
+        SELECT table_name FROM t_meta_model
+        WHERE is_delete = '0' and table_name = #{tableName}
+    </select>
+
+    <select id="selectTMetaModelList" parameterType="TMetaModel" resultMap="TMetaModelResult">
+        <include refid="selectTMetaModelVo"/>
+        <where>
+            <if test="categoryNameId != null ">and category_name_id = #{categoryNameId}</if>
+            <if test="modelVersion != null  and modelVersion != ''">and model_version = #{modelVersion}</if>
+            <if test="modelStatus != null  and modelStatus != ''">and model_status = #{modelStatus}</if>
+            <if test="dbId != null ">and db_id = #{dbId}</if>
+            <if test="tableName != null  and tableName != ''">and table_name = #{tableName}</if>
+            <if test="tableNameCn != null  and tableNameCn != ''">and table_name_cn = #{tableNameCn}</if>
+            <if test="safetyLevel != null  and safetyLevel != ''">and safety_level = #{safetyLevel}</if>
+            <if test="updateLog != null  and updateLog != ''">and update_log = #{updateLog}</if>
+            <if test="isDelete != null ">and is_delete = #{isDelete}</if>
+            <if test="accessMode != null ">and access_mode = #{accessMode}</if>
+            <if test="auditMode != null ">and audit_mode= #{auditMode}</if>
+            <if test="createDate != null  and createDate != ''">and create_date = #{createDate}</if>
+            <if test="updateDate != null  and updateDate != ''">and update_date = #{updateDate}</if>
+            <if test="relationMainDbId != null ">and relation_main_db_id = #{relationMainDbId}</if>
+            <if test="relationMainTableId != null ">and relation_main_table_id = #{relationMainTableId}</if>
+            <if test="relationMainTableAlias != null  and relationMainTableAlias != ''">and relation_main_table_alias =
+                #{relationMainTableAlias}
+            </if>
+            <if test="dataStorageMode != null ">and data_storage_mode = #{dataStorageMode}</if>
+            <if test="dataRelationType != null ">and data_relation_type = #{dataRelationType}</if>
+        </where>
+    </select>
+
+    <select id="selectTMetaModelById" parameterType="Long" resultMap="TMetaModelResult">
+        <include refid="selectTMetaModelVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="getTableAssociation" parameterType="com.mshz.cloud.tms.business.vo.MetaModelShowVo"
+            resultType="com.mshz.cloud.tms.business.vo.TableAssociationVo">
+        SELECT
+	md.table_name tableName,
+	tb.table_name rlTableName
+FROM
+	t_meta_model md
+	LEFT JOIN t_db_table tb ON tb.id = md.relation_main_table_id
+WHERE
+	md.id = #{modelId} and md.model_version=#{modelVersion}
+    </select>
+    <select id="selectMetaModelCategory"  resultType="TMetaModel">
+        select if(c.category_name_cn is null,'其他',c.category_name_cn)remark, m.id id, m.table_name_cn tableName, m.category_name_id as categoryNameId,m.table_name as tableNameCn
+        FROM t_meta_model m
+                 left JOIN t_meta_model_category c on m.category_name_id=c.id
+        where m.is_delete=0
+    </select>
+    <select id="selectMetaModelCategoryByTableName" parameterType="TMetaModel" resultType="TMetaModel">
+        select if(c.category_name_cn is null,'其他',c.category_name_cn)remark, m.id id, m.table_name_cn tableName, m.category_name_id as categoryNameId,m.table_name as tableNameCn
+        FROM t_meta_model m
+                 left JOIN t_meta_model_category c on m.category_name_id=c.id
+        where m.is_delete=0
+        <if test="tableName != null  and tableName != ''">and (table_name like concat('%',#{tableName},'%') or table_name_cn like concat('%',#{tableName},'%'))</if>
+    </select>
+
+    <select id="selectMetaModelCategoryJob" resultType="TMetaModel">
+        select if(c.category_name_cn is null,'其他',c.category_name_cn)remark, m.id id, m.table_name tableName, m.category_name_id as categoryNameId,m.table_name_cn as tableNameCn
+        FROM t_meta_model m
+                 left JOIN t_meta_model_category c on m.category_name_id=c.id
+        where m.is_delete=0 and m.table_name not in (	SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(invoke_target,"'",2) ,"'",-1)  FROM sys_job )
+    </select>
+
+    <select id="selectMetaModelWithoutIdRuleConfig" resultType="TMetaModel">
+        select if(c.category_name_cn is null,'其他',c.category_name_cn)remark, m.id id, m.table_name tableName, m.category_name_id as categoryNameId,m.table_name_cn as tableNameCn
+        FROM t_meta_model m
+                 left JOIN t_meta_model_category c on m.category_name_id=c.id
+        where m.is_delete=0 and m.id not in (select distinct  r.model_id from  t_meta_model_id_rule r where r.model_id is not null)
+    </select>
+
+    <insert id="insertTMetaModel" parameterType="TMetaModel">
+        insert into t_meta_model
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="categoryNameId != null">category_name_id,</if>
+            <if test="modelVersion != null">model_version,</if>
+            <if test="modelStatus != null">model_status,</if>
+            <if test="dbId != null">db_id,</if>
+            <if test="tableName != null">table_name,</if>
+            <if test="tableNameCn != null">table_name_cn,</if>
+            <if test="safetyLevel != null">safety_level,</if>
+            <if test="updateLog != null">update_log,</if>
+            <if test="isDelete != null">is_delete,</if>
+            <if test="createDate != null">create_date,</if>
+            <if test="updateDate != null">update_date,</if>
+            <if test="remark != null">remark,</if>
+            <if test="relationMainDbId != null">relation_main_db_id,</if>
+            <if test="relationMainTableId != null">relation_main_table_id,</if>
+            <if test="relationMainTableAlias != null">relation_main_table_alias,</if>
+            <if test="auditMode != null">audit_mode,</if>
+            <if test="accessMode != null">access_mode,</if>
+            <if test="dataStorageMode != null">data_storage_mode,</if>
+            <if test="dataRelationType != null">data_relation_type,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="categoryNameId != null">#{categoryNameId},</if>
+            <if test="modelVersion != null">#{modelVersion},</if>
+            <if test="modelStatus != null">#{modelStatus},</if>
+            <if test="dbId != null">#{dbId},</if>
+            <if test="tableName != null">#{tableName},</if>
+            <if test="tableNameCn != null">#{tableNameCn},</if>
+            <if test="safetyLevel != null">#{safetyLevel},</if>
+            <if test="updateLog != null">#{updateLog},</if>
+            <if test="isDelete != null">#{isDelete},</if>
+            <if test="createDate != null">#{createDate},</if>
+            <if test="updateDate != null">#{updateDate},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="relationMainDbId != null">#{relationMainDbId},</if>
+            <if test="relationMainTableId != null">#{relationMainTableId},</if>
+            <if test="relationMainTableAlias != null">#{relationMainTableAlias},</if>
+            <if test="auditMode != null">#{auditMode},</if>
+            <if test="accessMode != null">#{accessMode},</if>
+            <if test="dataStorageMode != null">#{dataStorageMode},</if>
+            <if test="dataRelationType != null">#{dataRelationType},</if>
+        </trim>
+    </insert>
+
+    <update id="updateTMetaModel" parameterType="TMetaModel">
+        update t_meta_model
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="categoryNameId != null">category_name_id = #{categoryNameId},</if>
+            <if test="modelVersion != null">model_version = #{modelVersion},</if>
+            <if test="modelStatus != null">model_status = #{modelStatus},</if>
+            <if test="dbId != null">db_id = #{dbId},</if>
+            <if test="tableName != null">table_name = #{tableName},</if>
+            <if test="tableNameCn != null">table_name_cn = #{tableNameCn},</if>
+            <if test="safetyLevel != null">safety_level = #{safetyLevel},</if>
+            <if test="updateLog != null">update_log = #{updateLog},</if>
+            <if test="isDelete != null">is_delete = #{isDelete},</if>
+            <if test="createDate != null">create_date = #{createDate},</if>
+            <if test="updateDate != null">update_date = #{updateDate},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="relationMainDbId != null">relation_main_db_id = #{relationMainDbId},</if>
+            <if test="relationMainTableId != null">relation_main_table_id = #{relationMainTableId},</if>
+            <if test="relationMainTableAlias != null">relation_main_table_alias = #{relationMainTableAlias},</if>
+            <if test="auditMode != null">audit_mode = #{auditMode},</if>
+            <if test="accessMode != null">access_mode = #{accessMode},</if>
+            <if test="dataStorageMode != null">data_storage_mode = #{dataStorageMode},</if>
+            <if test="dataRelationType != null">data_relation_type = #{dataRelationType},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTMetaModelById" parameterType="Long">
+        delete from t_meta_model where id = #{id}
+    </delete>
+
+    <delete id="deleteTMetaModelByIds" parameterType="String">
+        delete from t_meta_model where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+
+    <select id="getModelId" resultType="com.mshz.cloud.tms.business.vo.ModelVo">
+        select t.id as modelId, t.model_version modelVersion from t_meta_model t where t.table_name = #{tableName}
+    </select>
+
+    <select id="getMiddleTableName" resultType="string">
+    SELECT
+	    CONCAT( cf.db_username, '.', tb.table_name )
+    FROM
+    	t_db_table tb
+    LEFT JOIN t_db_config cf ON cf.id = tb.db_id
+    WHERE
+	tb.id = #{tableId}
+    </select>
+
+    <select id="getMiddleDbInfo" parameterType="Long" resultType="java.util.Map">
+        select m.relation_main_db_id as relationMainDbId, c.db_name as dbName, c.db_username dbUsername, c.db_type dbType
+        FROM t_meta_model m
+        join t_db_config c on m.relation_main_db_id = c.id
+        where m.id = #{id}
+    </select>
+
+    <select id="getRelationDbInfo" parameterType="Long" resultType="java.util.Map">
+        select distinct r.relation_db_id relationDbId, r.relation_table_id relationTableId, c.db_name as dbName, c.db_username dbUsername, c.db_type dbType
+        FROM t_meta_model_relation r
+        LEFT JOIN t_db_config c ON r.relation_db_id = c.id
+        where r.model_id = #{id}
+    </select>
+
+</mapper>

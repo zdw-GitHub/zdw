@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32.4193667px" height="32.4193667px" viewBox="0 0 32.4193667 32.4193667" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>电压等级</title>
+    <defs>
+        <path d="M3,0 L29.4193667,0 L32.4193667,3 L32.4193667,29.4193667 L29.4193667,32.4193667 L3,32.4193667 L0,29.4193667 L0,3 L3,0 Z" id="path-1"></path>
+        <filter x="-6.2%" y="-6.2%" width="112.3%" height="112.3%" filterUnits="objectBoundingBox" id="filter-2">
+            <feGaussianBlur stdDeviation="2" in="SourceAlpha" result="shadowBlurInner1"></feGaussianBlur>
+            <feOffset dx="0" dy="0" in="shadowBlurInner1" result="shadowOffsetInner1"></feOffset>
+            <feComposite in="shadowOffsetInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0.0274509804   0 0 0 0 0.607843137   0 0 0 0 0.623529412  0 0 0 0.455942861 0" type="matrix" in="shadowInnerInner1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="页面-5" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="2备份" transform="translate(-980.338847, -511.197311)">
+            <g id="编组-20" transform="translate(536.911153, 202.500000)">
+                <g id="编组-16" transform="translate(75.677695, 104.030885)">
+                    <g id="编组-18备份-11" transform="translate(367.750000, 201.876109)">
+                        <g id="电压等级" transform="translate(0.000000, 2.790317)">
+                            <g id="矩形">
+                                <use fill-opacity="0.64" fill="#EDFEFF" fill-rule="evenodd" xlink:href="#path-1"></use>
+                                <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                                <path stroke="#86CDCF" stroke-width="1" d="M29.2122599,0.5 L31.9193667,3.20710678 L31.9193667,29.2122599 L29.2122599,31.9193667 L3.20710678,31.9193667 L0.5,29.2122599 L0.5,3.20710678 L3.20710678,0.5 L29.2122599,0.5 Z" stroke-linejoin="square"></path>
+                            </g>
+                            <g id="编组" transform="translate(7.209683, 7.209683)" fill="#079B9F" fill-rule="nonzero">
+                                <path d="M0,8.09552283 C0.424199796,3.82186824 3.82186824,0.424199796 8.09552283,0 L8.09552283,1.82026029 C4.82267223,2.2281795 2.2281795,4.82222 1.82026029,8.09552283 L0,8.09552283 Z M0,9.90447717 C0.424199796,14.1776795 3.82186824,17.5758002 8.09552283,17.9995477 L8.09552283,16.1792875 C4.82267223,15.7718205 2.2281795,13.1773278 1.82026029,9.90447717 L0,9.90447717 Z M16.1797397,9.90447717 C15.7718205,13.1773278 13.1773278,15.7718205 9.90447717,16.1797397 L9.90447717,18 C14.1776795,17.5758002 17.5758002,14.1781318 18,9.90447717 L16.1797397,9.90447717 Z M18,8.09552283 C17.5758002,3.82186824 14.1781318,0.424199796 9.90447717,0 L9.90447717,1.82026029 C13.1773278,2.2281795 15.7718205,4.82222 16.1797397,8.09552283 L18,8.09552283 Z" id="形状"></path>
+                                <polygon id="路径" points="5.83432994 9.45223857 12.1656701 3.57313703 9.45223857 9.45223857"></polygon>
+                                <polygon id="路径" points="12.1656701 8.54776143 5.83432994 14.426863 8.54776143 8.54776143"></polygon>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

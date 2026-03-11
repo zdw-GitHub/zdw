@@ -1,0 +1,535 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mshz.cloud.tms.business.mapper.TMetaModelShowMapper">
+
+    <resultMap type="com.mshz.cloud.tms.business.entity.TMetaModelShow" id="TMetaModelShowResult">
+        <result property="id" column="id"/>
+        <result property="modelId" column="model_id"/>
+        <result property="columnId" column="column_id"/>
+        <result property="isQuery" column="is_query"/>
+        <result property="isVisible" column="is_visible"/>
+        <result property="sortNum" column="sort_num"/>
+        <result property="modelVersion" column="model_version"/>
+        <result property="createDate" column="create_date"/>
+        <result property="updateDate" column="update_date"/>
+        <result property="isAdvancedQueryIndex" column="is_advanced_query_index"/>
+        <result property="isCustomQuery" column="is_custom_query"/>
+        <result property="advancedQueryOrder" column="advanced_query_order"/>
+        <result property="isAdvancedQuery" column="is_advanced_query"/>
+        <result property="sortable"    column="sortable"    />
+        <result property="isJumpLink"    column="is_jump_link"    />
+        <result property="menuId"    column="menu_id"    />
+        <result property="menuPath"    column="menu_path"    />
+        <result property="linkReMetaModelId"    column="link_re_meta_model_id"    />
+        <result property="linkReMetaModel"    column="link_re_meta_model"    />
+        <result property="linkReMetaModelCn"    column="link_re_meta_model_cn"    />
+        <result property="linkReColumnId"    column="link_re_column_id"    />
+        <result property="linkReColumnName"    column="link_re_column_name"    />
+        <result property="linkReColumnNameCn"    column="link_re_column_name_cn"    />
+        <result property="isMergeRows"    column="is_merge_rows"    />
+        <result property="relateSearchCondition"    column="relate_search_condition"    />
+        <result property="relateSearchAttributeId"    column="relate_search_attribute_id"    />
+        <result property="relateSearchAttribute"    column="relate_search_attribute"    />
+        <result property="relateSearchName"    column="relate_search_name"    />
+    </resultMap>
+
+    <resultMap type="com.mshz.cloud.tms.business.vo.MetaModelShowVo" id="MetaModelShowVoResult">
+        <result property="columnName" column="column_name"/>
+        <result property="columnNameCn" column="column_name_cn"/>
+        <result property="columnType" column="column_type"/>
+        <result property="columnLength" column="column_length"/>
+        <result property="id" column="id"/>
+        <result property="modelId" column="model_id"/>
+        <result property="columnId" column="column_id"/>
+        <result property="isQuery" column="is_query"/>
+        <result property="isVisible" column="is_visible"/>
+        <result property="sortNum" column="sort_num"/>
+        <result property="modelVersion" column="model_version"/>
+        <result property="createDate" column="create_date"/>
+        <result property="updateDate" column="update_date"/>
+        <result property="isAdvancedQueryIndex" column="is_advanced_query_index"/>
+        <result property="isCustomQuery" column="is_custom_query"/>
+        <result property="advancedQueryOrder" column="advanced_query_order"/>
+        <result property="isAdvancedQuery" column="is_advanced_query"/>
+        <result property="sortable"    column="sortable"    />
+        <result property="isJumpLink"    column="is_jump_link"    />
+        <result property="menuId"    column="menu_id"    />
+        <result property="menuPath"    column="menu_path"    />
+        <result property="linkReMetaModelId"    column="link_re_meta_model_id"    />
+        <result property="linkReMetaModel"    column="link_re_meta_model"    />
+        <result property="linkReMetaModelCn"    column="link_re_meta_model_cn"    />
+        <result property="linkReColumnId"    column="link_re_column_id"    />
+        <result property="linkReColumnName"    column="link_re_column_name"    />
+        <result property="linkReColumnNameCn"    column="link_re_column_name_cn"    />
+        <result property="isMergeRows"    column="is_merge_rows"    />
+        <result property="relateSearchCondition"    column="relate_search_condition"    />
+        <result property="relateSearchAttributeId"    column="relate_search_attribute_id"    />
+        <result property="relateSearchAttribute"    column="relate_search_attribute"    />
+        <result property="relateSearchName"    column="relate_search_name"    />
+        <result property="icon"    column="icon"    />
+        <result property="isStyle"    column="is_style"    />
+        <collection  property="styleList"   javaType="java.util.List"           resultMap="styleResult" />
+    </resultMap>
+    <resultMap id="styleResult" type="TMetaModelShowStyle">
+        <id     property="id"       column="style_id"        />
+        <result property="value"     column="value"      />
+        <result property="style"     column="style"      />
+    </resultMap>
+
+    <resultMap type="com.mshz.cloud.tms.business.vo.MetaDataSyncVo" id="MetaDataSyncResult">
+        <result property="dbUserName" column="db_username"/>
+        <result property="tableName" column="table_name"/>
+        <result property="relationTableAlias" column="relation_table_alias"/>
+        <result property="isExternalConnection" column="is_external_connection"/>
+        <result property="columnName" column="column_name"/>
+        <result property="columnType" column="column_type"/>
+        <result property="modelVersionAlias" column="model_version_alias"/>
+        <result property="targetColumnName" column="target_column_name"/>
+        <result property="targetColumnType" column="target_column_type"/>
+        <result property="relationCondition" column="relation_condition"/>
+        <result property="relationType" column="relation_type"/>
+        <result property="sqlContent" column="sql_content"/>
+        <result property="isPrimaryKey" column="is_primary_key"/>
+        <result property="updateOrNot" column="update_or_not"/>
+    </resultMap>
+
+    <sql id="selectTMetaModelShow">
+        select id, model_id, column_id, is_visible, sort_num, model_version, create_date, update_date, is_query, is_advanced_query_index, is_custom_query, advanced_query_order, is_advanced_query ,sortable , is_jump_link, menu_id, menu_path, link_re_meta_model_id, link_re_meta_model, link_re_meta_model_cn, link_re_column_id, link_re_column_name, link_re_column_name_cn, is_merge_rows, relate_search_condition, relate_search_attribute_id, relate_search_attribute, relate_search_name  from t_meta_model_show
+    </sql>
+
+    <sql id="selectMetaModelShowVo">
+      select t.column_name,t.column_name_cn,t.column_type, t.column_length,
+             s.id, t.model_id, t.id as column_id, s.is_query, s.is_visible, s.sort_num,
+             t.model_version, s.create_date, s.update_date, s.is_advanced_query_index,
+             s.is_custom_query, s.advanced_query_order, s.is_advanced_query,s.sortable,
+             s.is_jump_link, s.menu_id, s.menu_path, s.link_re_meta_model_id, s.link_re_meta_model,
+             s.link_re_meta_model_cn, s.link_re_column_id, s.link_re_column_name, s.link_re_column_name_cn,
+             s.is_merge_rows, s.relate_search_condition, s.relate_search_attribute_id, s.relate_search_attribute, s.relate_search_name,
+             s.icon,s.is_style,ss.id AS style_id,ss.value,ss.style
+      from t_meta_model_tech t
+      left join t_meta_model_show s on s.model_id = t.model_id and s.model_version = t.model_version and s.column_id = t.id
+      LEFT JOIN t_meta_model_show_style ss ON s.model_id = s.model_id AND ss.model_version = ss.model_version AND s.column_id = ss.column_id
+    </sql>
+
+    <select id="selectMetaDataSyncVoList" parameterType="com.mshz.cloud.tms.business.vo.MetaModelShowVo"
+            resultMap="MetaDataSyncResult">
+        select
+        cf.db_username,t.table_name,r.relation_table_alias,r.is_external_connection,co.column_name,co.column_type,v.model_version_alias,te.column_name
+        as target_column_name,
+        te.column_type as target_column_type ,
+        r.relation_condition,r.relation_type,r.sql_content,r.model_id,r.model_version,te.is_primary_key,te.update_or_not
+        from t_meta_model_relation r
+        left join t_db_config cf on r.relation_db_id = cf.id
+        left join t_db_table t on r.relation_table_id = t.id
+        left join t_db_table_column co on r.relation_column_id = co.id
+        left join t_meta_model_tech te on r.model_id = te.model_id and r.model_version= te.model_version
+        and r.column_id = te.id
+        left join t_meta_model_version v on r.model_id = v.model_id and r.model_version=v.model_version
+        where r.model_id=#{modelId} and r.model_version=#{modelVersion} and( (r.relation_type=1 and r.relation_column_id
+        is not null) or r.relation_type=2)
+        <if test="updateOrNot!=null">
+            and te.update_or_not = #{updateOrNot}
+        </if>
+        <if test="isCustomQuery!=null">
+            and r.sql_content is not null and r.sql_content != ''
+        </if>
+        order by r.relation_type desc,r.sql_content desc
+    </select>
+
+    <!--个性化数据审批入库，拼接sql-->
+    <select id="selectMetaDataSyncVoListFiber" parameterType="com.mshz.cloud.tms.business.vo.MetaModelShowVo"
+            resultMap="MetaDataSyncResult">
+        SELECT NULL
+        db_username,
+        mo.table_name AS table_name,
+        't' relation_table_alias,
+        NULL is_external_connection,
+        trim(te.column_name) AS column_name,
+        te.column_type AS column_type,
+        v.model_version_alias,
+        trim(te.column_name) AS target_column_name,
+        te.column_type AS target_column_type,
+        NULL relation_condition,
+        NULL relation_type,
+        NULL sql_content,
+        te.model_id,
+        te.model_version,
+        te.is_primary_key,
+        te.update_or_not
+        FROM
+        t_meta_model_tech te
+        LEFT JOIN t_meta_model mo ON mo.id = te.model_id
+        LEFT JOIN t_meta_model_version v ON te.model_id = v.model_id
+        AND te.model_version COLLATE utf8mb4_unicode_ci = v.model_version
+        WHERE te.model_id = #{modelId}
+        AND te.model_version = #{modelVersion}
+        <if test="updateOrNot!=null">
+            and te.update_or_not = #{updateOrNot}
+        </if>
+    </select>
+
+    <select id="selectMetaModelShowVoList" parameterType="com.mshz.cloud.tms.business.vo.MetaModelShowVo"
+            resultMap="MetaModelShowVoResult">
+        <include refid="selectMetaModelShowVo"/>
+        <where>
+            <if test="columnName != null and columnName != ''">and t.column_name like concat('%', #{columnName}, '%')
+            </if>
+            <if test="columnNameCn != null and columnNameCn != ''">and t.column_name_cn like concat('%',
+                #{columnNameCn},
+                '%')
+            </if>
+            <if test="columnType != null  and columnType != ''">and t.column_type like #concat('%', #{columnType}, '%')
+            </if>
+            <if test="columnLength != null  ">and t.column_length = #{columnLength}</if>
+            <if test="modelId != null ">and t.model_id = #{modelId}</if>
+            <if test="columnId != null ">and t.id = #{columnId}</if>
+            <if test="isQuery != null  and isQuery != ''">and s.is_query = #{isQuery}</if>
+            <if test="isVisible != null  and isVisible != ''">and s.is_visible = #{isVisible}</if>
+            <if test="sortNum != null ">and s.sort_num = #{sortNum}</if>
+            <if test="modelVersion != null  and modelVersion != ''">and t.model_version = #{modelVersion}</if>
+            <if test="createDate != null  and createDate != ''">and s.create_date = #{createDate}</if>
+            <if test="updateDate != null  and updateDate != ''">and s.update_date = #{updateDate}</if>
+            <if test="isAdvancedQueryIndex != null  and isAdvancedQueryIndex != ''">and s.is_advanced_query_index =
+                #{isAdvancedQueryIndex}
+            </if>
+            <if test="isCustomQuery != null  and isCustomQuery != ''">and s.is_custom_query = #{isCustomQuery}</if>
+            <if test="advancedQueryOrder != null  and advancedQueryOrder != ''">and s.advanced_query_order =
+                #{advancedQueryOrder}
+            </if>
+            <if test="isAdvancedQuery != null  and isAdvancedQuery != ''">and s.is_advanced_query = #{isAdvancedQuery}
+            </if>
+            <if test="sortable != null  and sortable != ''"> and s.sortable = #{sortable}</if>
+            <if test="isJumpLink != null  and isJumpLink != ''"> and is_jump_link = #{isJumpLink}</if>
+            <if test="menuId != null "> and s.menu_id = #{menuId}</if>
+            <if test="menuPath != null  and menuPath != ''"> and s.menu_path = #{menuPath}</if>
+            <if test="linkReMetaModelId != null "> and s.link_re_meta_model_id = #{linkReMetaModelId}</if>
+            <if test="linkReMetaModel != null  and linkReMetaModel != ''"> and s.link_re_meta_model = #{linkReMetaModel}</if>
+            <if test="linkReMetaModelCn != null  and linkReMetaModelCn != ''"> and s.link_re_meta_model_cn = #{linkReMetaModelCn}</if>
+            <if test="linkReColumnId != null "> and s.link_re_column_id = #{linkReColumnId}</if>
+            <if test="linkReColumnName != null  and linkReColumnName != ''"> and s.link_re_column_name like concat('%', #{linkReColumnName}, '%')</if>
+            <if test="linkReColumnNameCn != null  and linkReColumnNameCn != ''"> and s.link_re_column_name_cn = #{linkReColumnNameCn}</if>
+            <if test="isMergeRows != null  and isMergeRows != ''"> and s.is_merge_rows = #{isMergeRows}</if>
+            <if test="relateSearchCondition != null  and relateSearchCondition != ''"> and s.relate_search_condition = #{relateSearchCondition}</if>
+            <if test="relateSearchAttributeId != null "> and s.relate_search_attribute_id = #{relateSearchAttributeId}</if>
+            <if test="relateSearchAttribute != null  and relateSearchAttribute != ''"> and s.relate_search_attribute = #{relateSearchAttribute}</if>
+            <if test="relateSearchName != null  and relateSearchName != ''"> and s.relate_search_name like concat('%', #{relateSearchName}, '%')</if>
+        </where>
+        <if test="orderByColumnName!=null">
+            order by ${orderByColumnName} ${orderByType}
+        </if>
+        <if test="orderByColumnName==null">
+            order by s.sort_num asc
+        </if>
+
+    </select>
+
+    <select id="selectMetaModelShowVoListNew" parameterType="com.mshz.cloud.tms.business.vo.MetaModelShowVo"
+            resultMap="MetaModelShowVoResult">
+        <include refid="selectMetaModelShowVo"/>
+        <where>
+            <if test="columnName != null and columnName != ''">and (UPPER(t.column_name) like concat('%', UPPER(#{columnName}), '%') or  t.column_name_cn like concat('%',
+                #{columnName},
+                '%'))
+            </if>
+            <if test="columnNameCn != null and columnNameCn != ''">and (UPPER(t.column_name) like concat('%', UPPER(#{columnNameCn}), '%') or  t.column_name_cn like concat('%',
+                #{columnNameCn},
+                '%'))
+            </if>
+            <if test="columnType != null  and columnType != ''">and t.column_type like #concat('%', #{columnType}, '%')
+            </if>
+            <if test="columnLength != null  ">and t.column_length = #{columnLength}</if>
+            <if test="modelId != null ">and t.model_id = #{modelId}</if>
+            <if test="columnId != null ">and t.id = #{columnId}</if>
+            <if test="isQuery != null  and isQuery != ''">and s.is_query = #{isQuery}</if>
+            <if test="isVisible != null  and isVisible != ''">and s.is_visible = #{isVisible}</if>
+            <if test="sortNum != null ">and s.sort_num = #{sortNum}</if>
+            <if test="modelVersion != null  and modelVersion != ''">and t.model_version = #{modelVersion}</if>
+            <if test="createDate != null  and createDate != ''">and s.create_date = #{createDate}</if>
+            <if test="updateDate != null  and updateDate != ''">and s.update_date = #{updateDate}</if>
+            <if test="isAdvancedQueryIndex != null  and isAdvancedQueryIndex != ''">and s.is_advanced_query_index =
+                #{isAdvancedQueryIndex}
+            </if>
+            <if test="isCustomQuery != null  and isCustomQuery != ''">and s.is_custom_query = #{isCustomQuery}</if>
+            <if test="advancedQueryOrder != null  and advancedQueryOrder != ''">and s.advanced_query_order =
+                #{advancedQueryOrder}
+            </if>
+            <if test="isAdvancedQuery != null  and isAdvancedQuery != ''">and s.is_advanced_query = #{isAdvancedQuery}
+            </if>
+            <if test="sortable != null  and sortable != ''"> and s.sortable = #{sortable}</if>
+            <if test="isJumpLink != null  and isJumpLink != ''"> and s.is_jump_link = #{isJumpLink}</if>
+            <if test="menuId != null "> and s.menu_id = #{menuId}</if>
+            <if test="menuPath != null  and menuPath != ''"> and s.menu_path = #{menuPath}</if>
+            <if test="linkReMetaModelId != null "> and s.link_re_meta_model_id = #{linkReMetaModelId}</if>
+            <if test="linkReMetaModel != null  and linkReMetaModel != ''"> and s.link_re_meta_model = #{linkReMetaModel}</if>
+            <if test="linkReMetaModelCn != null  and linkReMetaModelCn != ''"> and s.link_re_meta_model_cn = #{linkReMetaModelCn}</if>
+            <if test="linkReColumnId != null "> and s.link_re_column_id = #{linkReColumnId}</if>
+            <if test="linkReColumnName != null  and linkReColumnName != ''"> and s.link_re_column_name like concat('%', #{linkReColumnName}, '%')</if>
+            <if test="linkReColumnNameCn != null  and linkReColumnNameCn != ''"> and s.link_re_column_name_cn = #{linkReColumnNameCn}</if>
+            <if test="isMergeRows != null  and isMergeRows != ''"> and s.is_merge_rows = #{isMergeRows}</if>
+            <if test="relateSearchCondition != null  and relateSearchCondition != ''"> and s.relate_search_condition = #{relateSearchCondition}</if>
+            <if test="relateSearchAttributeId != null "> and s.relate_search_attribute_id = #{relateSearchAttributeId}</if>
+            <if test="relateSearchAttribute != null  and relateSearchAttribute != ''"> and s.relate_search_attribute = #{relateSearchAttribute}</if>
+            <if test="relateSearchName != null  and relateSearchName != ''"> and s.relate_search_name like concat('%', #{relateSearchName}, '%')</if>
+        </where>
+        <if test="orderByColumnName!=null">
+            order by ${orderByColumnName} ${orderByType}
+        </if>
+        <if test="orderByColumnName==null">
+            order by s.sort_num asc
+        </if>
+
+    </select>
+
+    <select id="selectTMetaModelShowList" parameterType="TMetaModelShow"
+            resultMap="TMetaModelShowResult">
+        <include refid="selectTMetaModelShow"/>
+        <where>
+            <if test="modelId != null ">and model_id = #{modelId}</if>
+            <if test="columnId != null ">and column_id = #{columnId}</if>
+            <if test="isQuery != null  and isQuery != ''">and is_query = #{isQuery}</if>
+            <if test="isVisible != null  and isVisible != ''">and is_visible = #{isVisible}</if>
+            <if test="sortNum != null ">and sort_num = #{sortNum}</if>
+            <if test="modelVersion != null  and modelVersion != ''">and model_version = #{modelVersion}</if>
+            <if test="createDate != null  and createDate != ''">and create_date = #{createDate}</if>
+            <if test="updateDate != null  and updateDate != ''">and update_date = #{updateDate}</if>
+            <if test="isAdvancedQueryIndex != null  and isAdvancedQueryIndex != ''">and is_advanced_query_index =
+                #{isAdvancedQueryIndex}
+            </if>
+            <if test="isCustomQuery != null  and isCustomQuery != ''">and is_custom_query = #{isCustomQuery}</if>
+            <if test="advancedQueryOrder != null  and advancedQueryOrder != ''">and advanced_query_order =
+                #{advancedQueryOrder}
+            </if>
+            <if test="isAdvancedQuery != null  and isAdvancedQuery != ''">and is_advanced_query = #{isAdvancedQuery}
+            </if>
+            <if test="sortable != null  and sortable != ''"> and sortable = #{sortable}</if>
+            <if test="isJumpLink != null  and isJumpLink != ''"> and is_jump_link = #{isJumpLink}</if>
+            <if test="menuId != null "> and menu_id = #{menuId}</if>
+            <if test="menuPath != null  and menuPath != ''"> and menu_path = #{menuPath}</if>
+            <if test="linkReMetaModelId != null "> and link_re_meta_model_id = #{linkReMetaModelId}</if>
+            <if test="linkReMetaModel != null  and linkReMetaModel != ''"> and link_re_meta_model = #{linkReMetaModel}</if>
+            <if test="linkReMetaModelCn != null  and linkReMetaModelCn != ''"> and link_re_meta_model_cn = #{linkReMetaModelCn}</if>
+            <if test="linkReColumnId != null "> and link_re_column_id = #{linkReColumnId}</if>
+            <if test="linkReColumnName != null  and linkReColumnName != ''"> and link_re_column_name like concat('%', #{linkReColumnName}, '%')</if>
+            <if test="linkReColumnNameCn != null  and linkReColumnNameCn != ''"> and link_re_column_name_cn = #{linkReColumnNameCn}</if>
+            <if test="isMergeRows != null  and isMergeRows != ''"> and is_merge_rows = #{isMergeRows}</if>
+            <if test="relateSearchCondition != null  and relateSearchCondition != ''"> and relate_search_condition = #{relateSearchCondition}</if>
+            <if test="relateSearchAttributeId != null "> and relate_search_attribute_id = #{relateSearchAttributeId}</if>
+            <if test="relateSearchAttribute != null  and relateSearchAttribute != ''"> and relate_search_attribute = #{relateSearchAttribute}</if>
+            <if test="relateSearchName != null  and relateSearchName != ''"> and relate_search_name like concat('%', #{relateSearchName}, '%')</if>
+        </where>
+        order by sort_num asc
+    </select>
+
+    <select id="selectTMetaModelShowById" parameterType="Long" resultMap="MetaModelShowVoResult">
+        <include refid="selectMetaModelShowVo"/>
+        where s.id = #{id}
+    </select>
+
+    <!--展示配置表复制，根据modelId和版本号-->
+    <select id="selectMetaModelShowListCopy" resultType="TMetaModelShow">
+        select model_id, column_id, is_query, is_visible, sort_num, create_date, is_advanced_query_index,
+        is_custom_query, advanced_query_order, is_advanced_query, sortable, is_jump_link, menu_id, menu_path, link_re_meta_model_id, link_re_meta_model, link_re_meta_model_cn, link_re_column_id, link_re_column_name, link_re_column_name_cn, is_merge_rows, relate_search_condition, relate_search_attribute_id, relate_search_attribute, relate_search_name  from t_meta_model_show
+        <where>
+            <if test="modelId != null ">and model_id = #{modelId}</if>
+            <if test="modelVersion != null  and modelVersion != ''">and model_version = #{modelVersion}</if>
+        </where>
+    </select>
+    <!--展示配置表新增-->
+    <insert id="insertTMetaModelShow" parameterType="TMetaModelShow">
+        insert into t_meta_model_show
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="modelId != null">model_id,</if>
+            <if test="columnId != null">column_id,</if>
+            <if test="isQuery != null">is_query,</if>
+            <if test="isVisible != null">is_visible,</if>
+            <if test="sortNum != null">sort_num,</if>
+            <if test="modelVersion != null">model_version,</if>
+            <if test="createDate != null">create_date,</if>
+            <if test="updateDate != null">update_date,</if>
+            <if test="isAdvancedQueryIndex != null">is_advanced_query_index,</if>
+            <if test="isCustomQuery != null">is_custom_query,</if>
+            <if test="advancedQueryOrder != null">advanced_query_order,</if>
+            <if test="isAdvancedQuery != null">is_advanced_query,</if>
+            <if test="sortable != null">sortable,</if>
+            <if test="isJumpLink != null">is_jump_link,</if>
+            <if test="menuId != null">menu_id,</if>
+            <if test="menuPath != null">menu_path,</if>
+            <if test="linkReMetaModelId != null">link_re_meta_model_id,</if>
+            <if test="linkReMetaModel != null">link_re_meta_model,</if>
+            <if test="linkReMetaModelCn != null">link_re_meta_model_cn,</if>
+            <if test="linkReColumnId != null">link_re_column_id,</if>
+            <if test="linkReColumnName != null">link_re_column_name,</if>
+            <if test="linkReColumnNameCn != null">link_re_column_name_cn,</if>
+            <if test="isMergeRows != null">is_merge_rows,</if>
+            <if test="relateSearchCondition != null">relate_search_condition,</if>
+            <if test="relateSearchAttributeId != null">relate_search_attribute_id,</if>
+            <if test="relateSearchAttribute != null">relate_search_attribute,</if>
+            <if test="relateSearchName != null">relate_search_name,</if>
+            <if test="icon != null">icon,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="modelId != null">#{modelId},</if>
+            <if test="columnId != null">#{columnId},</if>
+            <if test="isQuery != null">#{isQuery},</if>
+            <if test="isVisible != null">#{isVisible},</if>
+            <if test="sortNum != null">#{sortNum},</if>
+            <if test="modelVersion != null">#{modelVersion},</if>
+            <if test="createDate != null">#{createDate},</if>
+            <if test="updateDate != null">#{updateDate},</if>
+            <if test="isAdvancedQueryIndex != null">#{isAdvancedQueryIndex},</if>
+            <if test="isCustomQuery != null">#{isCustomQuery},</if>
+            <if test="advancedQueryOrder != null">#{advancedQueryOrder},</if>
+            <if test="isAdvancedQuery != null">#{isAdvancedQuery},</if>
+            <if test="sortable != null">#{sortable},</if>
+            <if test="isJumpLink != null">#{isJumpLink},</if>
+            <if test="menuId != null">#{menuId},</if>
+            <if test="menuPath != null">#{menuPath},</if>
+            <if test="linkReMetaModelId != null">#{linkReMetaModelId},</if>
+            <if test="linkReMetaModel != null">#{linkReMetaModel},</if>
+            <if test="linkReMetaModelCn != null">#{linkReMetaModelCn},</if>
+            <if test="linkReColumnId != null">#{linkReColumnId},</if>
+            <if test="linkReColumnName != null">#{linkReColumnName},</if>
+            <if test="linkReColumnNameCn != null">#{linkReColumnNameCn},</if>
+            <if test="isMergeRows != null">#{isMergeRows},</if>
+            <if test="relateSearchCondition != null">#{relateSearchCondition},</if>
+            <if test="relateSearchAttributeId != null">#{relateSearchAttributeId},</if>
+            <if test="relateSearchAttribute != null">#{relateSearchAttribute},</if>
+            <if test="relateSearchName != null">#{relateSearchName},</if>
+            <if test="icon != null">#{icon},</if>
+        </trim>
+    </insert>
+    <!--展示配置表复制-新增展示配置-->
+    <insert id="insertTMetaModelShowList">
+        <foreach collection="list" item="item" index="index" separator=";">
+            insert into t_meta_model_show
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="item.id != null">id,</if>
+                <if test="item.modelId != null">model_id,</if>
+                <if test="item.columnId != null">column_id,</if>
+                <if test="item.isQuery != null">is_query,</if>
+                <if test="item.isVisible != null">is_visible,</if>
+                <if test="item.sortNum != null">sort_num,</if>
+                <if test="item.modelVersion != null">model_version,</if>
+                <if test="item.createDate != null">create_date,</if>
+                <if test="item.updateDate != null">update_date,</if>
+                <if test="item.isAdvancedQueryIndex != null">is_advanced_query_index,</if>
+                <if test="item.isCustomQuery != null">is_custom_query,</if>
+                <if test="item.advancedQueryOrder != null">advanced_query_order,</if>
+                <if test="item.isAdvancedQuery != null">is_advanced_query,</if>
+                <if test="item.sortable != null">sortable,</if>
+                <if test="item.isJumpLink != null">is_jump_link,</if>
+                <if test="item.menuId != null">menu_id,</if>
+                <if test="item.menuPath != null">menu_path,</if>
+                <if test="item.linkReMetaModelId != null">link_re_meta_model_id,</if>
+                <if test="item.linkReMetaModel != null">link_re_meta_model,</if>
+                <if test="item.linkReMetaModelCn != null">link_re_meta_model_cn,</if>
+                <if test="item.linkReColumnId != null">link_re_column_id,</if>
+                <if test="item.linkReColumnName != null">link_re_column_name,</if>
+                <if test="item.linkReColumnNameCn != null">link_re_column_name_cn,</if>
+                <if test="item.isMergeRows != null">is_merge_rows,</if>
+                <if test="item.relateSearchCondition != null">relate_search_condition,</if>
+                <if test="item.relateSearchAttributeId != null">relate_search_attribute_id,</if>
+                <if test="item.relateSearchAttribute != null">relate_search_attribute,</if>
+                <if test="item.relateSearchName != null">relate_search_name,</if>
+                <if test="item.icon != null">icon,</if>
+            </trim>
+            <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="item.id != null">#{item.id},</if>
+                <if test="item.modelId != null">#{item.modelId},</if>
+                <if test="item.columnId != null">#{item.columnId},</if>
+                <if test="item.isQuery != null">#{item.isQuery},</if>
+                <if test="item.isVisible != null">#{item.isVisible},</if>
+                <if test="item.sortNum != null">#{item.sortNum},</if>
+                <if test="item.modelVersion != null">#{item.modelVersion},</if>
+                <if test="item.createDate != null">#{item.createDate},</if>
+                <if test="item.updateDate != null">#{item.updateDate},</if>
+                <if test="item.isAdvancedQueryIndex != null">#{item.isAdvancedQueryIndex},</if>
+                <if test="item.isCustomQuery != null">#{item.isCustomQuery},</if>
+                <if test="item.advancedQueryOrder != null">#{item.advancedQueryOrder},</if>
+                <if test="item.isAdvancedQuery != null">#{item.isAdvancedQuery},</if>
+                <if test="item.sortable != null">#{item.sortable},</if>
+                <if test="item.isJumpLink != null">#{item.isJumpLink},</if>
+                <if test="item.menuId != null">#{item.menuId},</if>
+                <if test="item.menuPath != null">#{item.menuPath},</if>
+                <if test="item.linkReMetaModelId != null">#{item.linkReMetaModelId},</if>
+                <if test="item.linkReMetaModel != null">#{item.linkReMetaModel},</if>
+                <if test="item.linkReMetaModelCn != null">#{item.linkReMetaModelCn},</if>
+                <if test="item.linkReColumnId != null">#{item.linkReColumnId},</if>
+                <if test="item.linkReColumnName != null">#{item.linkReColumnName},</if>
+                <if test="item.linkReColumnNameCn != null">#{item.linkReColumnNameCn},</if>
+                <if test="item.isMergeRows != null">#{isMergeRows},</if>
+                <if test="item.relateSearchCondition != null">#{relateSearchCondition},</if>
+                <if test="item.relateSearchAttributeId != null">#{relateSearchAttributeId},</if>
+                <if test="item.relateSearchAttribute != null">#{relateSearchAttribute},</if>
+                <if test="item.relateSearchName != null">#{relateSearchName},</if>
+                <if test="item.icon != null">#{icon},</if>
+            </trim>
+        </foreach>
+    </insert>
+
+    <update id="updateTMetaModelShow" parameterType="TMetaModelShow">
+        update t_meta_model_show
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="modelId != null">model_id = #{modelId},</if>
+            <if test="columnId != null">column_id = #{columnId},</if>
+            <if test="isQuery != null">is_query = #{isQuery},</if>
+            <if test="isVisible != null">is_visible = #{isVisible},</if>
+            <if test="sortNum != null">sort_num = #{sortNum},</if>
+            <if test="modelVersion != null">model_version = #{modelVersion},</if>
+            <if test="createDate != null">create_date = #{createDate},</if>
+            <if test="updateDate != null">update_date = #{updateDate},</if>
+            <if test="isAdvancedQueryIndex != null">is_advanced_query_index = #{isAdvancedQueryIndex},</if>
+            <if test="isCustomQuery != null">is_custom_query = #{isCustomQuery},</if>
+            <if test="advancedQueryOrder != null">advanced_query_order = #{advancedQueryOrder},</if>
+            <if test="isAdvancedQuery != null">is_advanced_query = #{isAdvancedQuery},</if>
+            <if test="sortable != null">sortable = #{sortable},</if>
+            <if test="isJumpLink != null">is_jump_link = #{isJumpLink},</if>
+            <if test="menuId != null">menu_id = #{menuId},</if>
+            <if test="menuPath != null">menu_path = #{menuPath},</if>
+            <if test="linkReMetaModelId != null">link_re_meta_model_id = #{linkReMetaModelId},</if>
+            <if test="linkReMetaModel != null">link_re_meta_model = #{linkReMetaModel},</if>
+            <if test="linkReMetaModelCn != null">link_re_meta_model_cn = #{linkReMetaModelCn},</if>
+            <if test="linkReColumnId != null">link_re_column_id = #{linkReColumnId},</if>
+            <if test="linkReColumnName != null">link_re_column_name = #{linkReColumnName},</if>
+            <if test="linkReColumnNameCn != null">link_re_column_name_cn = #{linkReColumnNameCn},</if>
+            <if test="isMergeRows != null">is_merge_rows = #{isMergeRows},</if>
+            <if test="relateSearchCondition != null">relate_search_condition = #{relateSearchCondition},</if>
+            <if test="relateSearchAttributeId != null">relate_search_attribute_id = #{relateSearchAttributeId},</if>
+            <if test="relateSearchAttribute != null">relate_search_attribute = #{relateSearchAttribute},</if>
+            <if test="relateSearchName != null">relate_search_name = #{relateSearchName},</if>
+            <if test="icon != null">icon = #{icon},</if>
+            <if test="isStyle != null">is_style = #{isStyle},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTMetaModelShowById" parameterType="Long">
+        delete from t_meta_model_show where id = #{id}
+    </delete>
+
+    <delete id="deleteTMetaModelShowByModelId">
+        delete from t_meta_model_show where model_id = #{modelId} and column_id = #{columnId}
+    </delete>
+
+
+    <delete id="deleteTMetaModelShowByIds" parameterType="String">
+        delete from t_meta_model_show where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+
+    <select id="selectBasicInformation" resultType="java.util.Map">
+        SELECT table_name AS tableName, table_name_cn AS tableNameCn,( SELECT category_name FROM t_meta_model_category WHERE id = category_name_id ) AS categoryName,
+               create_date AS createDate
+        FROM
+            t_meta_model
+        WHERE
+            id = #{modelId}
+    </select>
+</mapper>

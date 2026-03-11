@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mshz.cloud.tms.business.mapper.JobListMapper">
+
+    <select id="getOpticalList" resultType="string">
+        select ID from sg_tccon_tcopticalroad_b
+    </select>
+    <select id="selectChannelNumList" resultType="java.util.Map">
+        SELECT
+            t1.ID ID,
+            COUNT(  t2.CHANNEL_ID ) channelNum
+        FROM
+            sg_tccon_tcopticalroad_b t1
+                LEFT JOIN sg_tccon_tcopticalroad_r_tcchannelseg t2 ON t2.OPTICALROAD_ID = t1.ID
+        GROUP BY
+            t1.ID
+    </select>
+    <select id="selectSegNumList" resultType="java.util.Map">
+        SELECT
+            t1.ID ID,
+            COUNT( t3.FIBERSEG_ID ) segNum
+        FROM
+            sg_tccon_tcopticalroad_b t1
+                LEFT JOIN ( SELECT ROUTER_ID, FIBER_ID FROM sg_tccon_tcrouter_r_fiber GROUP BY ROUTER_ID, FIBER_ID ) t2 ON t2.ROUTER_ID = t1.ID
+                LEFT JOIN SG_TCDEV_FIBERSEG_R_FIBER t3 ON t3.FIBER_ID = t2.FIBER_ID
+        GROUP BY
+            t1.ID
+    </select>
+    <select id="selectSegLineNumList" resultType="java.util.Map">
+        SELECT
+            t1.ID ID,
+            COUNT( t3.FIBERSEGLINE_ID ) segLineNum
+        FROM
+            sg_tccon_tcopticalroad_b t1
+                LEFT JOIN sg_tccon_tcrouter_r_fiber t2 ON t2.ROUTER_ID = t1.ID
+                LEFT JOIN sg_tccon_fiberline_r_fibersegline t3 ON t3.FIBERLINE_ID = t2.LINE_ID
+        GROUP BY
+            t1.ID
+    </select>
+    <select id="selectRouteLengthList" resultType="java.util.Map">
+        SELECT
+            t1.ID ID,
+            sum( FIBER_LENGTH ) routeLength
+        FROM
+            sg_tccon_tcopticalroad_b t1
+                LEFT JOIN ( SELECT ROUTER_ID, FIBER_ID FROM sg_tccon_tcrouter_r_fiber GROUP BY ROUTER_ID, FIBER_ID ) t2 ON t2.ROUTER_ID = t1.ID
+                LEFT JOIN SG_TCDEV_FIBER_B t3 ON t3.ID = t2.FIBER_ID
+        GROUP BY
+            t1.ID
+    </select>
+    <select id="selectSgTcconTcopticalroadSById" resultType="string">
+        select ID from SG_TCCON_TCOPTICALROAD_S where ID = #{optical}
+    </select>
+
+    <insert id="insertSgTcconTcopticalroadS">
+        insert into SG_TCCON_TCOPTICALROAD_S (ID,CHANNEL_NUM,SEG_NUM,SEG_LINE_NUM,ROUTE_LENGTH,STAMP,create_date,update_date,OWNER) values (#{id},#{channelNum},#{segNum},#{segLineNum},#{routeLength},now(),now(),now(),'330000')
+    </insert>
+
+    <update id="updataSgTcconTcopticalroadS">
+        update SG_TCCON_TCOPTICALROAD_S set
+                                            CHANNEL_NUM = #{channelNum},
+                                            SEG_NUM = #{segNum},
+                                            SEG_LINE_NUM = #{segLineNum},
+                                            ROUTE_LENGTH = #{routeLength},
+                                            STAMP = now(),
+                                            update_date =now()
+        where ID = #{id}
+    </update>
+</mapper>

@@ -1,0 +1,79 @@
+spring:
+  application:
+    # 应用名称
+    name: txqj-zw-cloud-business
+  profiles:
+    # 环境配置
+    active: '@profiles.active@'
+  main:
+    allow-bean-definition-overriding: true
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+        namespace: 09091c07-8c47-46c3-9633-5673db21a9b0
+        group: DEFAULT_GROUP
+#        username: nacos
+#        password: nacos
+      config:
+        server-addr: localhost:8848
+        namespace: 09091c07-8c47-46c3-9633-5673db21a9b0
+        group: DEFAULT_GROUP
+#        username: nacos
+#        password: nacos
+        # 配置文件格式
+        file-extension: yml
+        # 共享配置
+        shared-configs:
+          - application-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
+
+server:
+  servlet:
+    session:
+      timeout: 30m
+#    context-path: /${spring.application.name}
+  compression:
+    enabled: true
+    mime-types: application/json,application/xml
+    min-response-size: 1024
+  tomcat:
+    accept-count: 1200
+    max-threads: 600
+    min-spare-threads: 200
+    max-connections: 15000
+    connection-timeout: 20000
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 3200000
+        readTimeout: 3200000
+  httpclient:
+    connection-timeout: 3200000
+
+logging:
+  level:
+    com:
+      alibaba:
+        nacos:
+          client:
+            naming: warn
+    com.mshz.cloud.tms.business.mapper: debug
+
+mybatis-plus:
+  mapper-locations: classpath*:mapper/**/*.xml
+  type-aliases-package: com.mshz.cloud.tms.business.entity, com.mshz.cloud.tms.business.vo
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+    call-setters-on-nulls: true
+    jdbc-type-for-null: 'null'
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      db-column-underline: true
+      logic-delete-field: isDel
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+    refresh-mapper: false

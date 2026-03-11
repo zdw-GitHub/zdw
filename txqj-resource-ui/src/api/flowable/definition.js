@@ -1,0 +1,162 @@
+import request from '@/utils/request'
+
+// 查询流程定义列表
+export function listDefinition(query) {
+  return request({
+    url: '/flowable/flowable/definition/list',
+    method: 'get',
+    params: query
+  })
+}
+
+// 部署流程实例
+export function definitionStart(procDefId,data) {
+  return request({
+    url: '/datatask/processSubmission/' + procDefId,
+    method: 'post',
+    data: data
+  })
+}
+// 添加表单待处理数据
+export function definitionUpdate(data) {
+  return request({
+    url: '/datatask/updates',
+    method: 'post',
+    data: data
+  })
+}
+// 获取流程变量
+export function getProcessVariables(taskId) {
+  return request({
+    url: '/flowable/flowable/task/processVariables/' + taskId,
+    method: 'get'
+  })
+}
+
+// 激活/挂起流程
+export function updateState(params) {
+  return request({
+    url: '/flowable/flowable/definition/updateState',
+    method: 'put',
+    params: params
+  })
+}
+
+// 指定流程办理人员列表
+export function userList(query) {
+  return request({
+    url: '/flowable/flowable/definition/userList',
+    method: 'get',
+    params: query
+  })
+}
+
+// 指定流程办理组列表
+export function roleList(query) {
+  return request({
+    url: '/flowable/flowable/definition/roleList',
+    method: 'get',
+    params: query
+  })
+}
+
+// 读取xml文件
+export function readXml(deployId) {
+  return request({
+    url: '/flowable/flowable/definition/readXml/' + deployId,
+    method: 'get'
+  })
+}
+// 读取image文件
+export function readImage(deployId) {
+  return request({
+    url: '/flowable/flowable/definition/readImage/' + deployId,
+    method: 'get'
+  })
+}
+
+// 读取image文件
+export function getFlowViewer(procInsId) {
+  return request({
+    url: '/flowable/flowable/task/flowViewer/' + procInsId,
+    method: 'get'
+  })
+}
+
+// 读取xml文件
+export function saveXml(data) {
+  return request({
+    url: '/flowable/flowable/definition/save',
+    method: 'post',
+    data: data
+  })
+}
+
+// 新增流程定义
+export function addDeployment(data) {
+  return request({
+    url: '/deployment',
+    method: 'post',
+    data: data
+  })
+}
+
+// 修改流程定义
+export function updateDeployment(data) {
+  return request({
+    url: '/deployment',
+    method: 'put',
+    data: data
+  })
+}
+
+// 删除流程定义
+export function delDeployment(query) {
+  return request({
+    url: '/flowable/flowable/definition/delete/',
+    method: 'delete',
+    params: query
+  })
+}
+
+// 导出流程定义
+export function exportDeployment(query) {
+  return request({
+    url: '/deployment/export',
+    method: 'get',
+    params: query
+  })
+}
+
+export function gltxhStart(procDefId, data) {
+  return request({
+    url: '/fiberedit/fiberedit-flow/startFlowForFiber/' + procDefId,
+    method: 'post',
+    data: data
+  })
+}
+
+// getTopoTaskIdApi
+// /fiberedit/flow/getFlowId/[flowIdl
+export function getTopoTaskIdApi(query) {
+  return request({
+    url: '/fiberedit/fiberedit/flow/getFlowId/' + query,
+    method: 'get',
+  })
+}
+//获取最新版本数据维护流程信息
+export function latestPdConversion() {
+  return request({
+    url: '/flowable/flowable/definition/latestPdConversion?procDefCategory=process_data_conversion',
+    method: 'get',
+  })
+}
+
+//查询唯一标识字段
+export function getMetaDataUidByModelId(data) {
+  return request({
+    url: '/uid/getMetaDataUidByModelId',
+    method: 'get',
+    params: data
+  })
+}

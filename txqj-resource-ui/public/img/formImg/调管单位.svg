@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32.4193667px" height="32.4193667px" viewBox="0 0 32.4193667 32.4193667" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>调管单位</title>
+    <defs>
+        <path d="M3,0 L29.4193667,0 L32.4193667,3 L32.4193667,29.4193667 L29.4193667,32.4193667 L3,32.4193667 L0,29.4193667 L0,3 L3,0 Z" id="path-1"></path>
+        <filter x="-6.2%" y="-6.2%" width="112.3%" height="112.3%" filterUnits="objectBoundingBox" id="filter-2">
+            <feGaussianBlur stdDeviation="2" in="SourceAlpha" result="shadowBlurInner1"></feGaussianBlur>
+            <feOffset dx="0" dy="0" in="shadowBlurInner1" result="shadowOffsetInner1"></feOffset>
+            <feComposite in="shadowOffsetInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0.0274509804   0 0 0 0 0.607843137   0 0 0 0 0.623529412  0 0 0 0.455942861 0" type="matrix" in="shadowInnerInner1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="页面-5" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="2备份" transform="translate(-612.588847, -755.987311)">
+            <g id="编组-20" transform="translate(536.911153, 202.500000)">
+                <g id="编组-16" transform="translate(75.677695, 104.030885)">
+                    <g id="编组-18备份-10" transform="translate(0.000000, 446.666109)">
+                        <g id="调管单位" transform="translate(0.000000, 2.790317)">
+                            <g id="矩形">
+                                <use fill-opacity="0.64" fill="#EDFEFF" fill-rule="evenodd" xlink:href="#path-1"></use>
+                                <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                                <path stroke="#86CDCF" stroke-width="1" d="M29.2122599,0.5 L31.9193667,3.20710678 L31.9193667,29.2122599 L29.2122599,31.9193667 L3.20710678,31.9193667 L0.5,29.2122599 L0.5,3.20710678 L3.20710678,0.5 L29.2122599,0.5 Z" stroke-linejoin="square"></path>
+                            </g>
+                            <g id="编组" transform="translate(7.709820, 7.709683)" fill="#079B9F" fill-rule="nonzero">
+                                <path d="M16.9997273,11.6177105 L12.1363852,8.65478947 L12.1363852,10.3547895 L3.81533254,10.3547895 C3.0265218,10.3378297 2.399128,9.68766242 2.41029232,8.89874838 C2.42145664,8.10983433 3.06699721,7.477681 3.85597199,7.48304926 C4.64494676,7.48841752 5.2818255,8.12929655 5.28225359,8.91828947 L5.28225359,9.68865789 L7.62870095,9.68865789 L7.62870095,8.91739474 C7.66124301,7.36753427 6.75263777,5.9521062 5.32995343,5.3363987 C3.9072691,4.7206912 2.25346266,5.02716204 1.14586636,6.11176192 C0.0382700635,7.19636179 -0.302826807,8.84337516 0.282900191,10.2786627 C0.86862719,11.7139502 2.2646831,12.6520483 3.81488517,12.6520263 L12.1359378,12.6520263 L12.1359378,14.5810789 L16.9997273,11.6177105 Z M5.32788517,17 L7.6747799,17 L7.6747799,13.3763158 L5.32788517,13.3763158 L5.32788517,17 Z M8.52299043,17 L10.8703325,17 L10.8703325,13.3763158 L8.52388517,13.3763158 L8.52299043,17 Z M8.52299043,9.6756842 L10.8703325,9.6756842 L10.8703325,4.76134212 L12.6307273,4.76134212 L9.60472728,0 L6.58051675,4.76134212 L8.52612202,4.76134212 L8.52612202,9.6756842 L8.52299043,9.6756842 Z" id="形状"></path>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

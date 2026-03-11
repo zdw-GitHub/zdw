@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>拓扑</title>
+  <style type="text/css">
+    body, #channel {
+      margin: 0 auto;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      overflow: hidden;
+    }
+  </style>
+  <script src="../js/jquery-2.1.4.min.js"></script>
+  <script src="../js/twaver.js"></script>
+  <script src="../js/license.js"></script>
+  <script src="../js/demo.js"></script>
+</head>
+<body>
+  <div id="fiberLine">
+  </div>
+</body>
+
+<script>
+  var box
+  var network
+
+  $(function () {
+    init()
+  })
+  function init () {
+    network = new twaver.network.Network();
+
+    network.setLinkFlowEnabled(true);
+    network.setKeyboardRemoveEnabled(false);//屏蔽键盘delete操作
+    network.setTransparentSelectionEnable(true)/* 设置点击网元的透明部分网元是否能被选中，暂时没发现去掉有什么影响 */
+    network.setZoom(1);
+    document.onmousewheel=function(event){
+      event=event||widow.event;
+      if(event.wheelDelta>0 || event.detail<0){
+        network.setZoom(network.getZoom() + 0.1)
+      }else{
+        network.setZoom(network.getZoom() - 0.1)
+      }
+    }
+    box = network.getElementBox();
+    var networkDom = network.getView();
+    networkDom.style.width = "100%";
+    networkDom.style.height = "100%";
+    $('#fiberLine').append(networkDom)
+
+    registerImage()
+    setRightClick()
+  }
+  //注册图片对象
+  function registerNormalImage( url,name, width, height) {
+    var image = new Image();
+    image.src = url;
+    image.onload = function () {
+      twaver.Util.registerImage(name, image, width, height, true);
+      image.onload = null;
+      network.invalidateElementUIs();
+    };
+  }
+  // 传输拓扑图注册图片
+  function registerImage() {
+    registerNormalImage('../img/duanZiAZ.png', 'node')
+  }
+
+  // 刷新toop
+  function reSetTopo (node, link) {
+    if (
+      node == undefined ||
+      link == undefined
+    ) {
+      return
+    }
+    var oldArr = box.getDatas()._as
+    for (let i = 0; oldArr.length > 0; i) {
+      box.remove(oldArr[i])
+    }
+    node.forEach((item, index, arr) => {
+      addNode(item, index)
+    })
+    link.forEach((item, index, arr) => {
+      addLink(item)
+    })
+  }
+  // 新增点
+  function addNode(item, index) {
+    if (
+      item.nodeId !== undefined &&
+      item.nodeId !== null &&
+      item.nodeId !== ''
+    ) {
+      if (box.getDataById(item.nodeId) !== undefined) {
+        return
+      }
+      var node = new twaver.Node(item.nodeId)
+      if (!item.positionX || !item.positionY) {
+        node.setLocation(100 + 300 * index, 100)
+      } else {
+        node.setLocation(parseFloat(item.positionX), parseFloat(item.positionY))
+      }
+      node.setName(item.nodeName)
+      node.setImage('node')
+      node.setWidth(30);
+      node.setHeight(30);
+      node.setClient('data', item)
+      node.setClient('type', 'node')
+      box.add(node)
+    }
+  }
+  // 新增线
+  function addLink (item) {
+    if (
+      item.ID === undefined ||
+      item.ID === null ||
+      item.ID === '' ||
+      item.aResId === undefined ||
+      item.aResId === null ||
+      item.aResId === '' ||
+      item.zResId === undefined ||
+      item.zResId === null ||
+      item.zResId === '' ||
+      box.getDataById(item.aResId) == undefined ||
+      box.getDataById(item.zResId) == undefined
+    ) return
+    if (box.getDataById(item.ID) !== undefined) {
+      return
+    }
+    var link = new twaver.Link(item.ID)
+    link.setStyle('link.bundle.gap', 30)
+    link.setStyle('link.color', '#67C23A')
+    // 此注释禁止删除 因为没找到怎么设置告警线颜色 所以直接在twaver.js中(源码)中修改了 改为#0084FF
+    link.setStyle('select.color', '#67C23A')
+    link.setStyle('select.style', 'border')
+    link.setName(item.name)
+    link.setClient('data', item)
+    link.setClient('type', 'link')
+    var from = box.getDataById(item.aResId)
+    var to = box.getDataById(item.zResId)
+    link.setFromNode(from)
+    link.setToNode(to)
+    box.add(link)
+  }
+</script>
+</html>

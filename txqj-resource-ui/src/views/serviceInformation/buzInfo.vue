@@ -1,0 +1,458 @@
+<template>
+  <div style="position: relative">
+    <el-switch style="position: absolute; top: 10px; right: 20px; z-index: 999" v-model="isEditMode"
+               v-if="activeName == '业务详情'" active-color="#13ce66"
+    ></el-switch>
+
+    <el-tabs v-model="activeName" @tab-click="handleClick">
+      <el-tab-pane label="业务详情" name="业务详情">
+        <editData
+          ref="child"
+          :modelObj="modelObj"
+          :dataObj="dataObj"
+          :customStyle="{height:isEditMode ? '60vh' : '65vh'}"
+          :customClass="pattern ? ['el-dialog-div'] : ['el-dialog-div','oneLineOne']"
+        >
+        </editData>
+        <div class="dialog-footer" v-if="isEditMode">
+          <el-button style="float: right;margin: 10px" type="primary" @click="submitForm()">确 定</el-button>
+        </div>
+      </el-tab-pane>
+      <el-tab-pane label="通道列表" name="通道列表">
+        <carryingChannelLink
+          v-if="show1"
+          style="height: 65vh"
+          :id="dataObj.ID"
+          :tableName="tableName"
+          :pattern="pattern"
+          :openNewPage="false"
+        >
+        </carryingChannelLink>
+      </el-tab-pane>
+      <el-tab-pane label="光路列表" name="光路列表">
+        <carryingOpticalPath
+          v-if="show2"
+          style="height: 65vh"
+          :id="dataObj.ID"
+          :tableName="tableName"
+          :pattern="pattern"
+          :openNewPage="false"
+        >
+        </carryingOpticalPath>
+      </el-tab-pane>
+      <el-tab-pane label="光缆列表" name="光缆列表">
+        <carrying
+          v-if="show3"
+          v-loading="fiber.loading"
+          style="height: 68vh"
+          ref="fiber"
+          :tableName="fiber.tableName"
+          :searchForm="fiber.searchForm"
+          :pattern="pattern"
+          :openNewPage="false"
+          :jumpLink="[{attributeNameUnderline: 'NAME', menuPath: 'fibersource/fiber'}]"
+        ></carrying>
+      </el-tab-pane>
+      <el-tab-pane label="业务路由" name="业务路由">
+        <div class="buzTopo" v-if="show4 == 2" v-loading="loading">
+          <div class="topo" :style="{height: tabShow ? '50%' : 'calc(100% - 30px)'}">
+            <iframe
+              ref="iframe"
+              width="100%"
+              id="iframe1"
+              name="iframe1"
+              style="border: none"
+              height="100%"
+              :src="iframeSrc"
+            ></iframe>
+          </div>
+          <div class="tab" :style="{height: tabShow ? '50%' : '30px'}">
+            <p class="tabTit">
+              路由信息
+              <span
+                class="tabClose"
+                :class="{
+              'el-icon-arrow-down' : tabShow,
+              'el-icon-arrow-up' : !tabShow
+            }"
+                @click="tabShow = !tabShow"
+              ></span>
+            </p>
+            <div class="tabCon" v-if="tabShow">
+              <el-table
+                stripe
+                border
+                height="100%"
+                :data="selLightPathTable"
+                style="width: 100%">
+                <el-table-column
+                  type="index"
+                  label="序号"
+                  width="80"
+                  align="center">
+                </el-table-column>
+                <el-table-column
+                  prop="name"
+                  label="光路名称"
+                  min-width="350"
+                  align="center">
+                </el-table-column>
+                <el-table-column
+                  prop="aResId"
+                  label="起始设备"
+                  width="250"
+                  align="center">
+                </el-table-column>
+                <el-table-column
+                  prop="aPort"
+                  label="起始端口"
+                  width="100"
+                  align="center">
+                </el-table-column>
+                <el-table-column
+                  prop="zResId"
+                  label="终止设备"
+                  width="250"
+                  align="center">
+                </el-table-column>
+                <el-table-column
+                  prop="zPort"
+                  label="终止端口"
+                  width="100"
+                  align="center">
+                </el-table-column>
+              </el-table>
+            </div>
+          </div>
+        </div>
+        <div class="channelTopo" v-if="show4 == 1" v-loading="loading">
+          <div class="topo" :style="{height: tabShow ? '50%' : 'calc(100% - 30px)'}">
+            <iframe
+              ref="iframe"
+              width="100%"
+              id="iframe1"
+              name="iframe1"
+              style="border: none"
+              height="100%"
+              :src="iframeSrc2"
+            ></iframe>
+          </div>
+          <div class="tab" :style="{height: tabShow ? '50%' : '30px'}">
+            <p class="tabTit">
+              路由信息
+              <span
+                class="tabClose"
+                :class="{
+            'el-icon-arrow-down' : tabShow,
+            'el-icon-arrow-up' : !tabShow
+          }"
+                @click="tabShow = !tabShow"
+              ></span>
+            </p>
+            <div class="tabCon" v-if="tabShow">
+              <el-table
+                stripe
+                border
+                height="100%"
+                :data="selLightPathTable"
+                style="width: 100%">
+                <el-table-column
+                  type="index"
+                  label="序号"
+                  width="80"
+                  align="center">
+                </el-table-column>
+                <el-table-column
+                  prop="aResName"
+                  label="起始站点"
+                  width="250"
+                  align="center">
+                </el-table-column>
+                <el-table-column
+                  prop="zResName"
+                  label="终止站点"
+                  width="250"
+                  align="center">
+                </el-table-column>
+                <el-table-column
+                  prop="fiberName"
+                  label="光缆名称"
+                  min-width="350"
+                  align="center">
+                </el-table-column>
+                <el-table-column
+                  prop="lineName"
+                  label="纤芯名称"
+                  width="100"
+                  align="center">
+                </el-table-column>
+              </el-table>
+            </div>
+          </div>
+        </div>
+
+      </el-tab-pane>
+    </el-tabs>
+  </div>
+</template>
+
+<script>
+import editData from '@/views/publicPage/edit/editData'
+import carryingOpticalPath from "@/views/lightPathInfoManage/carryingOpticalPath.vue";
+import carryingChannelLink from "@/views/serviceInformation/carryingChannelLink.vue";
+import carrying from "@/views/commonPage/carrying/index.vue";
+import { getModelId, submitEdit,getForm } from '@/api/zdwh/zdzywh'
+import { getFiberByBuzId } from '@/api/info/index'
+import { getBuzTopoApi2, } from '@/api/serviceInformation/channel'
+import { getLineTopoByTDId } from '@/api/serviceInformation/fiberLine'
+
+export default {
+  name: 'index',
+  components: {
+    editData,carryingOpticalPath,carryingChannelLink,carrying
+  },
+  props: {
+    dataObj: Object,
+    isEditMode: {
+      type: Boolean,
+      default: () => false
+    },
+    pattern: {
+      type: Boolean,
+      default: () => true
+    }
+  },
+  data() {
+    return {
+      modelObj: {},
+      tableName: 'SG_TCCON_TCBUZ_B',
+      activeName: '业务详情',
+      fiber: {
+        loading: false,
+        tableName: 'SG_TCDEV_FIBER_B',
+        searchForm: {
+          ID: ''
+        }
+      },
+      iframeSrc: '/stationWh/serve/buzRout.html',
+      iframeSrc2: '/stationWh/serve/buzRoutQx.html',
+      tabShow: true,
+      loading: false,
+      selLightPathTable: [],
+      topoData: {},
+      show1: false,
+      show2: false,
+      show3: false,
+      show4: 0
+    }
+  },
+  watch: {},
+  created() {
+  },
+  mounted() {
+    this.getData()
+  },
+  methods: {
+    handleClick() {
+      if (this.activeName ==  '通道列表' && this.show1 == false){
+        this.show1 = true
+      }
+      if (this.activeName ==  '光路列表' && this.show2 == false){
+        this.show2 = true
+      }
+      if (this.activeName ==  '光缆列表' && this.show3 == false){
+        this.show3 = true
+        getFiberByBuzId({ resId: this.dataObj.ID }).then(res => {
+          this.fiber.searchForm.ID = res.msg
+          this.$nextTick(() => {
+            this.$refs.fiber.getTableData()
+          })
+        })
+      }
+      if (this.activeName ==  '业务路由' && this.show4 == 0){
+
+        let params={
+          modelId:this.modelObj.modelId,
+          isPage:'0',
+          whereAttributes:[
+            {
+              attributeName: 'ID',
+              attributeValue:this.dataObj.ID,
+              isPrimaryKey:'1'
+            }
+          ]
+        }
+        getForm(params).then(res=>{
+          this.loading = true
+          if(res.data.IS_FIBER_BUZ == '1'){
+            this.show4 = 1
+            getLineTopoByTDId({id: this.dataObj.ID}).then(res => {
+              this.topoData.node = res.data.nodesData
+              this.topoData.link = res.data.optRoadData
+              this.selLightPathTable = res.data.optRoadData
+              for (let i = 0; i < this.topoData.link.length; i++) {
+                this.topoData.link[i].name = this.topoData.link[i].fiberName + ' ' + this.topoData.link[i].lineName
+              }
+              this.$nextTick(() => {
+                this.loading = false
+                setTimeout(() => {
+                  this.$refs.iframe.contentWindow.reSetTopo(
+                    this.topoData.node,
+                    this.topoData.link,
+                  )
+                }, 500)
+              })
+            })
+          }else {
+            this.show4 = 2
+            getBuzTopoApi2({id:this.dataObj.ID}).then(res => {
+              this.selLightPathTable = res.data.optRoadData
+              this.$nextTick(() => {
+                this.loading = false
+                setTimeout(()=>{
+                  this.$refs.iframe.contentWindow.reSetTopo(
+                    res.data.groups,
+                    res.data.childGroups,
+                    res.data.nodes,
+                    res.data.lines
+                  )
+                },500)
+              })
+            })
+          }
+        })
+      }
+    },
+    getData() {
+      getModelId({ tableName: this.tableName }).then(res => {
+        this.modelObj = res.data
+        this.$refs.child.modelObj = this.modelObj
+        this.$refs.child.dataObj = this.dataObj
+        this.$refs.child.beforeLoading()
+      })
+    },
+    //新增提交
+    submitForm() {
+      //调用子组件重复校验方法
+      this.$refs.child.beforeSubmit()
+      //获取子组件表单数据
+      this.editForm = {}
+      this.editForm = this.$refs.child.pageForm
+      setTimeout(() => {
+        this.$confirm('是否保存此数据?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let params = {
+            modelId: this.modelObj.modelId,
+            isPage: '0',
+            valueAttributes: []
+          }
+          for (let key in this.editForm) {
+            let obj = {}
+            //if(this.editForm[key]!==''&&this.editForm[key]!==undefined){
+            if (this.editForm[key] !== undefined) {
+              if (this.editForm[key] == '') {
+                obj = {
+                  attributeName: key,
+                  attributeValue: null
+                }
+              } else {
+                obj = {
+                  attributeName: key,
+                  attributeValue: this.editForm[key]
+                }
+              }
+              if (key === this.$refs.child.keyClu) {
+                obj.isPrimaryKey = 1
+              }
+              params.valueAttributes.push(obj)
+            }
+          }
+          submitEdit(params).then(response => {
+            this.$modal.msgSuccess('操作成功')
+            this.$bus.$emit('getTableDataBuz')
+          }
+          ).catch((e) => {
+            // this.$message({
+            //   message: e,
+            //   type: 'error',
+            //   center: true,
+            //   duration:0,
+            //   showClose:true
+            // })
+          })
+        })
+      }, 1500)
+    }
+  }
+}
+</script>
+
+<style scoped lang="scss">
+.buzTopo{
+  height: 65vh;
+  .topo{
+    height: 50%;
+  }
+  .tab{
+    height: 50%;
+    box-shadow: 0px -2px 0px #eee;
+    .tabTit{
+      color: #f0f0f0;
+      width: 100%;
+      height: 40px;
+      line-height: 40px;
+      font-size: 16px;
+      padding: 0 10px;
+      background-color: #0f9ea2;
+      .tabClose{
+        font-size: 24px;
+        line-height: 40px;
+        float: right;
+        cursor: pointer;
+        &:hover{
+          color: #409EFF;
+        }
+      }
+    }
+    .tabCon {
+      width: 100%;
+      height: calc(100% - 40px);
+    }
+  }
+}
+.channelTopo{
+  height: 65vh;
+  .topo{
+    height: 50%;
+  }
+  .tab{
+    height: 50%;
+    box-shadow: 0px -2px 0px #eee;
+    .tabTit{
+      color: #f0f0f0;
+      width: 100%;
+      height: 40px;
+      line-height: 40px;
+      font-size: 16px;
+      background-color: #0f9ea2;
+      padding: 0 10px;
+      .tabClose{
+        font-size: 24px;
+        line-height: 40px;
+        float: right;
+        cursor: pointer;
+        &:hover{
+          color: #409EFF;
+        }
+      }
+    }
+    .tabCon {
+      width: 100%;
+      height: calc(100% - 40px);
+    }
+  }
+}
+</style>

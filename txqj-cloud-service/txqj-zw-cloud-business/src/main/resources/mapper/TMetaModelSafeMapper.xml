@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mshz.cloud.tms.business.mapper.TMetaModelSafeMapper">
+
+    <resultMap type="TMetaModelSafe" id="TMetaModelSafeResult">
+        <result property="id"    column="id"    />
+        <result property="modelId"    column="model_id"    />
+        <result property="columnId"    column="column_id"    />
+        <result property="permissionDescription"    column="permission_description"    />
+        <result property="permissionType"    column="permission_type"    />
+        <result property="modelVersion"    column="model_version"    />
+        <result property="createDate"    column="create_date"    />
+        <result property="updateDate"    column="update_date"    />
+    </resultMap>
+
+    <sql id="selectTMetaModelSafeVo">
+        select id, model_id, column_id, permission_description, permission_type, model_version, create_date, update_date from t_meta_model_safe
+    </sql>
+
+    <select id="selectTMetaModelSafeList" parameterType="TMetaModelSafe" resultMap="TMetaModelSafeResult">
+        <include refid="selectTMetaModelSafeVo"/>
+        <where>
+            <if test="modelId != null "> and model_id = #{modelId}</if>
+            <if test="columnId != null "> and column_id = #{columnId}</if>
+            <if test="permissionDescription != null  and permissionDescription != ''"> and permission_description = #{permissionDescription}</if>
+            <if test="permissionType != null  and permissionType != ''"> and permission_type = #{permissionType}</if>
+            <if test="modelVersion != null  and modelVersion != ''"> and model_version = #{modelVersion}</if>
+            <if test="createDate != null  and createDate != ''"> and create_date = #{createDate}</if>
+            <if test="updateDate != null  and updateDate != ''"> and update_date = #{updateDate}</if>
+        </where>
+    </select>
+
+    <select id="selectTMetaModelSafeById" parameterType="Long" resultMap="TMetaModelSafeResult">
+        <include refid="selectTMetaModelSafeVo"/>
+        where id = #{id}
+    </select>
+    <!--安全元数据表复制，根据modelId和版本号-->
+    <select id="selectMetaModelSafeListCopy" resultType="TMetaModelSafe">
+        select model_id, column_id, permission_description, permission_type, update_date from t_meta_model_safe
+        <where>
+            <if test="modelId != null "> and model_id = #{modelId}</if>
+            <if test="modelVersion != null  and modelVersion != ''"> and model_version = #{modelVersion}</if>
+        </where>
+    </select>
+    <!--安全元数据表新增-->
+    <insert id="insertTMetaModelSafe" parameterType="TMetaModelSafe">
+        insert into t_meta_model_safe
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="modelId != null">model_id,</if>
+            <if test="columnId != null">column_id,</if>
+            <if test="permissionDescription != null">permission_description,</if>
+            <if test="permissionType != null">permission_type,</if>
+            <if test="modelVersion != null">model_version,</if>
+            <if test="createDate != null">create_date,</if>
+            <if test="updateDate != null">update_date,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="modelId != null">#{modelId},</if>
+            <if test="columnId != null">#{columnId},</if>
+            <if test="permissionDescription != null">#{permissionDescription},</if>
+            <if test="permissionType != null">#{permissionType},</if>
+            <if test="modelVersion != null">#{modelVersion},</if>
+            <if test="createDate != null">#{createDate},</if>
+            <if test="updateDate != null">#{updateDate},</if>
+         </trim>
+    </insert>
+    <insert id="insertTMetaModelSafeList">
+        <foreach collection="list" item="item" index="index" separator=";">
+            insert into t_meta_model_safe
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="item.id != null">id,</if>
+                <if test="item.modelId != null">model_id,</if>
+                <if test="item.columnId != null">column_id,</if>
+                <if test="item.permissionDescription != null">permission_description,</if>
+                <if test="item.permissionType != null">permission_type,</if>
+                <if test="item.modelVersion != null">model_version,</if>
+                <if test="item.createDate != null">create_date,</if>
+                <if test="item.updateDate != null">update_date,</if>
+            </trim>
+            <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="item.id != null">#{item.id},</if>
+                <if test="item.modelId != null">#{item.modelId},</if>
+                <if test="item.columnId != null">#{item.columnId},</if>
+                <if test="item.permissionDescription != null">#{item.permissionDescription},</if>
+                <if test="item.permissionType != null">#{item.permissionType},</if>
+                <if test="item.modelVersion != null">#{item.modelVersion},</if>
+                <if test="item.createDate != null">#{item.createDate},</if>
+                <if test="item.updateDate != null">#{item.updateDate},</if>
+            </trim>
+        </foreach>
+    </insert>
+
+    <update id="updateTMetaModelSafe" parameterType="TMetaModelSafe">
+        update t_meta_model_safe
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="modelId != null">model_id = #{modelId},</if>
+            <if test="columnId != null">column_id = #{columnId},</if>
+            <if test="permissionDescription != null">permission_description = #{permissionDescription},</if>
+            <if test="permissionType != null">permission_type = #{permissionType},</if>
+            <if test="modelVersion != null">model_version = #{modelVersion},</if>
+            <if test="createDate != null">create_date = #{createDate},</if>
+            <if test="updateDate != null">update_date = #{updateDate},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTMetaModelSafeById" parameterType="Long">
+        delete from t_meta_model_safe where id = #{id}
+    </delete>
+
+    <delete id="deleteTMetaModelSafeByIds" parameterType="String">
+        delete from t_meta_model_safe where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

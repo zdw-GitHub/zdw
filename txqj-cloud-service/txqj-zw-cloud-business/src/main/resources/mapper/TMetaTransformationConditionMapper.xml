@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mshz.cloud.tms.business.mapper.TMetaTransformationConditionMapper">
+
+    <resultMap type="TMetaTransformationCondition" id="TMetaTransformationConditionResult">
+        <result property="id"    column="id"    />
+        <result property="groupId"    column="group_id"    />
+        <result property="conditionType"    column="condition_type"    />
+        <result property="conditionContent"    column="condition_content"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectTMetaTransformationConditionVo">
+        select id, group_id, condition_type, condition_content, create_by, create_time, update_by, update_time, remark from t_meta_transformation_condition
+    </sql>
+
+    <select id="selectTMetaTransformationConditionList" parameterType="TMetaTransformationCondition" resultMap="TMetaTransformationConditionResult">
+        <include refid="selectTMetaTransformationConditionVo"/>
+        <where>
+            <if test="groupId != null "> and group_id = #{groupId}</if>
+            <if test="conditionType != null  and conditionType != ''"> and condition_type = #{conditionType}</if>
+            <if test="conditionContent != null  and conditionContent != ''"> and condition_content = #{conditionContent}</if>
+        </where>
+    </select>
+
+    <select id="selectTMetaTransformationConditionById" parameterType="Long" resultMap="TMetaTransformationConditionResult">
+        <include refid="selectTMetaTransformationConditionVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertTMetaTransformationCondition" parameterType="TMetaTransformationCondition" useGeneratedKeys="true" keyProperty="id">
+        insert into t_meta_transformation_condition
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="groupId != null">group_id,</if>
+            <if test="conditionType != null">condition_type,</if>
+            <if test="conditionContent != null">condition_content,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="groupId != null">#{groupId},</if>
+            <if test="conditionType != null">#{conditionType},</if>
+            <if test="conditionContent != null">#{conditionContent},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTMetaTransformationCondition" parameterType="TMetaTransformationCondition">
+        update t_meta_transformation_condition
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="groupId != null">group_id = #{groupId},</if>
+            <if test="conditionType != null">condition_type = #{conditionType},</if>
+            <if test="conditionContent != null">condition_content = #{conditionContent},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTMetaTransformationConditionById" parameterType="Long">
+        delete from t_meta_transformation_condition where id = #{id}
+    </delete>
+
+    <delete id="deleteTMetaTransformationConditionByIds" parameterType="String">
+        delete from t_meta_transformation_condition where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

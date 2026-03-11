@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32.4193667px" height="32.4193667px" viewBox="0 0 32.4193667 32.4193667" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>是否异构光缆</title>
+    <defs>
+        <path d="M3,0 L29.4193667,0 L32.4193667,3 L32.4193667,29.4193667 L29.4193667,32.4193667 L3,32.4193667 L0,29.4193667 L0,3 L3,0 Z" id="path-1"></path>
+        <filter x="-6.2%" y="-6.2%" width="112.3%" height="112.3%" filterUnits="objectBoundingBox" id="filter-2">
+            <feGaussianBlur stdDeviation="2" in="SourceAlpha" result="shadowBlurInner1"></feGaussianBlur>
+            <feOffset dx="0" dy="0" in="shadowBlurInner1" result="shadowOffsetInner1"></feOffset>
+            <feComposite in="shadowOffsetInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0.0274509804   0 0 0 0 0.607843137   0 0 0 0 0.623529412  0 0 0 0.455942861 0" type="matrix" in="shadowInnerInner1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="页面-5" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="2备份" transform="translate(-612.588847, -406.901202)">
+            <g id="编组-20" transform="translate(536.911153, 202.500000)">
+                <g id="编组-16" transform="translate(75.677695, 104.030885)">
+                    <g id="编组-18备份-2" transform="translate(0.000000, 97.580000)">
+                        <g id="是否异构光缆" transform="translate(0.000000, 2.790317)">
+                            <g id="矩形">
+                                <use fill-opacity="0.64" fill="#EDFEFF" fill-rule="evenodd" xlink:href="#path-1"></use>
+                                <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                                <path stroke="#86CDCF" stroke-width="1" d="M29.2122599,0.5 L31.9193667,3.20710678 L31.9193667,29.2122599 L29.2122599,31.9193667 L3.20710678,31.9193667 L0.5,29.2122599 L0.5,3.20710678 L3.20710678,0.5 L29.2122599,0.5 Z" stroke-linejoin="square"></path>
+                            </g>
+                            <g id="编组" transform="translate(7.500000, 9.248125)" fill="#079B9F" fill-rule="nonzero">
+                                <path d="M15.9109663,7.95450496 L15.9109663,3.97725248 C15.9109663,1.79005707 14.1209092,0 11.9337138,0 C9.74651838,0 7.95646131,1.79005707 7.95646131,3.97725248 L7.95646131,11.9337138 C7.95646131,13.250335 6.88633976,14.3204566 5.56971855,14.3204566 C4.25309734,14.3204566 3.18297579,13.250335 3.18297579,11.9337138 L3.18297579,7.95450496 L4.77348552,7.95450496 L4.77348552,1.59050972 L0,1.59050972 L0,7.95450496 L1.59050972,7.95450496 L1.59050972,11.9317574 C1.59050972,14.1189529 3.38056679,15.9090099 5.56776221,15.9090099 C7.75495762,15.9090099 9.54501469,14.1189529 9.54501469,11.9317574 L9.54501469,3.97725248 C9.54501469,2.66063127 10.6151362,1.59050972 11.9317574,1.59050972 C13.2483787,1.59050972 14.3185002,2.66063127 14.3185002,3.97725248 L14.3185002,7.95450496 L12.7279905,7.95450496 L12.7279905,14.3185002 L17.501476,14.3185002 L17.501476,7.95450496 L15.9109663,7.95450496 Z M1.59050972,3.18101945 L3.18101945,3.18101945 L3.18101945,6.36399524 L1.59050972,6.36399524 L1.59050972,3.18101945 Z M15.9109663,12.7279905 L14.3204566,12.7279905 L14.3204566,9.54501469 L15.9109663,9.54501469 L15.9109663,12.7279905 Z" id="形状"></path>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

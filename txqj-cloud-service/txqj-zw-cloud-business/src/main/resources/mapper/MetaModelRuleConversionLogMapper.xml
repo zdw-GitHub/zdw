@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mshz.cloud.tms.business.mapper.MetaModelRuleConversionLogMapper">
+
+    <resultMap type="com.mshz.cloud.tms.business.entity.MetaModelRuleConversionLog" id="MetaModelRuleConversionLogResult">
+        <result property="id"    column="id"    />
+        <result property="modelRuleId"    column="model_rule_id"    />
+        <result property="tableId"    column="table_id"    />
+        <result property="tableName"    column="table_name"    />
+        <result property="tableNameCn"    column="table_name_cn"    />
+        <result property="columnId"    column="column_id"    />
+        <result property="columnName"    column="column_name"    />
+        <result property="columnNameCn"    column="column_name_cn"    />
+        <result property="ruleUsed"    column="rule_used"    />
+        <result property="isBatch"    column="is_batch"    />
+        <result property="conversionResult"    column="conversion_result"    />
+        <result property="conversionTime"    column="conversion_time"    />
+        <result property="convertLog"    column="convert_log"    />
+        <result property="createDate"    column="create_date"    />
+        <result property="updateDate"    column="update_date"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectMetaModelRuleConversionLogVo">
+        select id, model_rule_id, table_id, table_name, table_name_cn, column_id, column_name, column_name_cn, rule_used, is_batch, conversion_result, conversion_time, convert_log, create_date, update_date, remark from t_meta_model_rule_conversion_log
+    </sql>
+
+    <select id="selectMetaModelRuleConversionLogList" parameterType="com.mshz.cloud.tms.business.entity.MetaModelRuleConversionLog" resultMap="MetaModelRuleConversionLogResult">
+        <include refid="selectMetaModelRuleConversionLogVo"/>
+        <where>
+            <if test="modelRuleId != null "> and model_rule_id = #{modelRuleId}</if>
+            <if test="tableId != null "> and table_id = #{tableId}</if>
+            <if test="tableName != null  and tableName != ''"> and table_name like concat('%', #{tableName}, '%')</if>
+            <if test="tableNameCn != null  and tableNameCn != ''"> and table_name_cn = #{tableNameCn}</if>
+            <if test="columnId != null "> and column_id = #{columnId}</if>
+            <if test="columnName != null  and columnName != ''"> and column_name like concat('%', #{columnName}, '%')</if>
+            <if test="columnNameCn != null  and columnNameCn != ''"> and column_name_cn = #{columnNameCn}</if>
+            <if test="ruleUsed != null  and ruleUsed != ''"> and rule_used = #{ruleUsed}</if>
+            <if test="isBatch != null  and isBatch != ''"> and is_batch = #{isBatch}</if>
+            <if test="conversionResult != null  and conversionResult != ''"> and conversion_result = #{conversionResult}</if>
+            <if test="conversionTime != null  and conversionTime != ''"> and conversion_time = #{conversionTime}</if>
+            <if test="convertLog != null  and convertLog != ''"> and convert_log = #{convertLog}</if>
+            <if test="createDate != null  and createDate != ''"> and create_date = #{createDate}</if>
+            <if test="updateDate != null  and updateDate != ''"> and update_date = #{updateDate}</if>
+
+            <if test="startTime != null and startTime != ''"> and conversion_time >= #{startTime}</if>
+            <if test="endTime != null and endTime != ''"> and conversion_time &lt;= #{endTime}</if>
+
+        </where>
+    </select>
+
+    <select id="selectMetaModelRuleConversionLogById" parameterType="Long" resultMap="MetaModelRuleConversionLogResult">
+        <include refid="selectMetaModelRuleConversionLogVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertMetaModelRuleConversionLog" parameterType="com.mshz.cloud.tms.business.entity.MetaModelRuleConversionLog">
+        insert into t_meta_model_rule_conversion_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="modelRuleId != null">model_rule_id,</if>
+            <if test="tableId != null">table_id,</if>
+            <if test="tableName != null">table_name,</if>
+            <if test="tableNameCn != null">table_name_cn,</if>
+            <if test="columnId != null">column_id,</if>
+            <if test="columnName != null">column_name,</if>
+            <if test="columnNameCn != null">column_name_cn,</if>
+            <if test="ruleUsed != null">rule_used,</if>
+            <if test="isBatch != null">is_batch,</if>
+            <if test="conversionResult != null">conversion_result,</if>
+            <if test="conversionTime != null">conversion_time,</if>
+            <if test="convertLog != null">convert_log,</if>
+            <if test="remark != null">remark,</if>
+            create_date
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="modelRuleId != null">#{modelRuleId},</if>
+            <if test="tableId != null">#{tableId},</if>
+            <if test="tableName != null">#{tableName},</if>
+            <if test="tableNameCn != null">#{tableNameCn},</if>
+            <if test="columnId != null">#{columnId},</if>
+            <if test="columnName != null">#{columnName},</if>
+            <if test="columnNameCn != null">#{columnNameCn},</if>
+            <if test="ruleUsed != null">#{ruleUsed},</if>
+            <if test="isBatch != null">#{isBatch},</if>
+            <if test="conversionResult != null">#{conversionResult},</if>
+            <if test="conversionTime != null">#{conversionTime},</if>
+            <if test="convertLog != null">#{convertLog},</if>
+            <if test="remark != null">#{remark},</if>
+            sysdate()
+         </trim>
+    </insert>
+
+    <update id="updateMetaModelRuleConversionLog" parameterType="com.mshz.cloud.tms.business.entity.MetaModelRuleConversionLog">
+        update t_meta_model_rule_conversion_log
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="modelRuleId != null">model_rule_id = #{modelRuleId},</if>
+            <if test="tableId != null">table_id = #{tableId},</if>
+            <if test="tableName != null">table_name = #{tableName},</if>
+            <if test="tableNameCn != null">table_name_cn = #{tableNameCn},</if>
+            <if test="columnId != null">column_id = #{columnId},</if>
+            <if test="columnName != null">column_name = #{columnName},</if>
+            <if test="columnNameCn != null">column_name_cn = #{columnNameCn},</if>
+            <if test="ruleUsed != null">rule_used = #{ruleUsed},</if>
+            <if test="isBatch != null">is_batch = #{isBatch},</if>
+            <if test="conversionResult != null">conversion_result = #{conversionResult},</if>
+            <if test="conversionTime != null">conversion_time = #{conversionTime},</if>
+            <if test="convertLog != null">convert_log = #{convertLog},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            update_date = sysdate()
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteMetaModelRuleConversionLogById" parameterType="Long">
+        delete from t_meta_model_rule_conversion_log where id = #{id}
+    </delete>
+
+    <delete id="deleteMetaModelRuleConversionLogByIds" parameterType="String">
+        delete from t_meta_model_rule_conversion_log where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

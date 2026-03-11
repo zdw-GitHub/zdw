@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mshz.cloud.tms.business.mapper.MetaModelRuleMapper">
+
+    <resultMap type="com.mshz.cloud.tms.business.entity.MetaModelRule" id="MetaModelRuleResult">
+        <result property="id"    column="id"    />
+        <result property="categoryId"    column="category_id"    />
+        <result property="categoryName"    column="category_name"    />
+        <result property="tableId"    column="table_id"    />
+        <result property="tableName"    column="table_name"    />
+        <result property="tableNameCn"    column="table_name_cn"    />
+        <result property="columnId"    column="column_id"    />
+        <result property="columnName"    column="column_name"    />
+        <result property="columnNameCn"    column="column_name_cn"    />
+        <result property="generateRuleName"    column="generate_rule_name"    />
+        <result property="generateRule"    column="generate_rule"    />
+        <result property="generateRuleExample"    column="generate_rule_example"    />
+        <result property="paramRuleSet"    column="param_rule_set"    />
+        <result property="convertRuleSql"    column="convert_rule_sql"    />
+        <result property="convertRuleBatchSql"    column="convert_rule_batch_sql"    />
+        <result property="ruleUsed"    column="rule_used"    />
+        <result property="createDate"    column="create_date"    />
+        <result property="updateDate"    column="update_date"    />
+        <result property="remark"    column="remark"    />
+        <result property="regularExecution"    column="regular_execution"    />
+    </resultMap>
+
+    <resultMap type="com.mshz.cloud.tms.business.vo.ModelRuleConvertVo" id="ModelRuleConvertVo">
+        <result property="ruleId" column="rule_id"/>
+        <result property="tableId" column="table_id"/>
+        <result property="columnId" column="column_id"/>
+    </resultMap>
+
+
+    <sql id="selectMetaModelRuleVo">
+        select id, category_id, category_name, table_id, table_name, table_name_cn,
+               column_id, column_name, column_name_cn,
+               generate_rule_name, generate_rule, generate_rule_example,
+               param_rule_set, convert_rule_sql, convert_rule_batch_sql,target_table,
+            rule_used, create_date, update_date, remark,CASE regular_execution WHEN 0 THEN '否' WHEN 1 THEN '是' END regular_execution
+        from t_meta_model_rule
+    </sql>
+
+    <select id="selectMetaModelRuleList" parameterType="com.mshz.cloud.tms.business.entity.MetaModelRule" resultMap="MetaModelRuleResult">
+        <include refid="selectMetaModelRuleVo"/>
+        <where>
+            <if test="categoryId != null "> and category_id = #{categoryId}</if>
+            <if test="categoryName != null  and categoryName != ''"> and category_name like concat('%', #{categoryName}, '%')</if>
+            <if test="tableId != null "> and table_id = #{tableId}</if>
+            <if test="tableName != null  and tableName != ''"> and table_name like concat('%', #{tableName}, '%')</if>
+            <if test="tableNameCn != null  and tableNameCn != ''"> and table_name_cn = #{tableNameCn}</if>
+            <if test="columnId != null "> and column_id = #{columnId}</if>
+            <if test="columnName != null  and columnName != ''"> and column_name like concat('%', #{columnName}, '%')</if>
+            <if test="columnNameCn != null  and columnNameCn != ''"> and column_name_cn = #{columnNameCn}</if>
+            <if test="generateRuleName != null  and generateRuleName != ''"> and generate_rule_name like concat('%', #{generateRuleName}, '%')</if>
+            <if test="generateRule != null  and generateRule != ''"> and generate_rule = #{generateRule}</if>
+            <if test="generateRuleExample != null  and generateRuleExample != ''"> and generate_rule_example = #{generateRuleExample}</if>
+            <if test="paramRuleSet != null  and paramRuleSet != ''"> and param_rule_set = #{paramRuleSet}</if>
+            <if test="convertRuleSql != null  and convertRuleSql != ''"> and convert_rule_sql = #{convertRuleSql}</if>
+            <if test="convertRuleBatchSql != null  and convertRuleBatchSql != ''"> and convert_rule_batch_sql = #{convertRuleBatchSql}</if>
+            <if test="ruleUsed != null  and ruleUsed != ''"> and rule_used = #{ruleUsed}</if>
+            <if test="regularExecution != null  and regularExecution != ''"> and regular_execution = #{regularExecution}</if>
+            <if test="createDate != null  and createDate != ''"> and create_date = #{createDate}</if>
+            <if test="updateDate != null  and updateDate != ''"> and update_date = #{updateDate}</if>
+        </where>
+    </select>
+
+    <select id="selectMetaModelRuleById" parameterType="Long" resultMap="MetaModelRuleResult">
+        <include refid="selectMetaModelRuleVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertMetaModelRule" parameterType="com.mshz.cloud.tms.business.entity.MetaModelRule">
+        insert into t_meta_model_rule
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="categoryId != null">category_id,</if>
+            <if test="categoryName != null">category_name,</if>
+            <if test="tableId != null">table_id,</if>
+            <if test="tableName != null">table_name,</if>
+            <if test="tableNameCn != null">table_name_cn,</if>
+            <if test="columnId != null">column_id,</if>
+            <if test="columnName != null">column_name,</if>
+            <if test="columnNameCn != null">column_name_cn,</if>
+            <if test="generateRuleName != null">generate_rule_name,</if>
+            <if test="generateRule != null">generate_rule,</if>
+            <if test="generateRuleExample != null">generate_rule_example,</if>
+            <if test="paramRuleSet != null ">param_rule_set,</if>
+            <if test="convertRuleSql != null">convert_rule_sql,</if>
+            <if test="convertRuleBatchSql != null">convert_rule_batch_sql,</if>
+            <if test="ruleUsed != null">rule_used,</if>
+            <if test="remark != null">remark,</if>
+            <if test="regularExecution != null">regular_execution,</if>
+            <if test="targetTable != null">target_table,</if>
+            create_date
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="categoryId != null">#{categoryId},</if>
+            <if test="categoryName != null">#{categoryName},</if>
+            <if test="tableId != null">#{tableId},</if>
+            <if test="tableName != null">#{tableName},</if>
+            <if test="tableNameCn != null">#{tableNameCn},</if>
+            <if test="columnId != null">#{columnId},</if>
+            <if test="columnName != null">#{columnName},</if>
+            <if test="columnNameCn != null">#{columnNameCn},</if>
+            <if test="generateRuleName != null">#{generateRuleName},</if>
+            <if test="generateRule != null">#{generateRule},</if>
+            <if test="generateRuleExample != null">#{generateRuleExample},</if>
+            <if test="paramRuleSet != null ">#{paramRuleSet},</if>
+            <if test="convertRuleSql != null">#{convertRuleSql},</if>
+            <if test="convertRuleBatchSql != null">#{convertRuleBatchSql},</if>
+            <if test="ruleUsed != null">#{ruleUsed},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="regularExecution != null">#{regularExecution},</if>
+            sysdate()
+         </trim>
+    </insert>
+
+    <update id="updateMetaModelRule" parameterType="com.mshz.cloud.tms.business.entity.MetaModelRule">
+        update t_meta_model_rule
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="categoryId != null">category_id = #{categoryId},</if>
+            <if test="categoryName != null">category_name = #{categoryName},</if>
+            <if test="tableId != null">table_id = #{tableId},</if>
+            <if test="tableName != null">table_name = #{tableName},</if>
+            <if test="tableNameCn != null">table_name_cn = #{tableNameCn},</if>
+            <if test="columnId != null">column_id = #{columnId},</if>
+            <if test="columnName != null">column_name = #{columnName},</if>
+            <if test="columnNameCn != null">column_name_cn = #{columnNameCn},</if>
+            <if test="generateRuleName != null">generate_rule_name = #{generateRuleName},</if>
+            <if test="generateRule != null">generate_rule = #{generateRule},</if>
+            <if test="generateRuleExample != null">generate_rule_example = #{generateRuleExample},</if>
+            <if test="paramRuleSet != null">param_rule_set = #{paramRuleSet},</if>
+            <if test="convertRuleSql != null">convert_rule_sql = #{convertRuleSql},</if>
+            <if test="convertRuleBatchSql != null">convert_rule_batch_sql = #{convertRuleBatchSql},</if>
+            <if test="ruleUsed != null">rule_used = #{ruleUsed},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="regularExecution != null">regular_execution = #{regularExecution},</if>
+            <if test="targetTable != null">target_table = #{targetTable},</if>
+            update_date = sysdate()
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteMetaModelRuleById" parameterType="Long">
+        delete from t_meta_model_rule where id = #{id}
+    </delete>
+
+    <delete id="deleteMetaModelRuleByIds" parameterType="String">
+        delete from t_meta_model_rule where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+
+    <select id="getModelRuleList" parameterType="com.mshz.cloud.tms.business.entity.MetaModelRule" resultType="com.mshz.cloud.tms.business.vo.ModelRuleVo">
+        select r.id as ruleId, r.category_id as categoryId, r.category_name as categoryName,
+               r.table_id as tableId, r.table_name as tableName, r.table_name_cn as tableNameCn,
+               r.column_id as columnId, r.column_name as csolumnName, r.column_name_cn as columnNameCn,
+               r.rule_used as ruleUsed, r.generate_rule_name as generateRuleName, r.generate_rule as generateRule, r.generate_rule_example as generateRuleExample,
+               r.param_rule_set as paramRuleSet,r.target_table targetTable,r.convert_rule_sql as convertRuleSql, r.convert_rule_batch_sql as convertRuleBatchSql,CASE r.regular_execution WHEN 0 THEN '否' WHEN 1 THEN '是' END regular_execution,
+               l.id as ruleLogId, l.is_batch as isBatch, l.conversion_result as conversionResult, l.conversion_time as conversionTime,
+               l.convert_log as convertLog
+        from t_meta_model_rule r
+        left join t_meta_model_rule_conversion_log l on r.id = l.model_rule_id
+        and  l.conversion_time = (
+            select max(conversion_time)
+            from t_meta_model_rule_conversion_log
+            where model_rule_id = l.model_rule_id
+        )
+        <where>
+            <if test="categoryId != null "> and r.category_id = #{categoryId}</if>
+            <if test="tableId != null "> and r.table_id = #{tableId}</if>
+            <if test="categoryName != null  and categoryName != ''"> and r.category_name like concat('%', #{categoryName}, '%')</if>
+            <if test="tableName != null  and tableName != ''"> and r.table_name like concat('%', #{tableName}, '%')</if>
+            <if test="tableNameCn != null  and tableNameCn != ''"> and r.table_name_cn = #{tableNameCn}</if>
+        </where>
+    </select>
+
+    <select id="getTableKeyName" parameterType="long" resultType="java.lang.String">
+        select column_name
+        from t_meta_model_tech
+        where model_id = #{modelId}
+        and is_primary_key = '1'
+    </select>
+
+
+    <select id="getColumRuleList" resultMap="ModelRuleConvertVo">
+        select ID AS rule_id,table_id,column_id from t_meta_model_rule where regular_execution = 1
+    </select>
+</mapper>

@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mshz.cloud.tms.business.mapper.TMetaModelIdRuleMapper">
+
+    <resultMap type="TMetaModelIdRule" id="TMetaModelIdRuleResult">
+        <result property="id"    column="id"    />
+        <result property="categoryId"    column="category_id"    />
+        <result property="categoryName"    column="category_name"    />
+        <result property="modelId"    column="model_id"    />
+        <result property="modelName"    column="model_name"    />
+        <result property="modelNameCn"    column="model_name_cn"    />
+        <result property="idDemo"    column="id_demo"    />
+        <result property="idGenerationRule"    column="id_generation_rule"    />
+        <result property="prefixEncodingDefault"    column="prefix_encoding_default"    />
+        <result property="prefixEncodingAttributeName"    column="prefix_encoding_attribute_name"    />
+        <result property="dataManagementOrgCodeDigit"    column="data_management_org_code_digit"    />
+        <result property="dataManagementOrgCodeDefault"    column="data_management_org_code_default"    />
+        <result property="isHaveDataManagementOrgCode"    column="is_have_data_management_org_code"    />
+        <result property="dataManagementOrgCodeAttributeName"    column="data_management_org_code_attribute_name"    />
+        <result property="serialNumberDigit"    column="serial_number_digit"    />
+        <result property="idInterfaceSql"    column="id_interface_sql"    />
+        <result property="batchUpdateSql"    column="batch_update_sql"    />
+        <result property="lastConversionResult"    column="last_conversion_result"    />
+        <result property="lastConversionTime"    column="last_conversion_time"    />
+        <result property="createDate"    column="create_date"    />
+        <result property="updateDate"    column="update_date"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectTMetaModelIdRuleVo">
+        select id, category_id, category_name, model_id, model_name, model_name_cn, id_demo, id_generation_rule, prefix_encoding_default, prefix_encoding_attribute_name, data_management_org_code_digit, data_management_org_code_default, is_have_data_management_org_code, data_management_org_code_attribute_name, serial_number_digit, id_interface_sql, batch_update_sql, last_conversion_result, last_conversion_time, create_date, update_date, remark from t_meta_model_id_rule
+    </sql>
+
+
+    <select id="selectTMetaModelIdRuleList" parameterType="TMetaModelIdRule" resultMap="TMetaModelIdRuleResult">
+        <include refid="selectTMetaModelIdRuleVo"/>
+        <where>
+            <if test="categoryId != null "> and category_id = #{categoryId}</if>
+            <if test="categoryName != null  and categoryName != ''"> and category_name like concat('%', #{categoryName}, '%')</if>
+            <if test="modelId != null "> and model_id = #{modelId}</if>
+            <if test="modelName != null  and modelName != ''"> and model_name like concat('%', #{modelName}, '%')</if>
+            <if test="modelNameCn != null  and modelNameCn != ''"> and model_name_cn = #{modelNameCn}</if>
+            <if test="idDemo != null  and idDemo != ''"> and id_demo = #{idDemo}</if>
+            <if test="idGenerationRule != null  and idGenerationRule != ''"> and id_generation_rule = #{idGenerationRule}</if>
+            <if test="prefixEncodingDefault != null  and prefixEncodingDefault != ''"> and prefix_encoding_default = #{prefixEncodingDefault}</if>
+            <if test="prefixEncodingAttributeName != null  and prefixEncodingAttributeName != ''"> and prefix_encoding_attribute_name like concat('%', #{prefixEncodingAttributeName}, '%')</if>
+            <if test="dataManagementOrgCodeDigit != null  and dataManagementOrgCodeDigit != ''"> and data_management_org_code_digit = #{dataManagementOrgCodeDigit}</if>
+            <if test="dataManagementOrgCodeDefault != null  and dataManagementOrgCodeDefault != ''"> and data_management_org_code_default = #{dataManagementOrgCodeDefault}</if>
+            <if test="isHaveDataManagementOrgCode != null  and isHaveDataManagementOrgCode != ''"> and is_have_data_management_org_code = #{isHaveDataManagementOrgCode}</if>
+            <if test="dataManagementOrgCodeAttributeName != null  and dataManagementOrgCodeAttributeName != ''"> and data_management_org_code_attribute_name like concat('%', #{dataManagementOrgCodeAttributeName}, '%')</if>
+            <if test="serialNumberDigit != null  and serialNumberDigit != ''"> and serial_number_digit = #{serialNumberDigit}</if>
+            <if test="idInterfaceSql != null  and idInterfaceSql != ''"> and id_interface_sql = #{idInterfaceSql}</if>
+            <if test="batchUpdateSql != null  and batchUpdateSql != ''"> and batch_update_sql = #{batchUpdateSql}</if>
+            <if test="lastConversionResult != null  and lastConversionResult != ''"> and last_conversion_result = #{lastConversionResult}</if>
+            <if test="lastConversionTime != null  and lastConversionTime != ''"> and last_conversion_time = #{lastConversionTime}</if>
+            <if test="createDate != null  and createDate != ''"> and create_date = #{createDate}</if>
+            <if test="updateDate != null  and updateDate != ''"> and update_date = #{updateDate}</if>
+        </where>
+    </select>
+
+    <select id="selectTMetaModelIdRuleListWithoutDefault" parameterType="TMetaModelIdRule" resultMap="TMetaModelIdRuleResult">
+        <include refid="selectTMetaModelIdRuleVo"/>
+        where
+            model_name != 'default'
+            <if test="categoryId != null "> and category_id = #{categoryId}</if>
+            <if test="categoryName != null  and categoryName != ''"> and category_name like concat('%', #{categoryName}, '%')</if>
+            <if test="modelId != null "> and model_id = #{modelId}</if>
+            <if test="modelName != null  and modelName != ''"> and model_name like concat('%', #{modelName}, '%')</if>
+            <if test="modelNameCn != null  and modelNameCn != ''"> and model_name_cn like concat('%', #{modelNameCn}, '%')</if>
+            <if test="idDemo != null  and idDemo != ''"> and id_demo = #{idDemo}</if>
+            <if test="idGenerationRule != null  and idGenerationRule != ''"> and id_generation_rule = #{idGenerationRule}</if>
+            <if test="prefixEncodingDefault != null  and prefixEncodingDefault != ''"> and prefix_encoding_default = #{prefixEncodingDefault}</if>
+            <if test="prefixEncodingAttributeName != null  and prefixEncodingAttributeName != ''"> and prefix_encoding_attribute_name like concat('%', #{prefixEncodingAttributeName}, '%')</if>
+            <if test="dataManagementOrgCodeDigit != null  and dataManagementOrgCodeDigit != ''"> and data_management_org_code_digit = #{dataManagementOrgCodeDigit}</if>
+            <if test="dataManagementOrgCodeDefault != null  and dataManagementOrgCodeDefault != ''"> and data_management_org_code_default = #{dataManagementOrgCodeDefault}</if>
+            <if test="isHaveDataManagementOrgCode != null  and isHaveDataManagementOrgCode != ''"> and is_have_data_management_org_code = #{isHaveDataManagementOrgCode}</if>
+            <if test="dataManagementOrgCodeAttributeName != null  and dataManagementOrgCodeAttributeName != ''"> and data_management_org_code_attribute_name like concat('%', #{dataManagementOrgCodeAttributeName}, '%')</if>
+            <if test="serialNumberDigit != null  and serialNumberDigit != ''"> and serial_number_digit = #{serialNumberDigit}</if>
+            <if test="idInterfaceSql != null  and idInterfaceSql != ''"> and id_interface_sql = #{idInterfaceSql}</if>
+            <if test="batchUpdateSql != null  and batchUpdateSql != ''"> and batch_update_sql = #{batchUpdateSql}</if>
+            <if test="lastConversionResult != null  and lastConversionResult != ''"> and last_conversion_result = #{lastConversionResult}</if>
+            <if test="lastConversionTime != null  and lastConversionTime != ''"> and last_conversion_time = #{lastConversionTime}</if>
+            <if test="createDate != null  and createDate != ''"> and create_date = #{createDate}</if>
+            <if test="updateDate != null  and updateDate != ''"> and update_date = #{updateDate}</if>
+    </select>
+
+    <select id="selectTMetaModelIdRuleById" parameterType="Long" resultMap="TMetaModelIdRuleResult">
+        <include refid="selectTMetaModelIdRuleVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertTMetaModelIdRule" parameterType="TMetaModelIdRule">
+        insert into t_meta_model_id_rule
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="categoryId != null">category_id,</if>
+            <if test="categoryName != null">category_name,</if>
+            <if test="modelId != null">model_id,</if>
+            <if test="modelName != null">model_name,</if>
+            <if test="modelNameCn != null">model_name_cn,</if>
+            <if test="idDemo != null">id_demo,</if>
+            <if test="idGenerationRule != null">id_generation_rule,</if>
+            <if test="prefixEncodingDefault != null">prefix_encoding_default,</if>
+            <if test="prefixEncodingAttributeName != null">prefix_encoding_attribute_name,</if>
+            <if test="dataManagementOrgCodeDigit != null">data_management_org_code_digit,</if>
+            <if test="dataManagementOrgCodeDefault != null">data_management_org_code_default,</if>
+            <if test="isHaveDataManagementOrgCode != null">is_have_data_management_org_code,</if>
+            <if test="dataManagementOrgCodeAttributeName != null">data_management_org_code_attribute_name,</if>
+            <if test="serialNumberDigit != null">serial_number_digit,</if>
+            <if test="idInterfaceSql != null">id_interface_sql,</if>
+            <if test="batchUpdateSql != null">batch_update_sql,</if>
+            <if test="lastConversionResult != null">last_conversion_result,</if>
+            <if test="lastConversionTime != null">last_conversion_time,</if>
+            <if test="createDate != null">create_date,</if>
+            <if test="updateDate != null">update_date,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="categoryId != null">#{categoryId},</if>
+            <if test="categoryName != null">#{categoryName},</if>
+            <if test="modelId != null">#{modelId},</if>
+            <if test="modelName != null">#{modelName},</if>
+            <if test="modelNameCn != null">#{modelNameCn},</if>
+            <if test="idDemo != null">#{idDemo},</if>
+            <if test="idGenerationRule != null">#{idGenerationRule},</if>
+            <if test="prefixEncodingDefault != null">#{prefixEncodingDefault},</if>
+            <if test="prefixEncodingAttributeName != null">#{prefixEncodingAttributeName},</if>
+            <if test="dataManagementOrgCodeDigit != null">#{dataManagementOrgCodeDigit},</if>
+            <if test="dataManagementOrgCodeDefault != null">#{dataManagementOrgCodeDefault},</if>
+            <if test="isHaveDataManagementOrgCode != null">#{isHaveDataManagementOrgCode},</if>
+            <if test="dataManagementOrgCodeAttributeName != null">#{dataManagementOrgCodeAttributeName},</if>
+            <if test="serialNumberDigit != null">#{serialNumberDigit},</if>
+            <if test="idInterfaceSql != null">#{idInterfaceSql},</if>
+            <if test="batchUpdateSql != null">#{batchUpdateSql},</if>
+            <if test="lastConversionResult != null">#{lastConversionResult},</if>
+            <if test="lastConversionTime != null">#{lastConversionTime},</if>
+            <if test="createDate != null">#{createDate},</if>
+            <if test="updateDate != null">#{updateDate},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTMetaModelIdRule" parameterType="TMetaModelIdRule">
+        update t_meta_model_id_rule
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="categoryId != null">category_id = #{categoryId},</if>
+            <if test="categoryName != null">category_name = #{categoryName},</if>
+            <if test="modelId != null">model_id = #{modelId},</if>
+            <if test="modelName != null">model_name = #{modelName},</if>
+            <if test="modelNameCn != null">model_name_cn = #{modelNameCn},</if>
+            <if test="idDemo != null">id_demo = #{idDemo},</if>
+            <if test="idGenerationRule != null">id_generation_rule = #{idGenerationRule},</if>
+            <if test="prefixEncodingDefault != null">prefix_encoding_default = #{prefixEncodingDefault},</if>
+            <if test="prefixEncodingAttributeName != null">prefix_encoding_attribute_name = #{prefixEncodingAttributeName},</if>
+            <if test="dataManagementOrgCodeDigit != null">data_management_org_code_digit = #{dataManagementOrgCodeDigit},</if>
+            <if test="dataManagementOrgCodeDefault != null">data_management_org_code_default = #{dataManagementOrgCodeDefault},</if>
+            <if test="isHaveDataManagementOrgCode != null">is_have_data_management_org_code = #{isHaveDataManagementOrgCode},</if>
+            <if test="dataManagementOrgCodeAttributeName != null">data_management_org_code_attribute_name = #{dataManagementOrgCodeAttributeName},</if>
+            <if test="serialNumberDigit != null">serial_number_digit = #{serialNumberDigit},</if>
+            <if test="idInterfaceSql != null">id_interface_sql = #{idInterfaceSql},</if>
+            <if test="batchUpdateSql != null">batch_update_sql = #{batchUpdateSql},</if>
+            <if test="lastConversionResult != null">last_conversion_result = #{lastConversionResult},</if>
+            <if test="lastConversionTime != null">last_conversion_time = #{lastConversionTime},</if>
+            <if test="createDate != null">create_date = #{createDate},</if>
+            <if test="updateDate != null">update_date = #{updateDate},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTMetaModelIdRuleById" parameterType="Long">
+        delete from t_meta_model_id_rule where id = #{id}
+    </delete>
+
+    <delete id="deleteTMetaModelIdRuleByIds" parameterType="String">
+        delete from t_meta_model_id_rule where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

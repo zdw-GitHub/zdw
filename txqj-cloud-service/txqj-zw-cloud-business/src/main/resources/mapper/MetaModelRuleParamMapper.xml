@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mshz.cloud.tms.business.mapper.MetaModelRuleParamMapper">
+
+    <resultMap type="com.mshz.cloud.tms.business.entity.MetaModelRuleParam" id="MetaModelRuleParamResult">
+        <result property="id"    column="id"    />
+        <result property="modelRuleId"    column="model_rule_id"    />
+        <result property="paramName"    column="param_name"    />
+        <result property="paramNameCn"    column="param_name_cn"    />
+        <result property="paramTableId"    column="param_table_id"    />
+        <result property="paramTableName"    column="param_table_name"    />
+        <result property="paramTableNameCn"    column="param_table_name_cn"    />
+        <result property="paramColumnId"    column="param_column_id"    />
+        <result property="paramColumnName"    column="param_column_name"    />
+        <result property="paramColumnNameCn"    column="param_column_name_cn"    />
+        <result property="paramCondition"    column="param_condition"    />
+        <result property="createDate"    column="create_date"    />
+        <result property="updateDate"    column="update_date"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectMetaModelRuleParamVo">
+        select id, model_rule_id, param_name, param_name_cn, param_table_id, param_table_name, param_table_name_cn, param_column_id, param_column_name, param_column_name_cn, param_condition, create_date, update_date, remark from t_meta_model_rule_param
+    </sql>
+
+    <select id="selectMetaModelRuleParamList" parameterType="com.mshz.cloud.tms.business.entity.MetaModelRuleParam" resultMap="MetaModelRuleParamResult">
+        <include refid="selectMetaModelRuleParamVo"/>
+        <where>
+            <if test="modelRuleId != null "> and model_rule_id = #{modelRuleId}</if>
+            <if test="paramName != null  and paramName != ''"> and param_name like concat('%', #{paramName}, '%')</if>
+            <if test="paramNameCn != null  and paramNameCn != ''"> and param_name_cn = #{paramNameCn}</if>
+            <if test="paramTableId != null "> and param_table_id = #{paramTableId}</if>
+            <if test="paramTableName != null  and paramTableName != ''"> and param_table_name like concat('%', #{paramTableName}, '%')</if>
+            <if test="paramTableNameCn != null  and paramTableNameCn != ''"> and param_table_name_cn = #{paramTableNameCn}</if>
+            <if test="paramColumnId != null "> and param_column_id = #{paramColumnId}</if>
+            <if test="paramColumnName != null  and paramColumnName != ''"> and param_column_name like concat('%', #{paramColumnName}, '%')</if>
+            <if test="paramColumnNameCn != null  and paramColumnNameCn != ''"> and param_column_name_cn = #{paramColumnNameCn}</if>
+            <if test="paramCondition != null  and paramCondition != ''"> and param_condition = #{paramCondition}</if>
+            <if test="createDate != null  and createDate != ''"> and create_date = #{createDate}</if>
+            <if test="updateDate != null  and updateDate != ''"> and update_date = #{updateDate}</if>
+        </where>
+    </select>
+
+    <select id="selectMetaModelRuleParamById" parameterType="Long" resultMap="MetaModelRuleParamResult">
+        <include refid="selectMetaModelRuleParamVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertMetaModelRuleParam" parameterType="com.mshz.cloud.tms.business.entity.MetaModelRuleParam">
+        insert into t_meta_model_rule_param
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="modelRuleId != null">model_rule_id,</if>
+            <if test="paramName != null">param_name,</if>
+            <if test="paramNameCn != null">param_name_cn,</if>
+            <if test="paramTableId != null">param_table_id,</if>
+            <if test="paramTableName != null">param_table_name,</if>
+            <if test="paramTableNameCn != null">param_table_name_cn,</if>
+            <if test="paramColumnId != null">param_column_id,</if>
+            <if test="paramColumnName != null">param_column_name,</if>
+            <if test="paramColumnNameCn != null">param_column_name_cn,</if>
+            <if test="paramCondition != null">param_condition,</if>
+            <if test="remark != null">remark,</if>
+            create_date
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="modelRuleId != null">#{modelRuleId},</if>
+            <if test="paramName != null">#{paramName},</if>
+            <if test="paramNameCn != null">#{paramNameCn},</if>
+            <if test="paramTableId != null">#{paramTableId},</if>
+            <if test="paramTableName != null">#{paramTableName},</if>
+            <if test="paramTableNameCn != null">#{paramTableNameCn},</if>
+            <if test="paramColumnId != null">#{paramColumnId},</if>
+            <if test="paramColumnName != null">#{paramColumnName},</if>
+            <if test="paramColumnNameCn != null">#{paramColumnNameCn},</if>
+            <if test="paramCondition != null">#{paramCondition},</if>
+            <if test="remark != null">#{remark},</if>
+            sysdate()
+         </trim>
+    </insert>
+
+    <update id="updateMetaModelRuleParam" parameterType="com.mshz.cloud.tms.business.entity.MetaModelRuleParam">
+        update t_meta_model_rule_param
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="modelRuleId != null">model_rule_id = #{modelRuleId},</if>
+            <if test="paramName != null">param_name = #{paramName},</if>
+            <if test="paramNameCn != null">param_name_cn = #{paramNameCn},</if>
+            <if test="paramTableId != null">param_table_id = #{paramTableId},</if>
+            <if test="paramTableName != null">param_table_name = #{paramTableName},</if>
+            <if test="paramTableNameCn != null">param_table_name_cn = #{paramTableNameCn},</if>
+            <if test="paramColumnId != null">param_column_id = #{paramColumnId},</if>
+            <if test="paramColumnName != null">param_column_name = #{paramColumnName},</if>
+            <if test="paramColumnNameCn != null">param_column_name_cn = #{paramColumnNameCn},</if>
+            <if test="paramCondition != null">param_condition = #{paramCondition},</if>
+            <if test="createDate != null">create_date = #{createDate},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            update_date = sysdate()
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteMetaModelRuleParamById" parameterType="Long">
+        delete from t_meta_model_rule_param where id = #{id}
+    </delete>
+
+    <delete id="deleteMetaModelRuleParamByIds" parameterType="String">
+        delete from t_meta_model_rule_param where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,30 @@
+spring:
+  application:
+    # 应用名称
+    name: txqj-zw-cloud-gateway
+  profiles:
+    # 环境配置
+    active: local
+  main:
+    allow-bean-definition-overriding: true
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+        namespace: 09091c07-8c47-46c3-9633-5673db21a9b0
+        group: DEFAULT_GROUP
+#        username: nacos
+#        password: nacos
+      config:
+        server-addr: localhost:8848
+        namespace: 09091c07-8c47-46c3-9633-5673db21a9b0
+        group: DEFAULT_GROUP
+#        username: nacos
+#        password: nacos
+        # 配置文件格式
+        file-extension: yml
+        # 共享配置
+        shared-configs:
+          - application-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
+
+

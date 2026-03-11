@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mshz.cloud.tms.business.mapper.CommonMetaMapper">
+
+
+    <select id="selectAll" parameterType="com.mshz.cloud.tms.business.vo.CommonVo"
+            resultType="java.util.LinkedHashMap">
+        ${sql}
+    </select>
+
+    <select id="selectAllMiddle" parameterType="com.mshz.cloud.tms.business.vo.CommonVo"
+            resultType="java.util.LinkedHashMap">
+        ${sql}
+    </select>
+    <!--确定表中是否有主键-->
+    <select id="selectPrimaryKey" resultType="java.lang.String">
+        select column_name
+        from information_schema.columns
+        where column_key = "PRI" and table_name = #{tableName}
+        and TABLE_schema = #{dbName}
+    </select>
+
+    <insert id="insertSql" parameterType="com.mshz.cloud.tms.business.vo.CommonVo">
+        ${sql}
+    </insert>
+
+    <update id="updateSql" parameterType="com.mshz.cloud.tms.business.vo.CommonVo">
+        ${sql}
+    </update>
+
+    <update id="updateSqlSlave" parameterType="com.mshz.cloud.tms.business.vo.CommonVo">
+        ${sql}
+    </update>
+
+    <delete id="deleteSql" parameterType="com.mshz.cloud.tms.business.vo.CommonVo">
+        ${sql}
+    </delete>
+
+    <!--在数据库中生成表-->
+    <update id="createTable">
+        create table `${tableName}` (
+        `data_category` varchar(5) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '数据类型',
+        `delete_flag` varchar(5) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '删除标记',
+        `EDITSTATUS` varchar(5) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '操作状态',
+                                        `create_date` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '创建时间',
+                                        `update_date` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '更新时间'
+        ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact  COMMENT=#{tableNameCn};
+    </update>
+
+    <update id="createTableMiddle">
+        create table `${tableName}` (
+                                        `create_date` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '创建时间',
+                                        `update_date` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '更新时间'
+        ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact  COMMENT=#{tableNameCn};
+    </update>
+
+    <!--向数据库表中增添字段-->
+    <update id="alterTable">
+        ALTER TABLE ${tableName} ADD COLUMN ${columnName}
+        ${columnType} (${columnLength}) NULL
+        <!--        <if test="isNotNull=='0'">-->
+        <!--            NULL-->
+        <!--        </if>-->
+        <!--        <if test="isNotNull=='1'">-->
+        <!--            not NULL-->
+        <!--        </if>-->
+        COMMENT '${columnNameCn}'
+        <!-- ALTER TABLE `t_meta_today` ADD COLUMN `memo` varchar(25) NULL COMMENT '备注' -->
+    </update>
+
+    <update id="alterTableMiddle">
+        ALTER TABLE `${tableName}` ADD COLUMN `${columnName}`
+        ${columnType} (${columnLength}) NULL
+        <!--        <if test="isNotNull=='0'">-->
+        <!--            NULL-->
+        <!--        </if>-->
+        <!--        <if test="isNotNull=='1'">-->
+        <!--            not NULL-->
+        <!--        </if>-->
+        COMMENT '${columnNameCn}'
+        <!-- ALTER TABLE `t_meta_today` ADD COLUMN `memo` varchar(25) NULL COMMENT '备注' -->
+    </update>
+
+    <!--设置主键-->
+    <update id="setPrimaryKey">
+         Alter table ${tableName} add primary key(`${columnName}`)
+    </update>
+
+    <update id="setPrimaryKeyMiddle">
+         Alter table ${tableName} add primary key(`${columnName}`)
+    </update>
+
+    <!--取消主键-->
+    <update id="setCancelPrimaryKey">
+        Alter table ${tableName} drop primary key;
+    </update>
+
+    <!--更改数据库表字段属性-->
+    <update id="updateTable">
+        <!--ALTER TABLE modelname CHANGE c1 c1 varchar(0)  NOT NULL  COMMENT 'test';-->
+        ALTER TABLE ${tableName} CHANGE ${oldColumnName} ${columnName} ${columnType}(
+        <if test="columnLength == null or columnLength== ''">
+            0
+        </if>
+        <if test="columnLength != null and columnLength!= ''">
+            ${columnLength}
+        </if>
+        )
+        <if test="isNotNull=='0'.toString()">
+            NULL
+        </if>
+        <if test="isNotNull=='1'.toString()">
+            not NULL
+        </if>
+        COMMENT '${columnNameCn}';
+    </update>
+    <!--在数据库中删除表-->
+    <update id="deleteTable">
+        DROP TABLE ${tableName};
+    </update>
+
+    <!--在元模型转换中间库中删除表-->
+    <update id="deleteMiddleDbTable">
+        DROP TABLE ${tableName};
+    </update>
+
+    <!--在数据库中拷贝要发布的表(-->
+    <update id="copyTable">
+
+        CREATE TABLE  ${newTable} LIKE ${oldTable};
+        INSERT INTO ${newTable} SELECT * FROM ${oldTable}
+    </update>
+
+    <!--修改数据库中表名-->
+    <update id="updateTableName">
+        alter table ${oldTableName} rename to ${newTableName}
+    </update>
+
+    <!--修改数据空表注释-->
+    <update id="updateTableNameCn">
+        alter table ${tableName} COMMENT #{tableNameCn}
+    </update>
+
+
+    <!--删除数据库中表中字段-->
+    <delete id="deleteTableColumn">
+        ALTER TABLE ${tableName} DROP ${columnName};
+    </delete>
+
+    <select id="whetherTheTableExists" resultType="string">
+        SHOW TABLES LIKE #{tableName}
+    </select>
+
+    <select id="isTableExist" resultType="int">
+        select count(*) from information_schema.TABLES t
+                        where t.TABLE_SCHEMA = #{dbName} and t.TABLE_NAME = #{tableName};
+    </select>
+
+    <select id="doesTheColumnNameExist" resultType="int">
+        select count(*) from information_schema.columns
+                        where TABLE_SCHEMA = #{dbName}
+                          and table_name = #{tableName}
+                          and column_name = #{columnName}
+    </select>
+
+    <select id="queryAllFieldsInTheTable" resultType="com.mshz.cloud.tms.business.vo.ColumnNameInfoVo">
+        select column_name as columnName,
+               data_type as dataType,
+               character_maximum_length as characterMaximumLength,
+               column_type as columnType,
+               column_key as  columnKey,
+               is_nullable as isNullable,
+               column_comment as columnComment
+        from information_schema.columns
+        where TABLE_SCHEMA = #{dbName} and table_name = #{tableName}
+    </select>
+
+
+
+    <resultMap type="com.mshz.cloud.tms.business.entity.TDbConfig" id="TDbConfigResult">
+        <result property="id"    column="id"    />
+        <result property="dbName"    column="db_name"    />
+        <result property="dbNameCn"    column="db_name_cn"    />
+        <result property="dbType"    column="db_type"    />
+        <result property="dbVersion"    column="db_version"    />
+        <result property="dbJdbc"    column="db_jdbc"    />
+        <result property="dbDriver"    column="db_driver"    />
+        <result property="dbIp"    column="db_ip"    />
+        <result property="dbPort"    column="db_port"    />
+        <result property="dbUsername"    column="db_username"    />
+        <result property="dbPassword"    column="db_password"    />
+        <result property="remark"    column="remark"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectTDbConfigVo">
+        select id, db_name, db_name_cn, db_type, db_version, db_jdbc, db_driver, db_ip, db_port, db_username, db_password, remark, create_time, update_time from t_db_config
+    </sql>
+
+    <select id="selectTDbConfigList" parameterType="com.mshz.cloud.tms.business.entity.TDbConfig" resultMap="TDbConfigResult">
+        <include refid="selectTDbConfigVo"/>
+        <where>
+            <if test="dbName != null  and dbName != ''"> and db_name = #{dbName}</if>
+            <if test="dbNameCn != null  and dbNameCn != ''"> and db_name_cn = #{dbNameCn}</if>
+            <if test="dbType != null  and dbType != ''"> and db_type = #{dbType}</if>
+            <if test="dbVersion != null  and dbVersion != ''"> and db_version = #{dbVersion}</if>
+            <if test="dbJdbc != null  and dbJdbc != ''"> and db_jdbc = #{dbJdbc}</if>
+            <if test="dbDriver != null  and dbDriver != ''"> and db_driver = #{dbDriver}</if>
+            <if test="dbIp != null  and dbIp != ''"> and db_ip = #{dbIp}</if>
+            <if test="dbPort != null  and dbPort != ''"> and db_port = #{dbPort}</if>
+            <if test="dbUsername != null  and dbUsername != ''"> and db_username = #{dbUsername}</if>
+            <if test="dbPassword != null  and dbPassword != ''"> and db_password = #{dbPassword}</if>
+        </where>
+    </select>
+
+
+    <resultMap type="com.mshz.cloud.tms.business.entity.TDbTable" id="TDbTableResult">
+        <result property="id" column="id"/>
+        <result property="tableName" column="table_name"/>
+        <result property="tableNameCn" column="table_name_cn"/>
+        <result property="dbId" column="db_id"/>
+        <result property="remark" column="remark"/>
+        <result property="searchCondition" column="search_condition"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="disabled" column="disabled"/>
+    </resultMap>
+
+    <sql id="selectTDbTableVo">
+        select id, table_name, table_name_cn, db_id, remark, search_condition, create_time, update_time from t_db_table
+    </sql>
+
+    <select id="selectTDbTableList" parameterType="com.mshz.cloud.tms.business.entity.TDbTable" resultMap="TDbTableResult">
+        <include refid="selectTDbTableVo"/>
+        <where>
+            <if test="tableName != null  and tableName != ''">and table_name = #{tableName}</if>
+            <if test="tableNameCn != null  and tableNameCn != ''">and table_name_cn = #{tableNameCn}</if>
+            <if test="dbId != null ">and db_id = #{dbId}</if>
+            <if test="searchCondition != null  and searchCondition != ''">and search_condition = #{searchCondition}</if>
+        </where>
+    </select>
+
+</mapper>

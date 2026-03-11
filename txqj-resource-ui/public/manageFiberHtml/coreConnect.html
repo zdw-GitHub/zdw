@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <meta http-equiv="pragma" content="no-cache">
+  <title></title>
+  <script type="text/javascript" src="../js/twaver.js"></script>
+  <style type="text/css">
+    *{
+      margin: 0;
+      padding: 0;
+    }
+    .border{
+      width: 100%;
+      height: 100vh;
+      padding: 5% 12%;
+      box-sizing: border-box;
+      background-image: url("../img/jth-bj.png");
+      background-size: 100%;
+      background-repeat: no-repeat;
+      background-position: 50% 50%;
+    }
+    #topoPage1{
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+  </style>
+  <script type="text/javascript">
+    window.onload = function () {
+      init()
+    }
+    var aNode = undefined
+    var zNode = undefined
+    var groups = []
+    var nodes = []
+    var links = []
+    var nodeSize = 40
+    var box = new twaver.ElementBox()
+    var network = new twaver.vector.Network(box)
+    network.setMovableFunction(function (e) {
+      if (e.getClient('data') && e.getClient('data').SEGID) {
+        return true
+      }
+      return false
+    })
+    network.setKeyboardRemoveEnabled(false)
+    network.addInteractionListener(function(e){
+      // 编辑状态 且 为单击事件 且 单机的是端子
+      if (
+        e.kind == 'clickElement' &&
+        e.element.getClient('data') &&
+        e.element.getClient('data').type == 'node'
+      ) {
+        if (!(e.element.getClient('data').isDisabled)) {
+          if (e.kind == 'clickElement' && e.element.getClient('data').parFiberSeg) {
+            if (aNode == undefined || aNode == '' || aNode == null) {
+              aNode = e.element.getClient('data').id
+              setA(e.element)
+            } else {
+              zNode = e.element.getClient('data').id
+              if (box.getDataById(aNode).getClient('data').parFiberSeg == box.getDataById(zNode).getClient('data').parFiberSeg) {
+                setA(e.element)
+              } else {
+                setZ()
+              }
+            }
+          }
+        } else{
+
+        }
+      }
+    })
+
+    function setA (element) {
+        if (box.getDataById(aNode).getLinks()) {
+          box.getDataById(aNode).setImage('duanZiAZ')
+        } else {
+          box.getDataById(aNode).setImage('duanZi')
+        }
+        
+        aNode = element.getClient('data').id
+        box.getDataById(aNode).setImage('duanZiChecked')
+        zNode = undefined
+      }
+      
+    function setZ () {
+      var alinks = box.getDataById(aNode).getLinks()
+      var zlinks = box.getDataById(zNode).getLinks()
+      var delLinks = []
+      var objs = []
+      if (alinks || zlinks) {
+        if (alinks) {
+          alinks.forEach((item, index, arr) => {
+            delLinks.push(item)
+            objs.push(item.getClient('data'))
+          })
+        }
+        if (zlinks) {
+          zlinks.forEach((item, index, arr) => {
+            delLinks.push(item)
+            objs.push(item.getClient('data'))
+          })
+        }
+        var aResId = box.getDataById(aNode).getClient('data').id
+        var zResId = box.getDataById(zNode).getClient('data').id
+        window.parent['reSetLink'](objs, delLinks, aResId, zResId)
+      } else {
+        window.parent['addFiberLine']({
+          aResId: box.getDataById(aNode).getClient('data').id,
+          zResId: box.getDataById(zNode).getClient('data').id,
+        })
+      }
+    }
+    // 注册图片方法
+    function registerImage(url, name) {
+      var image = new Image()
+      image.src = url
+      image.onload = function() {
+        twaver.Util.registerImage(name, image, image.width, image.height)
+        image.onload = null
+        if (window.network) {
+          window.network.invalidateElementUIs()
+        }
+        if (window.tree) {
+          window.tree.invalidateDisplay()
+        }
+      }
+    }
+    // 新增分组
+    function addGroup (item) {
+      if (
+        item.SEGID !== undefined &&
+        item.SEGID !== null &&
+        item.SEGID !== ''
+      ) {
+        var parentGroup = box.getDataById('border')
+        var group = new twaver.Group(item.SEGID)
+        group.setStyle("group.fill.color","#F4F4F4")
+        group.setStyle('label.position','top.top')
+        group.setStyle('label.padding.bottom', 100)
+        group.setStyle('label.yoffset', -10)
+        group.setStyle('group.padding', 13)
+        group.setStyle('group.outline.color', '#d6d6d6')
+        group.setStyle('group.outline.width', 3)
+        group.setStyle('group.shape', 'roundrect')
+        group.setStyle('select.style', 'none');
+        group.setName(item.SEGNAME)
+        group.setExpanded(true)
+        item.type = 'group'
+        group.setClient('data', item)
+        group.expanded = true
+        group.setLayerId('unmovable')
+        box.add(group)
+        parentGroup.addChild(group)
+      }
+    }
+    // 新增点
+    function addNode (items, width) {
+      if (items.length != 0) {
+        var parentGroup = box.getDataById(items[0].parFiberSeg)
+        var pIndex = groups.findIndex((item) => { return items[0].parFiberSeg == item.SEGID })
+        var location = {x: 100, y: 110}
+        var arrange
+        if (pIndex == 0) {
+          arrange = 'L'
+        } else if (pIndex == 1) {
+          arrange = 'R'
+          location.x = width
+          if (nodes[2]) {
+            var x1 = nodes[2] ? nodes[2].length * nodeSize + 100 : 0
+            var x2 = nodes[3] ? nodes[3].length * nodeSize + 100 : 0
+            location.x = Math.max(x1, x2, width)
+          }
+        } else if (pIndex == 2) {
+          arrange = 'T'
+          var x1 = nodes[2] ? nodes[2].length * nodeSize : 0
+          var x2 = nodes[3] ? nodes[3].length * nodeSize : 0
+          var x3 = Math.max(x1, x2, width)
+          location.x = (x3 / 2) - ((nodes[2].length * nodeSize) / 2) + 100
+          location.y = 60
+        } else if (pIndex == 3) {
+          arrange = 'B'
+          var x1 = nodes[2] ? nodes[2].length * nodeSize : 0
+          var x2 = nodes[3] ? nodes[3].length * nodeSize : 0
+          var x3 = width - width / 2 - nodeSize
+          location.x = nodes[2].length * nodeSize > width ? 200 : width - width / 2 + nodeSize
+          var y1 = nodes[0] ? nodes[0].length * nodeSize + 140 : 0
+          var y2 = nodes[1] ? nodes[1].length * nodeSize + 140 : 0
+          location.y = Math.max(y1, y2)
+        }
+      } else {
+        return
+      }
+      items.forEach((item, index, arr) =>  {
+        if (
+          item.id !== undefined &&
+          item.id !== null &&
+          item.id !== ''
+        ) {
+          item.arrange = arrange
+          item.type = 'node'
+          var node = new twaver.Node(item.id)
+          node.setLocation(location.x, location.y)
+          node.setName(item.sn)
+          if(item.lineflag + '' == '1') {
+            item.isDisabled = true // 不可选中
+            node.setImage('duanZiAlarm')
+          } else {
+            node.setImage('duanZi')
+          }
+          node.setStyle('label.position','center')
+          node.setClient('data', item)
+          box.add(node)
+          parentGroup.addChild(node)
+          if (pIndex == 0 || pIndex == 1) {
+            location.y += nodeSize
+          } else {
+            location.x += nodeSize
+          }
+        }
+      })
+    }
+    // 新增线
+    function addLink (item) {
+      if (
+        item.aResId === undefined ||
+        item.aResId === null ||
+        item.aResId === '' ||
+        item.zResId === undefined ||
+        item.zResId === null ||
+        item.zResId === ''
+      ) return
+      if (
+        box.getDataById(item.aResId) === undefined ||
+        box.getDataById(item.zResId) === undefined
+      ) return
+      if (
+        box.getDataById(item.id) !== undefined
+      ) return
+      var from = box.getDataById(item.aResId)
+      var to = box.getDataById(item.zResId)
+      var length = from.getParent()._childList._as.length
+      var index = parseInt(from.getClient('data').sn)
+      from.setImage('duanZiAZ')
+      to.setImage('duanZiAZ')
+      var link
+      if (
+      (from.getClient('data').arrange == 'L' && to.getClient('data').arrange == 'R') ||
+      (from.getClient('data').arrange == 'R' && to.getClient('data').arrange == 'L')
+      ) {
+        link = new twaver.Link(item.id, from, to)
+        link.setStyle('link.type', 'orthogonal.horizontal')
+        link.setStyle('link.from.at.edge', false)
+        link.setStyle('link.to.at.edge', false)
+        link.setStyle('link.split.by.percent', false)
+        var x1 = Math.max(from.getLocation().x, to.getLocation().x)
+        var x2 = Math.min(from.getLocation().x, to.getLocation().x)
+        link.setStyle('link.split.value', (x1 - x2) / (length + 1) * index)
+      } else if (
+        (from.getClient('data').arrange == 'T' && to.getClient('data').arrange == 'B') ||
+        (from.getClient('data').arrange == 'B' && to.getClient('data').arrange == 'T')
+      ) {
+        link = new twaver.Link(item.id, from, to)
+        link.setStyle('link.from.at.edge', false)
+        link.setStyle('link.to.at.edge', false)
+        link.setStyle('link.split.by.percent', false)
+        var y1 = Math.max(from.getLocation().y, to.getLocation().y)
+        var y2 = Math.min(from.getLocation().y, to.getLocation().y)
+        link.setStyle('link.type', 'orthogonal.vertical')
+        link.setStyle('link.split.value', (y1 - y2) / (length + 1) * index)
+      } else if (
+        (from.getClient('data').arrange == 'L' && to.getClient('data').arrange == 'T') ||
+        (from.getClient('data').arrange == 'L' && to.getClient('data').arrange == 'B') ||
+        (from.getClient('data').arrange == 'R' && to.getClient('data').arrange == 'T') ||
+        (from.getClient('data').arrange == 'R' && to.getClient('data').arrange == 'B')
+      ) {
+        link = new twaver.ShapeLink(item.id, from, to)
+        var x = to.getLocation().x + nodeSize / 4
+        var y = from.getLocation().y + nodeSize / 4
+        link.addPoint({x, y})
+      } else if (
+        (to.getClient('data').arrange == 'L' && from.getClient('data').arrange == 'T') ||
+        (to.getClient('data').arrange == 'L' && from.getClient('data').arrange == 'B') ||
+        (to.getClient('data').arrange == 'R' && from.getClient('data').arrange == 'T') ||
+        (to.getClient('data').arrange == 'R' && from.getClient('data').arrange == 'B')
+      ) {
+        link = new twaver.ShapeLink(item.id, from, to)
+        var x = from.getLocation().x + nodeSize / 4
+        var y = to.getLocation().y + nodeSize / 4
+        link.addPoint({x, y})
+      }
+      link.setStyle('link.color', '#387EFD')
+      link.setName(item.name)
+      item.type = 'link'
+      link.setClient('data', item)
+      box.add(link)
+      aNode = undefined
+      zNode = undefined
+      links.push(item)
+    }
+    function removerLink (link) {
+      var data = link.getClient('data')
+      window.parent['delLink'](data, link)
+    }
+    function removerLinkCommit(link) {
+      link.getFromNode().setImage('duanZi')
+      link.getToNode().setImage('duanZi')
+      box.remove(link)
+    }
+    // 设置鼠标右键
+    function setMouse () {
+      var popupMenu = new twaver.controls.PopupMenu(network)
+      // 最后选中的节点和位置
+      var mouseData
+      var mousePoint
+      popupMenu.onMenuShowing = function(e) {
+        mouseData = network.getSelectionModel().getLastData()
+        mousePoint = network.getLogicalPoint(e)
+        return true
+      }
+      // 设置右键菜单内容
+      popupMenu.setMenuItems([
+        {label : "删除连接", group: 'link'},
+        // {label : "批量连接", group: 'group'},
+        // {label : "批量删除", group: 'group'},
+      ])
+      // 设置右键菜单是否可见
+      popupMenu.isVisible = function(menuItem) {
+        if (mouseData) {
+          var type = mouseData.getClient('data').type
+          return menuItem.group === type
+        } else {
+          return menuItem.group === 'none'
+        }
+      }
+      // 设置右键菜单动作
+      popupMenu.onAction = function(menuItem) {
+        // 删除节点或者链路
+        if (menuItem.label == "删除连接") {
+          removerLink(mouseData)
+        } else if (menuItem.label == "批量连接") {
+          var data = mouseData.getClient('data')
+          let title = data.SEGNAME
+          window.parent['batchConnectionsShow'](
+            {SEGID: data.SEGID, SEGNAME: data.SEGNAME, groupLength: data.groupLength},
+            groups,
+            title
+          )
+        } else if (menuItem.label == "批量删除") {
+          var data = mouseData.getClient('data')
+          let title = data.SEGNAME
+          window.parent['delMoreBoxShow'](data.SEGID, data.groupLength, title)
+        }
+      }
+    }
+    function reSetTopo (groupsP, nodesP, linksP) {
+      aNode = undefined
+      zNode = undefined
+      var oldArr = box.getDatas()._as
+      for (let i = 0; oldArr.length > 0; i) {
+        box.remove(oldArr[i])
+      }
+      var group = new twaver.Group('border')
+      group.setStyle("group.fill.color","#F4F4F4")
+      group.setStyle('group.padding', 13)
+      group.setStyle('group.outline.color', '#d6d6d6')
+      group.setStyle('group.outline.width', 3)
+      group.setStyle('group.shape', 'roundrect')
+      group.setStyle('select.style', 'none');
+      group.setExpanded(true)
+      group.setLayerId('unmovable')
+      box.add(group)
+
+      groups = groupsP
+      nodes = nodesP
+      links = linksP
+      groups.forEach((item, index, arr) => {
+        addGroup(item)
+      })
+      var wid = (window.innerWidth * 0.76) - 40 - 100
+      nodes.forEach((items, index, arr) => {
+        addNode(items, wid)
+      })
+      links.forEach((items, index, arr) => {
+        addLink(items)
+      })
+    }
+
+    function init () {
+      var pane = new twaver.controls.BorderPane(network)
+      var view = pane.getView()
+      view.style.left = '0px'
+      view.style.top = '0px'
+      view.style.right = '0px'
+      view.style.bottom = '0px'
+      document.getElementById('topoPage1').appendChild(view)
+      // 注册topo图片
+      registerImage('../img/duanZi.png', 'duanZi')
+      registerImage('../img/duanZiChecked.png', 'duanZiChecked')
+      registerImage('../img/duanZiAZ.png', 'duanZiAZ')
+      registerImage('../img/duanZiAlarm.png', 'duanZiAlarm')
+      twaver.vector.Network.prototype.isDoubleClickToGroupExpand = function () {false}
+      setMouse()
+    }
+  </script>
+</head>
+<body>
+<div class="border">
+  <div id="topoPage1">
+
+  </div>
+</div>
+</body>
+</html>
