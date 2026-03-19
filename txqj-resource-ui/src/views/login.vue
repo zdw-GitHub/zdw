@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form">
-      <!-- <h3 class="title">通信一体化平台</h3> -->
+      <!-- <h3 class="title">全时空通信全景平台</h3> -->
       <el-form-item prop="username" style="margin-bottom: 30px !important;">
         <el-input
           v-model="loginForm.username"

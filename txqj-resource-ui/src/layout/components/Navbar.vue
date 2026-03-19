@@ -1,36 +1,49 @@
 <template>
   <div class="navbar">
-    用户 : {{ userName }}
-    <!-- <el-button
-      class="right-menu-item system-btn"
-      style="background-color: transparent; color: #fff; border: none;"
-      icon="el-icon-s-tools"
-      @click.native="toSystemManage"
-    >
-      
-    </el-button> -->
-    <!-- 原有退出按钮 -->
-    <el-button
-      class="right-menu-item logout-btn"
-      style="background-color: transparent; color: #303133; border: none;"
-      icon="el-icon-switch-button"
-      @click.native="logout"
-    >
-      退出
-    </el-button>
+    <!-- 修改用户信息部分 -->
+    <div class="user-wrapper">
+
+      <!-- 用户名称 -->
+      <span class="user-name">{{ userName }}</span>
+      <!-- 用户头像 -->
+      <el-avatar :size="40" :src="avatarUrl" class="user-avatar" fit="cover">
+        <!-- 如果头像加载失败，显示用户名首字母 -->
+        <img src="@/assets/txqj/user-login.png" alt="用户头像" />
+      </el-avatar>
+
+
+      <!-- 退出按钮 - 放大图标 -->
+      <el-button class="right-menu-item logout-btn"
+        style="background-color: transparent; color: #303133; border: none; padding: 0 8px;" @click.native="logout">
+        <i class="el-icon-switch-button" style="font-size: 18px;"></i>
+        <span style="font-size: 14px; margin-left: 4px;">退出</span>
+      </el-button>
+    </div>
   </div>
 </template>
 
 <script>
 import { getUserType, getIscUserId, removeIscUserId } from "@/utils/auth";
+import { mapGetters } from 'vuex'
+import defaultAvatar from '@/assets/txqj/user-login.png'
 
 export default {
   data() {
     return {
       year: '',
       day: '',
-      userName: sessionStorage.nickName,
-      userType: '当前'
+      userName: sessionStorage.nickName || '调度员',
+      userType: '当前',
+      defaultAvatar: defaultAvatar
+    }
+  },
+  computed: {
+    ...mapGetters([
+      'avatar'  // 从vuex获取头像
+    ]),
+    avatarUrl() {
+      // 如果有上传的头像，使用上传的；否则使用默认头像
+      return this.avatar || defaultAvatar
     }
   },
   created() {
@@ -57,7 +70,7 @@ export default {
             location.href = '/resourceManagement/index';
           }
         })
-      }).catch(() => {});
+      }).catch(() => { });
     },
     getTime: function () {
       var myDate = new Date()
@@ -65,14 +78,7 @@ export default {
       this.day = '星期' + weeks[myDate.getDay()]
       this.year = myDate.getFullYear() + '年' + (myDate.getMonth() + 1) + '月' + myDate.getDate() + '日'
     },
-    // 新增：模型配置导航方法
-    toModelConfig() {
-      // 替换为模型配置页面的实际路由路径
-      this.$router.push('/model/config')
-    },
-    // 新增：系统管理导航方法
     toSystemManage() {
-      // 替换为系统管理页面的实际路由路径
       this.$router.push('/system/manage')
     }
   },
@@ -84,26 +90,72 @@ export default {
   margin: 0 !important;
   width: 100%;
   height: 100%;
-  padding-right: 20px;
   line-height: 60px;
   font-size: 14px;
   color: #303133;
   text-align: right;
-  // 统一按钮样式：间距、hover效果，覆盖原有背景图（避免与退出按钮冲突）
+
+  .user-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    height: 100%;
+    gap: 8px; // 统一间距
+
+    .user-avatar {
+      background-color: #409EFF;
+      border: 2px solid #fff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      flex-shrink: 0;
+
+      :deep(img) {
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    .user-name {
+      font-size: 14px;
+      color: #303133;
+      margin-right: 0; // 移除右边距
+      white-space: nowrap;
+    }
+
+    .logout-btn {
+      margin-left: 0; // 移除左边距，用gap控制
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 40px;
+      border-radius: 20px;
+      padding: 0 12px !important;
+      transition: all 0.3s;
+
+      &:hover {
+        background: linear-gradient(180deg, #Dffff6 0%, #ffffff 100%);
+        border-color: transparent !important;
+        transform: scale(1.05);
+      }
+
+      i {
+        font-size: 24px;
+        margin-right: 4px;
+      }
+
+      span {
+        font-size: 14px;
+      }
+    }
+  }
+
   .el-button {
-    margin-left: 15px; // 调整间距，比原有20px更紧凑，适配多按钮
+    margin-left: 0; // 移除默认的左边距
+
     &:hover {
       background: linear-gradient(180deg, #Dffff6 0%, #ffffff 100%);
       border-color: transparent !important;
     }
-    // 图标与文字间距（可选，优化视觉）
-   .el-icon {
-      margin-right: 4px;
-    }
-  }
-  // 单独给退出按钮加稍大间距，与功能按钮区分
-  .logout-btn {
-    margin-left: 20px;
   }
 }
 </style>

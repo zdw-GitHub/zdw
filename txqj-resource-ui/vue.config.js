@@ -7,8 +7,8 @@ function resolve(dir) {
 
 const CompressionPlugin = require('compression-webpack-plugin')
 
-// const name =  '通信一体化平台' // 网页标题
-const name =  '通信一体化平台' // 网页标题
+// const name =  '全时空通信全景平台' // 网页标题
+const name =  '全时空通信全景平台' // 网页标题
 
 const port = 82 // 端口
 
