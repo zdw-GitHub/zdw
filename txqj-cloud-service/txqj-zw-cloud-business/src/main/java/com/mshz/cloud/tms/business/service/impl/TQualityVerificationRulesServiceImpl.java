@@ -1,4 +1,5 @@
 package com.mshz.cloud.tms.business.service.impl;
+import com.mshz.cloud.tms.business.entity.TMetaModelTech;
 import com.mshz.cloud.tms.business.entity.TQualityVerificationResult;
 import com.mshz.cloud.tms.business.entity.TQualityVerificationRules;
 import com.mshz.cloud.tms.business.service.ITQualityVerificationRulesService;
@@ -30,6 +31,19 @@ public class TQualityVerificationRulesServiceImpl implements ITQualityVerificati
     @Override
     public TQualityVerificationRules selectTQualityVerificationRulesById(Long id) {
         return tQualityVerificationRulesMapper.selectTQualityVerificationRulesById(id);
+    }
+
+    /**
+     * 查询技术元模型属性列表
+     * @param modelId
+     * @param columnName
+     * @param modelVersion
+     * @return
+     */
+    @Override
+    public List<TMetaModelTech> selectTMetaModelTechList(Long modelId, String columnName, String modelVersion)
+    {
+        return tQualityVerificationRulesMapper.selectTMetaModelTechList(modelId,columnName,modelVersion);
     }
 
     /**

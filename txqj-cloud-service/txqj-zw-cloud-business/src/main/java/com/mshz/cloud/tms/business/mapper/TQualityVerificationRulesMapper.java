@@ -1,5 +1,6 @@
 package com.mshz.cloud.tms.business.mapper;
 
+import com.mshz.cloud.tms.business.entity.TMetaModelTech;
 import com.mshz.cloud.tms.business.entity.TQualityVerificationResult;
 import com.mshz.cloud.tms.business.entity.TQualityVerificationRules;
 import com.mshz.cloud.tms.business.vo.*;
@@ -145,4 +146,13 @@ public interface TQualityVerificationRulesMapper {
     public List<QualityVerificationRulesVo> selectQualityVerificationRulesListVo(QualityVerificationRulesVo qualityVerificationRulesVo);
 
     List<SelectVo> selectSymbolList(@Param("englishName") String englishName);
+
+    /**
+     * 查询技术元模型属性列表
+     * @param modelId
+     * @param columnName
+     * @param modelVersion
+     * @return
+     */
+    public List<TMetaModelTech> selectTMetaModelTechList(@Param("modelId") Long modelId, @Param("columnName") String columnName,@Param("modelVersion") String modelVersion);
 }

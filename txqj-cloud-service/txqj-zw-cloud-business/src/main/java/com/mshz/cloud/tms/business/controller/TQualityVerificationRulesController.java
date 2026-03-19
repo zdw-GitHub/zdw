@@ -5,6 +5,7 @@ import com.mshz.cloud.tms.business.annotation.RequiresPermissions;
 import com.mshz.cloud.tms.business.common.controller.BaseController;
 import com.mshz.cloud.tms.business.domain.AjaxResult;
 import com.mshz.cloud.common.web.page.TableDataInfo;
+import com.mshz.cloud.tms.business.entity.TMetaModelTech;
 import com.mshz.cloud.tms.business.entity.TQualityVerificationRules;
 import com.mshz.cloud.tms.business.entity.TQualityVerificationResult;
 import com.mshz.cloud.tms.business.service.ITQualityVerificationResultService;
@@ -57,6 +58,9 @@ public class TQualityVerificationRulesController extends BaseController {
     /**
      * 查询数据质量-校验规则列表
      */
+    /**
+     * 查询数据质量-校验规则列表
+     */
     @RequiresPermissions("mm:verificationRules:listVo")
     @GetMapping("/listVo")
     public TableDataInfo list(QualityVerificationRulesVo tQualityVerificationRulesVo)
@@ -92,6 +96,19 @@ public class TQualityVerificationRulesController extends BaseController {
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id) {
         return AjaxResult.success(tQualityVerificationRulesService.selectTQualityVerificationRulesById(id));
+    }
+
+
+    @RequiresPermissions("mm:verificationRules:listVo")
+    @GetMapping("/attrListOptions")
+    public TableDataInfo attrListOptions(Long modelId, String columnName, String modelVersion)
+    {
+        if("".equals(modelVersion)||modelVersion == null){
+            modelVersion = ("edit");
+        }
+
+        List<TMetaModelTech> list = tQualityVerificationRulesService.selectTMetaModelTechList(modelId,columnName,modelVersion);
+        return getDataTable(list);
     }
 
     /**

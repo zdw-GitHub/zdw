@@ -1,4 +1,5 @@
 package com.mshz.cloud.tms.business.service;
+import com.mshz.cloud.tms.business.entity.TMetaModelTech;
 import com.mshz.cloud.tms.business.entity.TQualityVerificationResult;
 import com.mshz.cloud.tms.business.entity.TQualityVerificationRules;
 import com.mshz.cloud.tms.business.vo.*;
@@ -19,6 +20,15 @@ public interface ITQualityVerificationRulesService {
      * @return 数据质量-基础校验规则
      */
     public TQualityVerificationRules selectTQualityVerificationRulesById(Long id);
+
+    /**
+     * 查询技术元模型属性列表
+     * @param modelId
+     * @param columnName
+     * @param modelVersion
+     * @return
+     */
+    public List<TMetaModelTech> selectTMetaModelTechList(Long modelId, String columnName, String modelVersion);
 
     /**
      * 查询数据质量-基础校验规则列表

@@ -1,7 +1,7 @@
 <template>
   <div class="commonWh">
     <div class="main-layout">
-      <TreeSidebar ref="treeSidebar" :show-load-button="false" :default-active-path="activePath"
+      <TreeSidebar v-if="showTree" ref="treeSidebar" :show-load-button="false" :default-active-path="activePath"
         @node-click="handleTreeNodeClick" @load-data="loadSelectedTreeNodeData" @tip="handleTreeTip"
         @auto-select="handleAutoSelect" />
 
@@ -352,6 +352,10 @@
           <NMinusOne ref="nMinusOne" :tree-node="selectedTreeNode" />
         </div>
 
+        <div v-if="currentComponent === 'fiberManage'">
+          <FiberManage ref="fiberManage" :tree-node="selectedTreeNode" />
+        </div>
+
 
       </div>
 
@@ -372,6 +376,7 @@
 import TreeSidebar from '@/components/TreeSidebar/index.vue';
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 import NMinusOne from '@/views/nMinusOne/index.vue';
+// import FiberManage from '@/views/manageFiber/fiber/index.vue';
 import zspz from "./zspz";
 import {
   tree,
@@ -429,8 +434,15 @@ function buildTreeData(list, idKey = 'ID', parentIdKey = 'PARENT_ID', labelKey =
 
 export default {
   name: "Zdzywh",
-  components: { zspz, editData, seeData, TreeSidebar, NMinusOne },
+  components: {
+    zspz, editData, seeData, TreeSidebar, NMinusOne,
+    FiberManage: () => import('@/views/manageFiber/fiber/index.vue')
+  },
   props: {
+    showTree: {
+      type: Boolean,
+      default: true
+    },
     tableName: {
       type: String,
       default: 'SG_TCCON_TCSITE_B' // 默认模型
@@ -458,6 +470,7 @@ export default {
   },
   data() {
     return {
+      innerTableName: this.innerTableName,
       tableHeight: 'auto',
       currentComponent: 'zdzywh',
       activePath: '',
@@ -546,7 +559,15 @@ export default {
     }
   },
   watch: {
-
+    '$route'(to) {
+    this.activePath = to.path;
+    },
+    tableName: {
+      immediate: true,
+      handler(newVal) {
+        this.innerTableName = newVal;
+      }
+    },
     filterText(val) {
       this.$refs.treeForm.filter(val);
     },
@@ -590,36 +611,23 @@ export default {
   },
   mounted() {
     this.initTreeData();
+    this.activePath = this.$route.path; 
     this.calcTableHeight();
-    // 监听窗口大小变化，重新计算高度
     window.addEventListener('resize', this.calcTableHeight);
+
     this.$nextTick(async () => {
       this.globalSearchKeyword = this.$route.query.searchKeyword || '';
-      const routeTableName = this.$route.query.tableName ||
-        (() => {
-          const pathSegments = this.$route.path.split('/').filter(seg => seg);
-          return pathSegments.pop() || '';
-        })();
-
-      // 自动选中节点（兼容所有类型）
-      if (routeTableName) {
-        // 从路由中解析完整path，设置给树组件
-        const pathSegments = this.$route.path.split('/').filter(seg => seg);
-        pathSegments.pop(); // 移除最后一个tableName
-        const basePath = pathSegments.join('/');
-        this.activePath = `${basePath}/${routeTableName}`;
-      }
 
       if (this.globalSearchKeyword) {
         this.handleGlobalSearch(this.globalSearchKeyword);
       }
 
-      // 仅当路由是表模型路径时，才默认显示右侧内容
-      if (this.$route.path.includes('/zdwh/')) {
+      // 根据 tableName 加载数据（如果有）
+      if (this.innerTableName) {
         this.showRightContent = true;
         await this.loadTreeNodeData();
       } else {
-        this.showRightContent = false; // 非表模型隐藏右侧数据区
+        this.showRightContent = false;
       }
     });
   },
@@ -706,62 +714,69 @@ export default {
     calcTableHeight() {
       this.$nextTick(() => {
         try {
-          // 获取表格容器的可用高度
           const tableBox = this.$refs.tableBox;
           if (tableBox) {
-            // 获取表格顶部按钮高度
             const tabTopButton = tableBox.querySelector('.tabTopButton');
             const buttonHeight = tabTopButton ? tabTopButton.offsetHeight : 40;
-            // 获取分页器高度
             const pagination = tableBox.querySelector('.pagination');
             const paginationHeight = pagination ? pagination.offsetHeight : 30;
-            // 计算表格可用高度（容器高度 - 按钮高度 - 分页高度 - 内边距）
             const containerHeight = tableBox.clientHeight;
-            this.tableHeight = containerHeight - buttonHeight - paginationHeight - 20; // 20px为预留内边距
-            // 最小高度保障
-            if (this.tableHeight < 200) {
-              this.tableHeight = 400;
+            this.tableHeight = containerHeight - buttonHeight - paginationHeight - 20;
+            if (this.tableHeight < 440) {
+              this.tableHeight = 440;
             }
           }
         } catch (e) {
           console.error('计算表格高度失败：', e);
-          this.tableHeight = 400; // 默认高度
+          // 关键修改：默认高度从 400px 改为 600px
+          this.tableHeight = 400;
         }
       });
     },
+
+
     handleTreeNodeClick(data, node) {
-      if (!data) {
-        this.$message.warning('节点数据为空，请重试');
-        return;
-      }
+      if (!data || !data.isLeaf) return;
 
-      this.currentTreeNode = data;
-      this.selectedTreeNode = data;
-      this.showRightContent = true;
+      // // 风险分析页面
+      // if (data.path.includes('/analysis/nMinusOne')) {
+      //   this.$router.push({
+      //     path: '/resourceManagement/analysis/nMinusOne',
+      //     query: { treeNode: JSON.stringify(data) }
+      //   });
+      //   return;
+      // }
 
-      if (!data.isLeaf) {
-        this.$refs.treeSidebar?.toggleExpanded(data);
-        this.$message.info('请选择具体的模型表节点');
-        return;
-      }
+      // // 光缆管理页面
+      // if (data.path.includes('fibersource/fiber')) {
+      //   this.$router.push({
+      //     path: '/fibersource/fiber',
+      //     query: { treeNode: JSON.stringify(data) }
+      //   });
+      //   return;
+      // }
 
-      // ========== 核心：根据节点类型切换组件 ==========
-      if (data.label === '风险分析' || data.tableName === '风险分析') {
-        // 切换到风险分析组件
-        this.currentComponent = 'nMinusOne';
-        // 给风险分析组件传参（可选）
-        this.$nextTick(() => {
-          this.$refs.nMinusOne?.initData(data); // 通知风险分析组件初始化
-        });
-      } else {
-        // 切换回普通表格组件
-        this.currentComponent = 'zdzywh';
-        // 原有数据加载逻辑
-        const pathSegments = data.path.split('/').filter(seg => seg);
-        const tableName = pathSegments.pop() || '';
-        this.tableName = tableName;
-        this.loadTreeNodeData();
-      }
+      // // 业务信息页面
+      // if (data.path.includes('/businesssource/serviceInformation')) {
+      //   this.$router.push({
+      //     path: '/businesssource/serviceInformation',
+      //     query: { treeNode: JSON.stringify(data) }
+      //   });
+      //   return;
+      // }
+
+      // // 光路信息页面
+      // if (data.path.includes('/transsource/lightPathInfoManage')) {
+      //   this.$router.push({
+      //     path: '/transsource/lightPathInfoManage',
+      //     query: { treeNode: JSON.stringify(data) }
+      //   });
+      //   return;
+      // }
+
+      this.$router.push({
+        path: data.path,
+      });
     },
     handleTreeTip({ type, message }) {
       this.$message[type](message);
@@ -776,13 +791,13 @@ export default {
         return pathSegments.pop() || '';
       })();
       if (nodeTableName && node.path.includes('/zdzy/')) {
-        this.tableName = nodeTableName;
+        this.innerTableName = nodeTableName;
         this.loadTreeNodeData();
       }
     },
 
     async loadTreeNodeData() {
-      if (!this.tableName || !this.$route.path.includes('/zdwh/')) {
+      if (!this.innerTableName) {
         // 非表模型节点，直接返回
         return;
       }
@@ -792,16 +807,15 @@ export default {
       }
 
       try {
-        console.log('开始加载数据，tableName：', this.tableName);
 
         // 1. 校验tableName是否有效
-        if (!this.tableName) {
+        if (!this.innerTableName) {
           throw new Error('tableName为空，无法加载数据');
         }
 
         // 2. 获取模型ID（增加超时处理）
         const modelRes = await Promise.race([
-          getModelId({ tableName: this.tableName }),
+          getModelId({ tableName: this.innerTableName }),
           new Promise((_, reject) => setTimeout(() => reject(new Error('接口请求超时')), 10000))
         ]);
 
@@ -825,8 +839,8 @@ export default {
       } catch (error) {
         console.error('加载节点数据失败：', error);
         // 仅表模型节点提示错误，非表模型不提示
-        if (this.$route.path.includes('/zdwh/')) {
-          this.$message.error(`加载【${this.tableName}】数据失败：${error.message || error.msg || '服务器错误'}`);
+        if (this.innerTableName) {
+          this.$message.error(`加载【${this.innerTableName}】数据失败：${error.message || error.msg || '服务器错误'}`);
         }
         this.showRightContent = true;
         this.tableData = [];
@@ -901,7 +915,7 @@ export default {
       }
 
       // 重复点击时提示，避免重复加载
-      if (this.tableName === this.selectedTreeNode.tableName) {
+      if (this.innerTableName === this.selectedTreeNode.tableName) {
         this.$message.info(`【${this.selectedTreeNode.label}】数据已加载`);
         return;
       }
@@ -912,7 +926,7 @@ export default {
       this.queryList = [];
       this.tableData = [];
       this.total = 0;
-      this.tableName = this.selectedTreeNode.tableName;
+      this.innerTableName = this.selectedTreeNode.tableName;
       this.refresh();
       this.$message.success(`已加载【${this.selectedTreeNode.label}】模型数据`);
     },
@@ -970,7 +984,7 @@ export default {
           return pathSegments.pop() || '';
         })();
         if (nodeTableName && target.node.path.includes('/zdzy/')) {
-          this.tableName = nodeTableName;
+          this.innerTableName = nodeTableName;
           this.loadTreeNodeData();
         }
       }
@@ -1075,7 +1089,7 @@ export default {
         const formData = new FormData()
         formData.append('file', file)
         formData.append('modelId', this.modelObj.modelId)
-        formData.append('tableName', this.tableName)
+        formData.append('tableName', this.innerTableName)
         const res = await importDataByExcel(formData)
         this.$message.success(res.msg || '数据导入成功')
         this.importDialog.show = false
@@ -1220,7 +1234,7 @@ export default {
           query: {
             queryData: JSON.stringify(arr),
             searchForm: JSON.stringify(this.searchForm),
-            tableName: JSON.stringify(this.tableName)
+            tableName: JSON.stringify(this.innerTableName)
           }
         })
         window.open(routeOne.href, '_blank')
@@ -1308,7 +1322,7 @@ export default {
       });
     },
     openTool() {
-      getModelId({ tableName: this.tableName }).then(res => {
+      getModelId({ tableName: this.innerTableName }).then(res => {
         this.modelObj = res.data
         this.versionObj.label = res.data.modelVersion
         this.versionObj.parentId = res.data.modelId
@@ -1917,10 +1931,8 @@ export default {
 
 <style scoped>
 .commonWh {
-  width: 100vw;
-  /* 改为视口宽度 */
-  height: 100vh;
-  /* 改为视口高度 */
+  width: 100%;
+  height: 100%;
   overflow: hidden;
 }
 
@@ -1960,10 +1972,10 @@ export default {
 .right-content-container {
   flex: 1;
   height: 100%;
-  overflow: auto;
+  /* 关键修改：把 overflow: auto 改为 overflow: hidden */
+  overflow: hidden;
   padding: 10px;
   box-sizing: border-box;
-  /* 确保背景不影响高度计算 */
   background: linear-gradient(180deg, rgba(223, 255, 246, 0.9) 0%, rgba(255, 255, 255, 0.9) 100%),
     url('~@/assets/txqj/Mask group.png') no-repeat center center / cover;
 }
@@ -2037,17 +2049,15 @@ export default {
 
 .tableBox {
   flex: 1;
-  /* 关键：让表格容器占满剩余高度 */
   width: 100%;
-  min-height: 300px;
-  /* 最小高度保障 */
+  /* 关键修改：提高最小高度，比如从 300px 改为 600px */
+  min-height: 440px;
   border: 1px solid #d6e9e6;
   border-radius: 4px;
   padding: 10px;
   box-sizing: border-box;
   background: rgba(255, 255, 255, 0.7);
   overflow: hidden;
-  /* 防止内容溢出 */
 }
 
 /* 按钮靠左排列（默认就是这个，但可以更规范） */
@@ -2059,8 +2069,10 @@ export default {
   background: linear-gradient(135deg, #e6f7f5 0%, #f0fcf9 100%);
   /* 关键：左对齐 */
   display: flex;
-  justify-content: flex-start; /* 靠左 */
-  gap: 8px; /* 按钮之间的间距 */
+  justify-content: flex-start;
+  /* 靠左 */
+  gap: 8px;
+  /* 按钮之间的间距 */
 }
 
 .menuDiv {
@@ -2148,4 +2160,5 @@ export default {
 ::v-deep .el-tree-node.is-current>.el-tree-node__content {
   background-color: #b9eae4 !important;
   color: #006A65 !important;
-}</style>
+}
+</style>

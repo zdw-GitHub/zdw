@@ -6,19 +6,12 @@
           <div class="header-decoration"></div>
           <h2 class="group-title">{{ group.name }}</h2>
         </div>
-        
+
         <div class="items-grid">
-          <div 
-            class="function-item" 
-            v-for="(item, itemIndex) in group.children" 
-            :key="itemIndex"
-            @click="toPage(group.url, item)"
-          >
+          <div class="function-item" v-for="(item, itemIndex) in group.children" :key="itemIndex"
+            @click="toPage(group.url, item)">
             <div class="item-icon">
-              <img 
-                :src="publicPath + 'img/homeImg/' + item.name + '.png'" 
-                :alt="item.name"
-              >
+              <img :src="publicPath + 'img/homeImg/' + item.name + '.png'" :alt="item.name">
             </div>
             <div class="item-info">
               <p class="item-name">{{ item.name }}</p>
@@ -45,6 +38,11 @@ export default {
   },
   methods: {
     toPage(itemUrl, sitem) {
+      const query = sitem.query ? JSON.parse(sitem.query) : {};
+      // 如果当前项是光缆管理，手动添加 tableName
+      if (sitem.url === '/fibersource/fiber') {
+        query.tableName = 'SG_TCDEV_FIBER_B';
+      }
       this.$router.push({
         path: itemUrl + sitem.url,
         query: sitem.query ? JSON.parse(sitem.query) : {}
@@ -89,15 +87,15 @@ export default {
     background-image: radial-gradient(rgba(160, 174, 192, 0.05) 1px, transparent 1px);
     background-size: 20px 20px;
     z-index: 0;
-    pointer-events: none; 
-  } 
+    pointer-events: none;
+  }
 }
 
 .main-content {
   max-width: 100%;
   margin: 0 auto;
   position: relative;
-  z-index: 1; 
+  z-index: 1;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 20px;
@@ -112,7 +110,7 @@ export default {
   overflow: hidden;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   width: 100%;
-  
+
   &:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 28px rgba(64, 158, 255, 0.18);
@@ -132,7 +130,7 @@ export default {
   align-items: center;
   // background: linear-gradient(90deg, #409EFF 0%, #5ba6ff 50%, #7bb8ff 100%);
   padding: 18px 24px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2); 
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .header-decoration {
@@ -141,7 +139,7 @@ export default {
   background-color: #686565;
   border-radius: 2px;
   margin-right: 12px;
-  box-shadow: 0 0 8px rgba(255, 255, 255, 0.5); 
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
 }
 
 .group-title {
@@ -172,7 +170,7 @@ export default {
   cursor: pointer;
   transition: all 0.3s ease;
   border: 1px solid rgb(20, 20, 20);
-  
+
   &:hover {
     background-color: #646464;
     border-color: #c6e2ff;
@@ -192,11 +190,11 @@ export default {
   border-radius: 50%;
   box-shadow: 0 3px 10px rgba(148, 163, 184, 0.1);
   transition: box-shadow 0.3s ease;
-  
+
   &:hover {
     box-shadow: 0 4px 15px rgba(64, 158, 255, 0.2);
   }
-  
+
   img {
     max-width: 38px;
     max-height: 38px;
@@ -211,7 +209,8 @@ export default {
 
 .item-name {
   font-size: 14px;
-  color: #05367a; /* 加深文字颜色，提升可读性 */
+  color: #05367a;
+  /* 加深文字颜色，提升可读性 */
   margin: 0;
   white-space: nowrap;
   overflow: hidden;
@@ -225,31 +224,31 @@ export default {
   .dashboard-container {
     padding: 15px;
   }
-  
+
   .items-grid {
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     gap: 12px;
     padding: 18px;
   }
-  
+
   .function-item {
     padding: 18px 12px;
   }
-  
+
   .item-icon {
     width: 46px;
     height: 46px;
-    
+
     img {
       max-width: 32px;
       max-height: 32px;
     }
   }
-  
+
   .group-header {
     padding: 15px 20px;
   }
-  
+
   .group-title {
     font-size: 16px;
   }

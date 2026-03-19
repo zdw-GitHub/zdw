@@ -9,7 +9,7 @@ export function getColSize (val, titVal) {
     }
   }
   if (!dom) {
-    return 80
+    return 150
   }
   let width1 = 0
   let width2 = 0
@@ -34,5 +34,8 @@ export function getColSize (val, titVal) {
   if(width1 > 420){
     width1 = 420
   }
-  return Math.max(width1, width2) + 80
+  const baseWidth = Math.max(width1, width2);
+  const minWidth = 120; // 最小保障宽度
+  const extraSpace = 100; // 额外余量
+  return Math.max(baseWidth, minWidth) + extraSpace;
 }

@@ -163,7 +163,7 @@ public class ResourceManagementServiceImpl implements ResourceManagementService 
 
         data = this.setData2StringByType(data);
 
-        data = this.processingDataList(data,modelName);
+//        data = this.processingDataList(data,modelName);
 
         return data;
     }

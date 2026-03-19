@@ -61,7 +61,6 @@
                 LEFT JOIN t_meta_model_show s ON CONCAT(s.column_id) = v.meta_model_column_id
     </sql>
 
-
     <sql id="selectTQualityVerificationRulesVo">
         select id, meta_mode_id, meta_model_column_id, rule_id, alarm_level, rule_description, modification_suggestions, state, superior_unit_id, select_type, symbol, param, rel_meta_mode_id, rel_id_meta_model_column_id,rel_name_meta_model_column_id, customized_sql, model_version, create_time, update_time from t_quality_verification_rules
     </sql>
@@ -828,7 +827,7 @@ FROM
     </select>
     <select id="selectSiteMaintenanceUnit" resultType="java.util.Map">
         select t.id as id,t2.name as name from SG_TCCON_TCSITE_B t
-        LEFT JOIN SG_ORG_COMPANY_B t2 ON t2.id = t.MAINTENANCE_DEPT
+        LEFT JOIN SG_ORG_COMPANY_B t2 ON t2.id = t.MANAGE_DEPT_ID
         where t.id in
         <foreach item="id" collection="list" open="(" separator="," close=")">
             #{id}
@@ -880,7 +879,7 @@ FROM
                 <if test="item.param != null">#{item.param},</if>
                 <if test="item.relMetaModeId != null">#{item.relMetaModeId},</if>
                 <if test="item.relIdMetaModelColumnId != null">#{item.relIdMetaModelColumnId},</if>
-                <if test="item.relNameMetaModelColumnId != null ">#{relNameMetaModelColumnId},</if>
+                <if test="item.relNameMetaModelColumnId != null ">#{item.relNameMetaModelColumnId},</if>
                 <if test="item.customizedSql != null">#{item.customizedSql},</if>
                 <if test="item.modelVersion != null">#{item.modelVersion},</if>
                 <if test="item.createTime != null">#{item.createTime},</if>
@@ -941,9 +940,7 @@ WHERE
 
     </delete>
 
-
-
-    <select id="selectQualityVerificationRulesListVo" parameterType="QualityVerificationRulesVo" resultType="QualityVerificationRulesVo">
+    <select id="selectQualityVerificationRulesListVo" parameterType="com.mshz.cloud.tms.business.vo.QualityVerificationRulesVo" resultType="com.mshz.cloud.tms.business.vo.QualityVerificationRulesVo">
         <include refid="selectQualityVerificationRulesVo"/>
         <where>
             <if test="columnName != null and columnName != ''">and t.column_name like concat('%', #{columnName}, '%')
@@ -952,7 +949,7 @@ WHERE
                 #{columnNameCn},
                 '%')
             </if>
-            <if test="columnType != null  and columnType != ''">and t.column_type like #concat('%', #{columnType}, '%')
+            <if test="columnType != null  and columnType != ''">and t.column_type like concat('%', #{columnType}, '%')
             </if>
             <if test="columnLength != null  ">and t.column_length = #{columnLength}</if>
             <if test="metaModeId != null  and metaModeId != ''"> and meta_mode_id = #{metaModeId}</if>
@@ -981,5 +978,42 @@ WHERE
         select dict_label selectName FROM sys_dict_data
         where dict_type = 'symbol'
           and  css_class  = #{englishName}
+    </select>
+
+    <resultMap type="TMetaModelTech" id="TMetaModelTechResult">
+        <result property="id" column="id"/>
+        <result property="modelId" column="model_id"/>
+        <result property="columnName" column="column_name"/>
+        <result property="columnNameCn" column="column_name_cn"/>
+        <result property="columnType" column="column_type"/>
+        <result property="columnLength" column="column_length"/>
+        <result property="isNotNull" column="is_not_null"/>
+        <result property="isPrimaryKey" column="is_primary_key"/>
+        <result property="modelVersion" column="model_version"/>
+        <result property="createDate" column="create_date"/>
+        <result property="updateDate" column="update_date"/>
+        <result property="productionForm" column="production_form"/>
+        <result property="remark" column="remark"/>
+        <result property="dataSources" column="data_sources"/>
+        <result property="updateOrNot" column="update_or_not"/>
+    </resultMap>
+    <select id="selectTMetaModelTechList" parameterType="com.mshz.cloud.tms.business.entity.TMetaModelTech"
+            resultMap="TMetaModelTechResult">
+        select t.id, column_name, column_name_cn, column_type, column_length, is_not_null, is_primary_key ,
+        t.create_date,sort_num, production_form, remark, data_sources,t.update_or_not
+        FROM t_meta_model_tech t
+        LEFT JOIN t_meta_model_show s on t.id=s.column_id
+        <where>
+            <if test="modelVersion!=null">
+                and  t.model_id = #{modelId}
+            </if>
+            <if test="modelVersion!=null">
+                and  (t.model_version = #{modelVersion})
+            </if>
+            <if test="columnName != null  and columnName  != ''">
+                and column_name like concat('%', #{columnName}, '%')
+            </if>
+        </where>
+        ORDER BY sort_num asc,t.create_date asc
     </select>
 </mapper>
