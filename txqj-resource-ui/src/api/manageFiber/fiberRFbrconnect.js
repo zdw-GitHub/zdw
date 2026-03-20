@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 新增光缆和接头盒关联
 export function addSgTcconFiberRFbrconnect(data) {
   return request({
-    url: '/resources/SgTcconFiberRFbrconnect',
+    url: '/SgTcconFiberRFbrconnect',
     method: 'post',
     data: data
   })
@@ -12,7 +12,7 @@ export function addSgTcconFiberRFbrconnect(data) {
 // 删除光缆和接头盒关联
 export function delSgTcconFiberRFbrconnect(id) {
   return request({
-    url: '/resources/SgTcconFiberRFbrconnect/' + id,
+    url: '/SgTcconFiberRFbrconnect/' + id,
     method: 'delete'
   })
 }
@@ -20,7 +20,7 @@ export function delSgTcconFiberRFbrconnect(id) {
 // 查询光缆和接头盒关系根据光缆Id
 export function listByFiberId(params) {
   return request({
-    url: '/resources/SgTcconFiberRFbrconnect/listByFiberId',
+    url: '/SgTcconFiberRFbrconnect/listByFiberId',
     method: 'get',
     params:params
   })
@@ -29,7 +29,7 @@ export function listByFiberId(params) {
 // 查询类型为接头盒的光缆接续装置基本信息列表
 export function jointBoxList(params) {
   return request({
-    url: '/resources/SgTcconFiberRFbrconnect/jointBoxList',
+    url: '/SgTcconFiberRFbrconnect/jointBoxList',
     method: 'get',
     params:params
   })
@@ -38,7 +38,7 @@ export function jointBoxList(params) {
 // 光缆断点定位
 export function fiberBreakpointLocation(params) {
   return request({
-    url: '/resources/SgTcconFiberRFbrconnect/fiberBreakpointLocation',
+    url: '/SgTcconFiberRFbrconnect/fiberBreakpointLocation',
     method: 'post',
     params:params
   })
@@ -47,7 +47,7 @@ export function fiberBreakpointLocation(params) {
 // 新增接头盒
 export function addSgTcconFbrconnectB(data) {
   return request({
-    url: '/resources/SgTcconFbrconnectB',
+    url: '/SgTcconFbrconnectB',
     method: 'post',
     data: data
   })
@@ -55,7 +55,7 @@ export function addSgTcconFbrconnectB(data) {
 // 修改接头盒
 export function updateSgTcconFbrconnectB(data) {
   return request({
-    url: '/resources/SgTcconFbrconnectB',
+    url: '/SgTcconFbrconnectB',
     method: 'put',
     data: data
   })
@@ -64,7 +64,7 @@ export function updateSgTcconFbrconnectB(data) {
 // 删除接头盒
 export function delSgTcconFbrconnectB(id) {
   return request({
-    url: '/resources/SgTcconFbrconnectB/' + id,
+    url: '/SgTcconFbrconnectB/' + id,
     method: 'delete'
   })
 }

@@ -29,9 +29,9 @@
         <el-button size="mini" type="primary" @click="openAdd()" v-hasPermi="['system:b:add']">新增</el-button>
         <el-button size="mini" type="danger" @click="deleteSta()" v-hasPermi="['system:b:remove']">删除</el-button>
         <el-button size="mini" @click="handleExport()">导出</el-button>
-        <el-button size="mini" @click="lightPathListExport()">光路列表导出</el-button>
-        <el-button size="mini" type="primary" @click="computeOpticalroadRoute()">计算光路路由</el-button>
-        <el-button size="mini" type="danger" @click="computeOpticalroadEmergencyRoute()">计算应急路由</el-button>
+        <!-- <el-button size="mini" @click="lightPathListExport()">光路列表导出</el-button> -->
+        <!-- <el-button size="mini" type="primary" @click="computeOpticalroadRoute()">计算光路路由</el-button> -->
+        <!-- <el-button size="mini" type="danger" @click="computeOpticalroadEmergencyRoute()">计算应急路由</el-button> -->
         <el-button size="mini" @click="openWindow" icon="el-icon-full-screen">全屏</el-button>
       </template>
       <template v-slot:handle="slot">
@@ -41,8 +41,8 @@
         <el-dropdown style="margin-left: 5px" trigger="click" >
           <span class="el-dropdown-link"><i class="el-icon-arrow-down el-icon--right"></i></span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item @click.native="toFiber(slot.scope.row, '/zdwh/sgtccon/fiberLine')">查看对应光缆纤芯</el-dropdown-item>
-            <el-dropdown-item @click.native="toFiber(slot.scope.row, '/zdwh/sgtccon/fiberSegLine')">查看对应光缆段纤芯</el-dropdown-item>
+            <!-- <el-dropdown-item @click.native="toFiber(slot.scope.row, '/zdwh/sgtccon/fiberLine')">查看对应光缆纤芯</el-dropdown-item> -->
+            <!-- <el-dropdown-item @click.native="toFiber(slot.scope.row, '/zdwh/sgtccon/fiberSegLine')">查看对应光缆段纤芯</el-dropdown-item> -->
           </el-dropdown-menu>
         </el-dropdown>
       </template>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mshz.cloud.tms.business.mapper">
+
+    <resultMap type="SgTcdevFibersegRFiber" id="SgTcdevFibersegRFiberResult">
+        <result property="createDate" column="create_date"/>
+        <result property="updateDate" column="update_date"/>
+        <result property="id" column="ID"/>
+        <result property="fiberId" column="FIBER_ID"/>
+        <result property="fibersegId" column="FIBERSEG_ID"/>
+        <result property="owner" column="OWNER"/>
+        <result property="stamp" column="STAMP"/>
+        <result property="dataCategory" column="DATA_CATEGORY"/>
+        <result property="deleteFlag" column="DELETE_FLAG"/>
+        <result property="editstatus" column="EDITSTATUS"/>
+    </resultMap>
+
+    <sql id="selectSgTcdevFibersegRFiberVo">
+        select create_date, update_date, ID, FIBER_ID, FIBERSEG_ID, OWNER, STAMP from sg_tcdev_fiberseg_r_fiber
+    </sql>
+
+    <select id="selectSgTcdevFibersegRFiberList" parameterType="SgTcdevFibersegRFiber"
+            resultMap="SgTcdevFibersegRFiberResult">
+        <include refid="selectSgTcdevFibersegRFiberVo"/>
+        <where>
+            <if test="createDate != null  and createDate != ''">and create_date = #{createDate}</if>
+            <if test="updateDate != null  and updateDate != ''">and update_date = #{updateDate}</if>
+            <if test="fiberId != null  and fiberId != ''">and FIBER_ID = #{fiberId}</if>
+            <if test="fibersegId != null  and fibersegId != ''">and FIBERSEG_ID = #{fibersegId}</if>
+            <if test="owner != null  and owner != ''">and OWNER = #{owner}</if>
+            <if test="stamp != null  and stamp != ''">and STAMP = #{stamp}</if>
+            <if test="deleteFlag != null  and deleteFlag != ''">and DELETE_FLAG = #{deleteFlag}</if>
+        </where>
+    </select>
+
+    <select id="selectSgTcdevFibersegRFiberById" parameterType="String" resultMap="SgTcdevFibersegRFiberResult">
+        <include refid="selectSgTcdevFibersegRFiberVo"/>
+        where ID = #{id}
+    </select>
+
+    <insert id="insertSgTcdevFibersegRFiber" parameterType="SgTcdevFibersegRFiber">
+        insert into sg_tcdev_fiberseg_r_fiber
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="createDate != null">create_date,</if>
+            <if test="updateDate != null">update_date,</if>
+            <if test="id != null">ID,</if>
+            <if test="fiberId != null">FIBER_ID,</if>
+            <if test="fibersegId != null">FIBERSEG_ID,</if>
+            <if test="owner != null">OWNER,</if>
+            <if test="stamp != null">STAMP,</if>
+            <if test="dataCategory != null">DATA_CATEGORY,</if>
+            <if test="deleteFlag != null">DELETE_FLAG,</if>
+            <if test="editstatus != null">EDITSTATUS,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="createDate != null">#{createDate},</if>
+            <if test="updateDate != null">#{updateDate},</if>
+            <if test="id != null">#{id},</if>
+            <if test="fiberId != null">#{fiberId},</if>
+            <if test="fibersegId != null">#{fibersegId},</if>
+            <if test="owner != null">#{owner},</if>
+            <if test="stamp != null">#{stamp},</if>
+            <if test="dataCategory != null">#{dataCategory},</if>
+            <if test="deleteFlag != null">#{deleteFlag},</if>
+            <if test="editstatus != null">#{editstatus},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSgTcdevFibersegRFiber" parameterType="SgTcdevFibersegRFiber">
+        update sg_tcdev_fiberseg_r_fiber
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="createDate != null">create_date = #{createDate},</if>
+            <if test="updateDate != null">update_date = #{updateDate},</if>
+            <if test="fiberId != null">FIBER_ID = #{fiberId},</if>
+            <if test="fibersegId != null">FIBERSEG_ID = #{fibersegId},</if>
+            <if test="owner != null">OWNER = #{owner},</if>
+            <if test="stamp != null">STAMP = #{stamp},</if>
+            <if test="dataCategory != null">DATA_CATEGORY = #{dataCategory},</if>
+            <if test="deleteFlag != null">DELETE_FLAG = #{deleteFlag},</if>
+            <if test="editstatus != null">EDITSTATUS = #{editstatus},</if>
+        </trim>
+        where ID = #{id}
+    </update>
+
+    <delete id="deleteSgTcdevFibersegRFiberById" parameterType="String">
+        delete from sg_tcdev_fiberseg_r_fiber where ID = #{id}
+    </delete>
+
+    <delete id="deleteSgTcdevFibersegRFiberByIds" parameterType="String">
+        delete from sg_tcdev_fiberseg_r_fiber where ID in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteSgTcdevFibersegRFiberByFiberIdOrFibersegId" parameterType="SgTcdevFibersegRFiber">
+        delete from sg_tcdev_fiberseg_r_fiber
+        <where>
+            <if test="fiberId != null  and fiberId != ''">and FIBER_ID = #{fiberId}</if>
+            <if test="fibersegId != null  and fibersegId != ''">and FIBERSEG_ID = #{fibersegId}</if>
+        </where>
+    </delete>
+</mapper>

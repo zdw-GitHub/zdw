@@ -21,7 +21,7 @@ export function setPipeDataApi (data, url) {
 // 获取沟道关联光缆
 export function getChannelFiberApi (query) {
   return request({
-    url: '/resources/pipe/queryimgsegbypipe',
+    url: '/pipe/queryimgsegbypipe',
     method: 'get',
     params: query
   })

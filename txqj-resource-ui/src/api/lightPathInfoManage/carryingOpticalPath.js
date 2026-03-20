@@ -42,7 +42,7 @@ export function selectLineSn(data) {
 }
 export function analysisFiberOpticCableCarryingOpticalPath(params) {
   return request({
-    url: '/resources/DataDetailInformation/analysisFiberOpticCableCarryingOpticalPath',
+    url: '/DataDetailInformation/analysisFiberOpticCableCarryingOpticalPath',
     method: 'get',
     params:params
   })

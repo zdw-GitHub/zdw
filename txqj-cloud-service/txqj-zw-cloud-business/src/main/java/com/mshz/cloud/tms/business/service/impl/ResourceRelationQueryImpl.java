@@ -495,7 +495,7 @@ public class ResourceRelationQueryImpl implements ResourceRelationQueryService {
         MetaModelShowVo metaModelShowVo = new MetaModelShowVo();
         metaModelShowVo.setColumnName("ID");
         showAttributes.add(metaModelShowVo);
-        String sql = para.packageQuerySql(packageTableName(modelName, metadataDBConfig.getUserName()), companyQuerySql,  showAttributes);
+        String sql = para.packageQuerySql(packageTableName(modelName, metadataDBConfig.getDatabaseName()), companyQuerySql,  showAttributes);
         CommonVo vo = new CommonVo();
         vo.setSql(sql);
         return resourceManagementMapper.selectAll(vo);

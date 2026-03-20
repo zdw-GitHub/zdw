@@ -11,8 +11,8 @@
           <el-button size="mini" type="primary" @click="openAdd()" v-hasPermi="['system:b:add']">新增</el-button>
           <el-button size="mini" type="danger" @click="deleteSta()" v-hasPermi="['system:b:remove']">删除</el-button>
           <el-button size="mini" @click="handleExport()">导出</el-button>
-          <el-button size="mini" type="primary" @click="computeBuzRoute()">计算通道路由</el-button>
-          <el-button size="mini" type="danger" @click="computeBuzEmergencyRoute()">计算应急路由</el-button>
+          <!-- <el-button size="mini" type="primary" @click="computeBuzRoute()">计算通道路由</el-button>
+          <el-button size="mini" type="danger" @click="computeBuzEmergencyRoute()">计算应急路由</el-button> -->
           <el-button size="mini" @click="openWindow" icon="el-icon-full-screen">全屏</el-button>
         </template>
         <template v-slot:handle="slot">

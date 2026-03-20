@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 获取表格下拉框数据
 export function getData(data) {
   return request({
-    url: '/resources/fibersegline/listZs',
+    url: '/fibersegline/listZs',
     method: 'get',
     params:data
   })
@@ -12,7 +12,7 @@ export function getData(data) {
 // 提交新增
 export function submit(data) {
   return request({
-    url: '/resources/fibersegline',
+    url: '/fibersegline',
     method: 'post',
     data: data
   })
@@ -22,7 +22,7 @@ export function submit(data) {
 // 提交修改
 export function submitEdit(data) {
   return request({
-    url: '/resources/fibersegline',
+    url: '/fibersegline',
     method: 'put',
     data: data
   })
@@ -30,7 +30,7 @@ export function submitEdit(data) {
 
 export function delData(data) {
   return request({
-    url: '/resources/fibersegline/remove',
+    url: '/fibersegline/remove',
     method: 'delete',
     data: data
   })
@@ -38,7 +38,7 @@ export function delData(data) {
 
 export function getFiberSegLineByFiberSegData(data) {
   return request({
-    url: '/resources/fibersegline/listslave',
+    url: '/fibersegline/listslave',
     method: 'get',
     params:data
   })

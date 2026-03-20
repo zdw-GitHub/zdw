@@ -4,7 +4,7 @@ import request from '@/utils/request'
 // 查询沟道列表
 export function queryChannelType(query) {
     return request({
-      url: '/resources/sgTcconTcpipesegB/queryList',
+      url: '/sgTcconTcpipesegB/queryList',
       method: 'get',
       params: query
     })
@@ -12,7 +12,7 @@ export function queryChannelType(query) {
   // 根据查询已绑定光缆段
 export function querysegByPipoId(pipoId) {
     return request({
-      url: '/resources/tcpipeseg/queryseg?pipoId='+pipoId,
+      url: '/tcpipeseg/queryseg?pipoId='+pipoId,
       method: 'get',
     })
   }
@@ -20,7 +20,7 @@ export function querysegByPipoId(pipoId) {
     // 根据查询未绑定光缆段
 export function querysegbysiteBySiteId(pipoId,segName,siteId) {
     return request({
-      url: '/resources/tcpipeseg/querysegbysite?segName='+segName+'&siteId='+siteId+'&pipoId='+pipoId,
+      url: '/tcpipeseg/querysegbysite?segName='+segName+'&siteId='+siteId+'&pipoId='+pipoId,
       method: 'get',
     })
   }
@@ -28,7 +28,7 @@ export function querysegbysiteBySiteId(pipoId,segName,siteId) {
     // 获取沟道基本信息
 export function sgTcconTcpipesegBByPipoId(pipoId) {
     return request({
-      url: '/resources/sgTcconTcpipesegB/'+pipoId,
+      url: '/sgTcconTcpipesegB/'+pipoId,
       method: 'get',
     })
   }
@@ -36,7 +36,7 @@ export function sgTcconTcpipesegBByPipoId(pipoId) {
   /*站点下拉框*/
 export function sgTcconTcsiteBOptions() {
     return request({
-      url:'/resources/sgTcconTcsiteB/selectList',
+      url:'/sgTcconTcsiteB/selectList',
       method: 'get'
     })
   }
@@ -44,7 +44,7 @@ export function sgTcconTcsiteBOptions() {
   // 新增
   export function addChannelType(data) {
     return request({
-      url: '/resources/sgTcconTcpipesegB',
+      url: '/sgTcconTcpipesegB',
       method: 'post',
       data: data
     })
@@ -53,7 +53,7 @@ export function sgTcconTcsiteBOptions() {
   // 修改
   export function updateChannelType(data) {
     return request({
-      url: '/resources/sgTcconTcpipesegB',
+      url: '/sgTcconTcpipesegB',
       method: 'put',
       data: data
     })
@@ -62,7 +62,7 @@ export function sgTcconTcsiteBOptions() {
   // 删除沟道
   export function delChannelType(id) {
     return request({
-      url: '/resources/sgTcconTcpipesegB/' + id,
+      url: '/sgTcconTcpipesegB/' + id,
       method: 'delete'
     })
   }
@@ -70,7 +70,7 @@ export function sgTcconTcsiteBOptions() {
   // 删除光缆段和沟道的关联关系
   export function delTcpipeseg(id) {
     return request({
-      url: '/resources/tcpipeseg/' + id,
+      url: '/tcpipeseg/' + id,
       method: 'delete'
     })
   }
@@ -78,7 +78,7 @@ export function sgTcconTcsiteBOptions() {
   // 新增光缆段和沟道
   export function addTcpipesegAndChannel(data) {
     return request({
-      url: '/resources/tcpipeseg',
+      url: '/tcpipeseg',
       method: 'post',
       data: data
     })
@@ -87,7 +87,7 @@ export function sgTcconTcsiteBOptions() {
   // 导出
   export function exportChannelType(query) {
     return request({
-      url: '/resources/sgTcconTcpipesegB/export',
+      url: '/sgTcconTcpipesegB/export',
       method: 'get',
       params: query
     })

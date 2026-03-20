@@ -20,7 +20,7 @@ export function getNotOneLine(data,params) {
 }
 export function getSegByFiberId(params) {
   return request({
-    url: '/resources/sgTcdevFibersegB/getSegByFiberId',
+    url: '/sgTcdevFibersegB/getSegByFiberId',
     method: 'get',
     params: params
   })

@@ -21,7 +21,7 @@
         <el-button size="mini" type="primary" @click="openEditBox('add', {})" v-hasPermi="['system:b:add']">新增</el-button>
         <el-button size="mini" type="danger" @click="deleteSta()" v-hasPermi="['system:b:remove']">删除</el-button>
         <el-button size="mini" @click="handleExport()">导出</el-button>
-        <el-button size="mini" @click="opticalCableLoadBearingLightPath()">导出光缆承载光路</el-button>
+        <!-- <el-button size="mini" @click="opticalCableLoadBearingLightPath()">导出光缆承载光路</el-button> -->
         <el-button size="mini" @click="openWindow" icon="el-icon-full-screen">全屏</el-button>
       </template>
       <template v-slot:handle="slot">
@@ -34,11 +34,11 @@
         <el-dropdown style="margin-left: 5px" trigger="click">
           <span class="el-dropdown-link"><i class="el-icon-arrow-down el-icon--right"></i></span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item @click.native="toFiberSeg(slot.scope.row)">光缆段基本信息</el-dropdown-item>
+            <!-- <el-dropdown-item @click.native="toFiberSeg(slot.scope.row)">光缆段基本信息</el-dropdown-item>
             <el-dropdown-item @click.native="fiberRouter(slot.scope.row)">光缆示意图</el-dropdown-item>
             <el-dropdown-item @click.native="toFiberLine(slot.scope.row)">光缆纤芯</el-dropdown-item>
             <el-dropdown-item @click.native="openFiberCoreDetail(slot.scope.row)">光缆纤芯示意图</el-dropdown-item>
-            <el-dropdown-item @click.native="fiberLineRelationShow(slot.scope.row)">对应一次线路</el-dropdown-item>
+            <el-dropdown-item @click.native="fiberLineRelationShow(slot.scope.row)">对应一次线路</el-dropdown-item> -->
           </el-dropdown-menu>
         </el-dropdown>
       </template>

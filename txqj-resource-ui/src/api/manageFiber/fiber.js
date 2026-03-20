@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 提交新增
 export function submit(data) {
   return request({
-    url: '/resources/fiber',
+    url: '/fiber',
     method: 'post',
     data: data
   })
@@ -12,7 +12,7 @@ export function submit(data) {
 // 提交修改
 export function submitEdit(data) {
   return request({
-    url: '/resources/fiber',
+    url: '/fiber',
     method: 'put',
     data: data
   })
@@ -21,7 +21,7 @@ export function submitEdit(data) {
 // 提交删除
 // export function delData(id) {
 //   return request({
-//     url: '/resources/fiber/' + id,
+//     url: '/fiber/' + id,
 //     method: 'delete',
 //   })
 // }
@@ -29,7 +29,7 @@ export function submitEdit(data) {
 // 提交删除
 export function delData(data) {
   return request({
-    url: '/resources/fiber/removeOne',
+    url: '/fiber/removeOne',
     method: 'delete',
     data: data
   })
@@ -37,7 +37,7 @@ export function delData(data) {
 
 export function batchDelData(data) {
   return request({
-    url: '/resources/fiber/'+data,
+    url: '/fiber/'+data,
     method: 'delete',
   })
 }
@@ -45,7 +45,7 @@ export function batchDelData(data) {
 // 获取待处理光缆列表
   export function getFiberData(params) {
     return request({
-      url: '/resources/fiber/listslave',
+      url: '/fiber/listslave',
       method: 'get',
       params:params
     })
@@ -55,7 +55,7 @@ export function batchDelData(data) {
 // 光缆路由
 export function getFiberRouter(params) {
   return request({
-    url: '/resources/fiber/selectFiberTopoMeta',
+    url: '/fiber/selectFiberTopoMeta',
     method: 'get',
     params:params
   })
@@ -63,7 +63,7 @@ export function getFiberRouter(params) {
 // 光缆路由
 export function getFiberRouterAwait(params) {
   return request({
-    url: '/resources/fiber/selectFiberTopoMiddle',
+    url: '/fiber/selectFiberTopoMiddle',
     method: 'get',
     params:params
   })
@@ -72,7 +72,7 @@ export function getFiberRouterAwait(params) {
 // 查询接头盒纤芯状况
 export function coreConnectShowApi(data) {
   return request({
-    url: '/resources/lineline/getTconId',
+    url: '/lineline/getTconId',
     method: 'get',
     params: data
   })
@@ -81,7 +81,7 @@ export function coreConnectShowApi(data) {
 // 查询接头盒纤芯状况
 export function creatFiberLineForMeda(data) {
   return request({
-    url: '/resources/fiber/creatFiberLineForMeda',
+    url: '/fiber/creatFiberLineForMeda',
     method: 'post',
     data: data
   })
@@ -90,7 +90,7 @@ export function creatFiberLineForMeda(data) {
 // 查询接头盒纤芯状况
 export function creatFiberLineForMiddle(data) {
   return request({
-    url: '/resources/fiber/creatFiberLineForMiddle',
+    url: '/fiber/creatFiberLineForMiddle',
     method: 'post',
     data: data
   })
@@ -99,7 +99,7 @@ export function creatFiberLineForMiddle(data) {
 // 查询接头盒纤芯状况
 export function addFiberLineApi(data) {
   return request({
-    url: '/resources/lineline',
+    url: '/lineline',
     method: 'post',
     data: data
   })
@@ -108,7 +108,7 @@ export function addFiberLineApi(data) {
 // 查询接头盒纤芯状况
 export function delFiberLinkApi(data) {
   return request({
-    url: '/resources/lineline/remove',
+    url: '/lineline/remove',
     method: 'delete',
     data: data
   })
@@ -117,7 +117,7 @@ export function delFiberLinkApi(data) {
 // 查询接头盒纤芯状况
 export function getAwaitFiberByIdApi(data) {
   return request({
-    url: '/resources/fiber/getFiberObj',
+    url: '/fiber/getFiberObj',
     method: 'get',
     params: data
   })
@@ -126,7 +126,7 @@ export function getAwaitFiberByIdApi(data) {
 // 获取光缆审批任务ID
 export function getFiberApprovalID(params) {
   return request({
-    url: '/resources/fiber/selectFiberApprovalID',
+    url: '/fiber/selectFiberApprovalID',
     method: 'get',
     params:params
   })
@@ -143,14 +143,14 @@ export function exportOpticalCableLoadBearingLightPath(data) {
 
 export function selectFiberIdByHgsId(params) {
   return request({
-    url: '/resources/fiber/selectFiberIdByHgsId',
+    url: '/fiber/selectFiberIdByHgsId',
     method: 'get',
     params:params
   })
 }
 export function selectTaskIdByHgsId(params) {
   return request({
-    url: '/resources/fiber/selectTaskIdByHgsId',
+    url: '/fiber/selectTaskIdByHgsId',
     method: 'get',
     params:params
   })
@@ -158,21 +158,21 @@ export function selectTaskIdByHgsId(params) {
 
 export function generateFiberOpticCableCores(params) {
   return request({
-    url: '/resources/DataDetailInformation/generateFiberOpticCableCores',
+    url: '/DataDetailInformation/generateFiberOpticCableCores',
     method: 'get',
     params:params
   })
 }
 export function generateSgTcconFiberlineRFibersegline(params) {
   return request({
-    url: '/resources/DataDetailInformation/generateSgTcconFiberlineRFibersegline',
+    url: '/DataDetailInformation/generateSgTcconFiberlineRFibersegline',
     method: 'get',
     params:params
   })
 }
 export function generateFiberGraphical(params) {
   return request({
-    url: '/resources/DataDetailInformation/generateFiberGraphical',
+    url: '/DataDetailInformation/generateFiberGraphical',
     method: 'get',
     params:params
   })
@@ -180,7 +180,7 @@ export function generateFiberGraphical(params) {
 
 export function updateFiberLineNumber(params) {
   return request({
-    url: '/resources/fiber/updateFiberLineNumber',
+    url: '/fiber/updateFiberLineNumber',
     method: 'post',
     params:params
   })

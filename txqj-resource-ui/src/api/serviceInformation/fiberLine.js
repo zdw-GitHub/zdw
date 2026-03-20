@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function getRouterApi(data) {
   return request({
-    url: '/resources/sgTcconTcchannelFiberB/getLineTopoByChannelsegId',
+    url: '/sgTcconTcchannelFiberB/getLineTopoByChannelsegId',
     method: 'get',
     params:data
   })
@@ -10,7 +10,7 @@ export function getRouterApi(data) {
 
 export function getLineTopoByTDId(data) {
   return request({
-    url: '/resources/sgTcconTcchannelFiberB/getLineTopoByTDId',
+    url: '/sgTcconTcchannelFiberB/getLineTopoByTDId',
     method: 'get',
     params:data
   })
@@ -18,7 +18,7 @@ export function getLineTopoByTDId(data) {
 
 export function saveRouterApi(data) {
   return request({
-    url: '/resources/sgTcconTcchannelFiberB/saveChannelLineTopo',
+    url: '/sgTcconTcchannelFiberB/saveChannelLineTopo',
     method: 'post',
     data:data
   })
@@ -26,14 +26,14 @@ export function saveRouterApi(data) {
 
 export function getFiberOptionsApi(data) {
   return request({
-    url: '/resources/fiber/listmeta',
+    url: '/fiber/listmeta',
     method: 'get',
     params:data
   })
 }
 export function getFiberLineOptionsApi(data) {
   return request({
-    url: '/resources/fiberline/listZs',
+    url: '/fiberline/listZs',
     method: 'get',
     params:data
   })

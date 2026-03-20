@@ -357,7 +357,7 @@ export function uploadFile (params) {
 }
 export function getNewIdByOriginalId (params) {
   return request({
-      url: '/resources/DataDetailInformation/getNewIdByOriginalId',
+      url: '/DataDetailInformation/getNewIdByOriginalId',
     method: 'get',
     params: params
   })

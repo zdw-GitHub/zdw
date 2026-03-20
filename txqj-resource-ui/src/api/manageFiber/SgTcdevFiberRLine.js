@@ -4,7 +4,7 @@ import request from '@/utils/request'
 // 新增光缆与一次线路关系
 export function addSgTcdevFiberRLine(data) {
   return request({
-    url: '/resources/SgTcdevFiberRLine/',
+    url: '/SgTcdevFiberRLine/',
     method: 'post',
     data: data
   })
@@ -13,7 +13,7 @@ export function addSgTcdevFiberRLine(data) {
 // 删除光缆与一次线路关系
 export function delSgTcdevFiberRLine(data) {
   return request({
-    url: '/resources/SgTcdevFiberRLine/',
+    url: '/SgTcdevFiberRLine/',
     method: 'delete',
     data: data
   })

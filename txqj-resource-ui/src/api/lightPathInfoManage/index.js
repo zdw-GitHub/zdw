@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 提交删除
 export function delDataApi(id) {
   return request({
-    url: '/resources/tcopticalroadB/' + id,
+    url: '/tcopticalroadB/' + id,
     method: 'delete',
   })
 }
@@ -11,14 +11,14 @@ export function delDataApi(id) {
 // 提交光路修改
 export function commitRouterApi(data) {
   return request({
-    url: '/resources/routerrfiber/saverouter',
+    url: '/routerrfiber/saverouter',
     method: 'post',
     data: data
   })
 }
 export function saveMsp(params) {
   return request({
-    url: '/resources/routerrfiber/saveMsp',
+    url: '/routerrfiber/saveMsp',
     method: 'get',
     params:params
   })
@@ -43,7 +43,7 @@ export function computeOpticalroadEmergencyRoute(params) {
 
 export function serialOpticalRouting(params) {
   return request({
-    url:'/resources/DataDetailInformation/serialOpticalRouting',
+    url:'/DataDetailInformation/serialOpticalRouting',
     method: 'get',
     params:params
   })

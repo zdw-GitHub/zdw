@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 提交新增
 export function submit(data) {
   return request({
-    url: '/resources/sgTcdevFibersegB',
+    url: '/sgTcdevFibersegB',
     method: 'post',
     data: data
   })
@@ -12,7 +12,7 @@ export function submit(data) {
 // 提交修改
 export function submitEdit(data) {
   return request({
-    url: '/resources/sgTcdevFibersegB',
+    url: '/sgTcdevFibersegB',
     method: 'put',
     data: data
   })
@@ -20,7 +20,7 @@ export function submitEdit(data) {
 
 export function delDataApi(id) {
   return request({
-    url: '/resources/sgTcdevFibersegB/removeAll/' + id,
+    url: '/sgTcdevFibersegB/removeAll/' + id,
     method: 'delete',
   })
 }
@@ -29,7 +29,7 @@ export function delDataApi(id) {
 // 获取表格下拉框数据（正式库）
 export function getFiberOptions(params) {
   return request({
-    url: '/resources/fiber/selectdatameta',
+    url: '/fiber/selectdatameta',
     method: 'get',
     params:params
   })
@@ -38,7 +38,7 @@ export function getFiberOptions(params) {
 // 获取表格下拉框数据(全部)
 export function getFiberOptionsAll(params) {
   return request({
-    url: '/resources/fiber/selectdataAll',
+    url: '/fiber/selectdataAll',
     method: 'get',
     params:params
   })
@@ -47,7 +47,7 @@ export function getFiberOptionsAll(params) {
 // 查询已绑定列表
 export function getData(data) {
   return request({
-    url: '/resources/sgTcdevFibersegB/listmeta',
+    url: '/sgTcdevFibersegB/listmeta',
     method: 'get',
     params:data
   })
@@ -55,7 +55,7 @@ export function getData(data) {
 // 获取选择光缆表格
 export function getSelFiber(params) {
   return request({
-    url: '/resources/sgTcdevFibersegB/selectdatameta',
+    url: '/sgTcdevFibersegB/selectdatameta',
     method: 'get',
     params:params
   })
@@ -64,7 +64,7 @@ export function getSelFiber(params) {
 // 获取表格下拉框数据
 export function getSelFiberAwait(params) {
   return request({
-    url: '/resources/sgTcdevFibersegB/selectdataAll',
+    url: '/sgTcdevFibersegB/selectdataAll',
     method: 'get',
     params:params
   })
@@ -72,7 +72,7 @@ export function getSelFiberAwait(params) {
   // 绑定光缆段与光缆关系
   export function addFiberRFiberSeg(data) {
     return request({
-      url: '/resources/fibersegrfiber/addAll',
+      url: '/fibersegrfiber/addAll',
       method: 'post',
        data
     })
@@ -80,7 +80,7 @@ export function getSelFiberAwait(params) {
 // 解绑光缆段与光缆关系
 export function delFiberRFiberSeg(data) {
   return request({
-    url: '/resources/fibersegrfiber/delFiberRFiberSeg',
+    url: '/fibersegrfiber/delFiberRFiberSeg',
     method: 'post',
     data
   })
@@ -88,14 +88,14 @@ export function delFiberRFiberSeg(data) {
 
 export function getFiberSegByFiberData(data) {
   return request({
-    url: '/resources/sgTcdevFibersegB/listslave',
+    url: '/sgTcdevFibersegB/listslave',
     method: 'get',
     params:data
   })
 }
 export function getSegIdsByFiberId(data) {
   return request({
-    url: '/resources/sgTcdevFibersegB/getSegIdsByFiberId',
+    url: '/sgTcdevFibersegB/getSegIdsByFiberId',
     method: 'get',
     params:data
   })

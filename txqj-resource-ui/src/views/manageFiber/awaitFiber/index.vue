@@ -108,10 +108,10 @@
               <el-dropdown trigger="click" style="margin-left: 5px">
                 <span class="el-dropdown-link"><i class="el-icon-arrow-down el-icon--right"></i></span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item @click.native="toAWaitFiberSeg(scope.row)">光缆段基本信息</el-dropdown-item>
+                  <!-- <el-dropdown-item @click.native="toAWaitFiberSeg(scope.row)">光缆段基本信息</el-dropdown-item>
                   <el-dropdown-item @click.native="fiberRouter(scope.row)">光缆示意图</el-dropdown-item>
                   <el-dropdown-item @click.native="toAWaitFiberLine(scope.row)">光缆纤芯</el-dropdown-item>
-                  <el-dropdown-item @click.native="openFiberCoreDetail(scope.row)">光缆纤芯示意图</el-dropdown-item>
+                  <el-dropdown-item @click.native="openFiberCoreDetail(scope.row)">光缆纤芯示意图</el-dropdown-item> -->
                 </el-dropdown-menu>
               </el-dropdown>
             </template>

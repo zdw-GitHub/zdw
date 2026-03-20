@@ -9,6 +9,7 @@ import com.mshz.cloud.tms.business.mapper.ResourceManagementMapper;
 import com.mshz.cloud.tms.business.util.AtrrNameUtils;
 import com.mshz.cloud.tms.business.util.DateUtils;
 import com.mshz.cloud.tms.business.util.ExcelUtilTool;
+import com.mshz.cloud.tms.business.util.SnowflakeIdGenerator;
 import com.mshz.cloud.tms.business.vo.CommonVo;
 import com.mshz.cloud.tms.business.vo.DataMaintainAttributeVo;
 import com.mshz.cloud.tms.business.vo.DataMaintainParaVo;
@@ -16,6 +17,7 @@ import com.mshz.cloud.tms.business.service.ResourceManagementService;
 import com.mshz.cloud.tms.business.vo.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -46,6 +48,10 @@ public class ResourceManagementServiceImpl implements ResourceManagementService 
 
     @Resource
     private PathConfig pathConfig;
+
+
+    @Autowired
+    private SnowflakeIdGenerator idGenerator;
 
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -660,7 +666,7 @@ public class ResourceManagementServiceImpl implements ResourceManagementService 
             DataMaintainAttributeVo record = valueAttributes.get(i);
             String isPrimaryKey = record.getIsPrimaryKey();
             if (isPrimaryKey != null && isPrimaryKey.equals("1")) {
-                id = String.valueOf(UUID.randomUUID());
+                id = String.valueOf(idGenerator.nextId());
                 record.setAttributeValue(id);
             }
 

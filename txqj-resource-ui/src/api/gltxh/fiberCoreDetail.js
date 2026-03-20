@@ -30,7 +30,7 @@ export function formEditCommitApi(url, data) {
 // 获取光缆纤芯和光缆段纤芯关系 list
 export function querylist(params) {
   return request({
-    url: '/resources/fiberlinerfibersegline/querylist',
+    url: '/fiberlinerfibersegline/querylist',
     method: 'get',
     params: params
   })
@@ -39,7 +39,7 @@ export function querylist(params) {
 // 修改光缆段纤芯与光缆纤芯
 export function updataSgTcdevFiberSegLineRLineRB(params) {
   return request({
-    url: '/resources/fiberlinerfibersegline/updataSgTcdevFiberSegLineRLineRB',
+    url: '/fiberlinerfibersegline/updataSgTcdevFiberSegLineRLineRB',
     method: 'get',
     params: params
   })
